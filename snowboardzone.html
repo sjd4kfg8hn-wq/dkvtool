@@ -65,30 +65,29 @@
             transform: translateY(-2px);
         }
 
-        /* Pulsador IvyAsesor Muy Llamativo */
-        .btn-ivy-pulsador {
-            background: linear-gradient(135deg, #9333ea, #c084fc, #38bdf8);
-            color: white;
-            font-weight: 700;
-            border-radius: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
-            animation: pulseGlow 2s infinite;
-        }
+        /* Pulsador Ivysnow Muy Llamativo */
+.btn-ivy-pulsador {
+    background: linear-gradient(135deg, #9333ea, #c084fc, #38bdf8);
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+    animation: pulseGlow 2s infinite;
+}
 
-        .btn-ivy-pulsador:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.8);
-            color: white;
-        }
+.btn-ivy-pulsador:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.8);
+    color: white;
+}
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.7); }
-            100% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
-        }
-
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.7); }
+    100% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
+}
         .nav-link.active-tab {
             background-color: var(--accent-blue) !important;
             color: #0f172a !important;
@@ -357,9 +356,9 @@
                         <i class="fa-brands fa-whatsapp fs-3"></i> Comunidad WhatsApp
                     </a>
 
-                    <button class="btn btn-ivy-pulsador btn-lg px-4 py-3 shadow d-inline-flex align-items-center gap-2" onclick="openIvyModal()">
-                        <i class="fa-solid fa-robot fs-3 text-warning"></i> 🤖 IvyAsesor (Gemini IA)
-                    </button>
+                    <button class="btn btn-ivy-pulsador btn-lg px-4 py-3 shadow d-inline-flex align-items-center gap-2" onclick="openIvysnowModal()">
+    <i class="fa-solid fa-mountain-sun fs-3 text-warning"></i> ❄️ Ivysnow te dice:
+</button>
 
                     <button class="btn btn-warning btn-lg px-4 py-3 fw-bold shadow d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#donationModal">
                         <i class="fa-solid fa-mug-hot fs-4"></i> Invitar a un café ☕
@@ -426,26 +425,32 @@
         </div>
     </div>
 
-    <!-- Modal para IvyAsesor (Chat) -->
-    <div class="modal fade" id="ivyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content glass-panel text-light border border-secondary">
-                <div class="modal-header border-bottom border-secondary">
-                    <h5 class="modal-title"><i class="fa-solid fa-robot text-purple me-2"></i>IvyAsesor <span class="fs-6 text-purple">(Powered by Gemini IA)</span></h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <!-- Modal Ivysnow te dice (Frases y Paisajes de Montaña) -->
+<div class="modal fade" id="ivysnowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content glass-panel text-light border border-secondary" style="overflow: hidden;">
+            <div class="modal-header border-bottom border-secondary bg-dark bg-opacity-50">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-snowflake text-info me-2"></i>Ivysnow te dice:</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0 position-relative">
+                <div id="quoteImageBg" style="position: absolute; top:0; left:0; width:100%; height:100%; background: url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; opacity: 0.25; z-index: 0;"></div>
+                
+                <div class="p-5 text-center position-relative" style="z-index: 1; min-height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <i class="fa-solid fa-quote-left text-info fs-3 mb-3 opacity-75"></i>
+                    <p id="quoteText" class="fs-5 fw-semibold fst-italic mb-4 text-light px-3" style="line-height: 1.6; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
+                        "La montaña no es más alta que tus sueños, ni la nieve más fría que la pasión de un rider."
+                    </p>
+                    <i class="fa-solid fa-quote-right text-info fs-3 mt-1 opacity-75"></i>
                 </div>
-                <div class="modal-body p-4">
-                    <p class="small text-secondary mb-3">Tu experto personal en material de snowboard, tablas, ropa técnica, freeride y recomendaciones de estaciones.</p>
-                    <div class="chat-container mb-3" id="chatHistory" style="max-height: 350px; overflow-y: auto; padding: 15px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                        <div class="chat-bubble ivy" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: rgba(30, 41, 59, 0.9); color: #f8fafc; border: 1px solid rgba(192, 132, 252, 0.3);">
-                            ¡Hola! Soy <strong>IvyAsesor</strong>, tu experto integrado en snowboard. ¿En qué te puedo ayudar hoy? Puedes preguntarme sobre tablas con perfil híbrido o camber, marcas de botas normativas, cuáles son los mejores spots de freeride en el Pirineo o recomendaciones de estaciones según las valoraciones de la comunidad.
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="chatInput" class="form-control glass-panel text-light py-2" placeholder="Pregunta sobre material, freeride, estaciones..." onkeypress="handleChatKey(event)">
-                        <button class="btn btn-custom px-4" onclick="sendToIvy()"><i class="fa-solid fa-paper-plane me-1"></i> Preguntar</button>
-                    </div>
-                </div>
+            </div>
+            <div class="modal-footer border-top border-secondary bg-dark bg-opacity-50 d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-info px-4 fw-bold" onclick="generateNewQuote()"><i class="fa-solid fa-shuffle me-2"></i>Otra reflexión</button>
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
