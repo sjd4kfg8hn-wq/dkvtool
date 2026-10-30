@@ -1453,31 +1453,61 @@ const quotesAndImages = [
 
     <!-- Contenido de los Juegos -->
     <div class="game-container">
-      <!-- BLACKJACK DE FORFAITS -->
+      <!-- BLACKJACK DE FORFAITS (BLACK SNOW) -->
       <div id="game-blackjack" class="game-screen active">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div>Tus Forfaits: <span id="bj-bank" class="fw-bold text-warning">10 Forfaits 🎟️</span></div>
+          <div>Tus Forfaits: <span id="bj-bank" class="fw-bold text-warning">20 Forfaits 🎟️</span></div>
           <button class="btn btn-sm btn-outline-warning" onclick="showRanking()">🏆 Top 10 Forfaits</button>
         </div>
         
         <div id="bj-game-area" class="p-3 bg-dark rounded border border-info text-light">
-          <!-- Estado de la mesa -->
-          <div class="mb-3">
-            <h6 class="text-info">Crupier & Bots en pista</h6>
-            <div id="bj-bots-status" class="small text-muted mb-2">Esperando apuesta...</div>
+          <!-- Temporizador de Bloqueo por 12h (si aplica) -->
+          <div id="bj-lock-banner" class="alert alert-danger py-2 text-center" style="display:none;">
+            ⏳ Te has quedado sin forfaits. Vuelve en 12 horas!!!. Tiempo restante: <span id="bj-timer">12:00:00</span>
           </div>
 
-          <!-- Cartas -->
-          <div class="row text-center mb-3">
-            <div class="col-6 border-end border-secondary">
-              <p class="small mb-1">Crupier</p>
-              <div id="bj-dealer-cards" class="fs-5 fw-bold">🎴</div>
+          <div id="bj-play-interface">
+            <!-- Estado de la mesa (Crupier vs Tú) -->
+            <div class="row text-center mb-3 border-bottom border-secondary pb-2">
+              <div class="col-6 border-end border-secondary">
+                <p class="small mb-1 text-danger fw-bold">Crupier</p>
+                <div id="bj-dealer-cards" class="fs-6">🎴</div>
+                <div class="small text-muted mt-1">Puntuación: <span id="bj-dealer-score">-</span></div>
+              </div>
+              <div class="col-6">
+                <p class="small mb-1 text-warning fw-bold">Tu Mano</p>
+                <div id="bj-player-cards" class="fs-6">🎴</div>
+                <div class="small text-muted mt-1">Puntuación: <span id="bj-player-score">0</span></div>
+              </div>
             </div>
-            <div class="col-6">
-              <p class="small mb-1">Tu Mano (<span id="bj-player-score">0</span>)</p>
-              <div id="bj-player-cards" class="fs-5 fw-bold text-info">🎴</div>
+
+            <!-- Área de Apuesta (Se muestra antes de empezar la ronda) -->
+            <div id="bj-bet-section" class="text-center mb-2">
+              <p class="small text-light mb-1">Selecciona tu apuesta en Forfaits para la ronda:</p>
+              <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(1)">1 Día 🎿</button>
+              <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(3)">3 Días 🏂</button>
+              <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(7)">7 Días 🏔️</button>
             </div>
+
+            <!-- Controles de Jugada (Se muestran durante la partida activa) -->
+            <div id="bj-action-section" class="d-none text-center mt-2">
+              <button class="btn btn-success btn-sm px-4 me-2" onclick="bjHit()">Pedir Carta</button>
+              <button class="btn btn-danger btn-sm px-4" onclick="bjStand()">Plantarse</button>
+            </div>
+            
+            <div id="bj-message" class="mt-2 text-center fw-bold small text-warning"></div>
           </div>
+        </div>
+
+        <!-- VISTA DE RANKING TOP 10 -->
+        <div id="bj-ranking-view" class="mt-3 p-2 bg-dark rounded border border-secondary" style="display:none;">
+          <h6 class="text-warning mb-2 text-center">🏆 Top 10 Reyes de la Nieve</h6>
+          <ol id="bj-ranking-list" class="list-unstyled small text-start px-3 m-0"></ol>
+          <div class="text-center mt-2">
+            <button class="btn btn-sm btn-outline-light" onclick="hideRanking()">Volver al Juego</button>
+          </div>
+        </div>
+      </div>
 
           <!-- Área de Apuesta -->
           <div id="bj-bet-section" class="mb-2">
@@ -1548,10 +1578,12 @@ const quotesAndImages = [
   </div>
 </div>
     <script>
-// --- LÓGICA DE MINIJUEGOS Y BLACKJACK DE FORFAITS ---
+<script>
+// --- LÓGICA DE MINIJUEGOS Y BLACK SNOW (BLACKJACK) ---
 
 function openGamesModal() {
   document.getElementById('gamesModal').style.display = 'flex';
+  checkBjLockStatus();
 }
 
 function closeGamesModal(e) {
@@ -1571,13 +1603,56 @@ function switchGame(gameId) {
   if (gameId === 'snake') startSnake();
   if (gameId === 'breakout') startBreakout();
   if (gameId === 'sudoku') initSudoku();
+  if (gameId === 'blackjack') checkBjLockStatus();
 }
 
-// --- BLACKJACK DE FORFAITS (4 JUGADORES: TÚ + 3 BOTS + CRUPIER) ---
-let bjBank = 10; 
+// --- BLACK SNOW: MOTOR DE BLACKJACK PROFESIONAL (1 VS 1) ---
+let bjBank = parseInt(localStorage.getItem('snowboard_bj_bank')) || 20;
 let currentBet = 0;
-let deck = [], playerHand = [], dealerHand = [], botHands = [[], [], []];
+let deck = [], playerHand = [], dealerHand = [];
 let gameActive = false;
+
+// Control de bloqueo de 12 horas si el banco llega a 0
+function checkBjLockStatus() {
+  let lockUntil = localStorage.getItem('snowboard_bj_lock');
+  if (lockUntil) {
+    let now = new Date().getTime();
+    if (now < parseInt(lockUntil)) {
+      // Sanción activa
+      document.getElementById('bj-play-interface').style.display = 'none';
+      document.getElementById('bj-lock-banner').style.display = 'block';
+      startLockCountdown(parseInt(lockUntil));
+      return;
+    } else {
+      // Expiró el bloqueo, reponer 20 forfaits
+      localStorage.removeItem('snowboard_bj_lock');
+      bjBank = 20;
+      localStorage.setItem('snowboard_bj_bank', bjBank);
+    }
+  }
+  document.getElementById('bj-play-interface').style.display = 'block';
+  document.getElementById('bj-lock-banner').style.display = 'none';
+  document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
+}
+
+function startLockCountdown(targetTime) {
+  let timerInterval = setInterval(() => {
+    let now = new Date().getTime();
+    let distance = targetTime - now;
+    if (distance < 0) {
+      clearInterval(timerInterval);
+      localStorage.removeItem('snowboard_bj_lock');
+      bjBank = 20;
+      localStorage.setItem('snowboard_bj_bank', bjBank);
+      checkBjLockStatus();
+      return;
+    }
+    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById('bj-timer').innerText = `${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+}
 
 function startBlackjackGame(days) {
   if (bjBank < days) {
@@ -1586,13 +1661,14 @@ function startBlackjackGame(days) {
   }
   currentBet = days;
   bjBank -= days;
+  localStorage.setItem('snowboard_bj_bank', bjBank);
   document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
   
   document.getElementById('bj-bet-section').classList.add('d-none');
   document.getElementById('bj-action-section').classList.remove('d-none');
   document.getElementById('bj-message').innerText = '';
 
-  // Crear mazo de 52 cartas
+  // Construir mazo de 52 cartas
   deck = [];
   const suits = ['♠', '♥', '♦', '♣'];
   const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
@@ -1601,20 +1677,15 @@ function startBlackjackGame(days) {
       deck.push({ val: v, suit: s, color: (s === '♥' || s === '♦') ? 'text-danger' : 'text-dark' });
     }
   }
-  // Barajar aleatoriamente (Fisher-Yates)
+  // Barajado Fisher-Yates aleatorio
   for (let i = deck.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
 
-  // Repartir cartas: Usuario, 3 Bots y Crupier (2 cartas cada uno)
+  // Repartir 2 cartas al jugador y 2 al crupier
   playerHand = [deck.pop(), deck.pop()];
   dealerHand = [deck.pop(), deck.pop()];
-  botHands = [
-    [deck.pop(), deck.pop()],
-    [deck.pop(), deck.pop()],
-    [deck.pop(), deck.pop()]
-  ];
 
   gameActive = true;
   updateBjBoard(false);
@@ -1651,26 +1722,18 @@ function renderCardsHtml(hand, hideSecond = false) {
 function updateBjBoard(revealDealer) {
   document.getElementById('bj-player-cards').innerHTML = renderCardsHtml(playerHand);
   document.getElementById('bj-player-score').innerText = calculateHand(playerHand);
-  document.getElementById('bj-dealer-cards').innerHTML = renderCardsHtml(dealerHand, !revealDealer);
 
-  let botsHtml = "";
-  botHands.forEach((bot, idx) => {
-    let bScore = calculateHand(bot);
-    let botStatus = bScore > 21 ? '💥 Pasado' : `${bScore} pts`;
-    botsHtml += `<div class="col-4 border-end border-secondary">
-      <p class="small mb-1 text-info">Bot ${idx+1} (${botStatus})</p>
-      <div>${renderCardsHtml(bot)}</div>
-    </div>`;
-  });
-  document.getElementById('bj-bots-container').innerHTML = botsHtml;
+  document.getElementById('bj-dealer-cards').innerHTML = renderCardsHtml(dealerHand, !revealDealer);
+  document.getElementById('bj-dealer-score').innerText = revealDealer ? calculateHand(dealerHand) : '?';
 }
 
 function bjHit() {
   if (!gameActive) return;
   playerHand.push(deck.pop());
   updateBjBoard(false);
-  if (calculateHand(playerHand) > 21) {
-    endBjRound("¡Te pasaste de 21! Pierdes tus forfaits.");
+  let pScore = calculateHand(playerHand);
+  if (pScore > 21) {
+    endBjRound("¡Te pasaste de 21! Has perdido tus forfaits de la apuesta.", false);
   }
 }
 
@@ -1681,6 +1744,7 @@ function bjStand() {
   let pScore = calculateHand(playerHand);
   let dScore = calculateHand(dealerHand);
 
+  // Turno del Crupier: pide obligatoriamente hasta sumar 17 o más
   while (dScore < 17) {
     dealerHand.push(deck.pop());
     dScore = calculateHand(dealerHand);
@@ -1689,64 +1753,64 @@ function bjStand() {
   updateBjBoard(true);
 
   if (pScore > 21) {
-    document.getElementById('bj-message').innerText = `❌ Te pasaste de 21. Pierdes la apuesta.`;
+    endBjRound("❌ Te pasaste de 21 puntos.", false);
   } else if (dScore > 21 || pScore > dScore) {
     let won = currentBet * 2;
     bjBank += won;
-    document.getElementById('bj-message').innerText = `🎉 ¡Victoria! Has ganado ${won} Forfaits.`;
-    checkAndSaveRanking(bjBank);
+    localStorage.setItem('snowboard_bj_bank', bjBank);
+    endBjRound(`🎉 ¡Victoria! Has ganado ${won} Forfaits.`, true);
   } else if (pScore === dScore) {
-    bjBank += currentBet;
-    document.getElementById('bj-message').innerText = `🤝 Empate. Recuperas tus forfaits.`;
+    bjBank += currentBet; // Devuelve la apuesta inicial
+    localStorage.setItem('snowboard_bj_bank', bjBank);
+    endBjRound(`🤝 Empate (Push). Recuperas tus ${currentBet} forfaits.`, false);
   } else {
-    document.getElementById('bj-message').innerText = `❌ El crupier gana con ${dScore} puntos.`;
+    endBjRound(`❌ El crupier gana la mano con ${dScore} puntos.`, false);
   }
-
-  if (bjBank <= 0) {
-    bjBank = 5;
-    alert("¡Te quedaste sin forfaits! Te regalamos 5 nuevos de cortesía.");
-  }
-
-  document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
-  document.getElementById('bj-action-section').classList.add('d-none');
-  document.getElementById('bj-bet-section').classList.remove('d-none');
 }
 
-function endBjRound(msg) {
+function endBjRound(msg, wonGame) {
   gameActive = false;
-  updateBjBoard(true);
   document.getElementById('bj-message').innerText = msg;
-  if (bjBank <= 0) bjBank = 5;
   document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
+  
   document.getElementById('bj-action-section').classList.add('d-none');
   document.getElementById('bj-bet-section').classList.remove('d-none');
+
+  if (wonGame) {
+    checkAndSaveRanking(bjBank);
+  }
+
+  // Comprobar si el usuario se quedó sin forfaits
+  if (bjBank <= 0) {
+    let lockTime = new Date().getTime() + (12 * 60 * 60 * 12 * 1000); // 12 horas exactas
+    // (Nota: 12 * 3600 * 1000 para 12 horas reales)
+    lockTime = new Date().getTime() + (12 * 3600 * 1000);
+    localStorage.setItem('snowboard_bj_lock', lockTime);
+    alert("¡Te has quedado sin forfaits! Sanción aplicada: no podrás jugar en 12 horas.");
+    checkBjLockStatus();
+  }
 }
 
+// Sistema de Ranking Top 10 Interactivo
 function checkAndSaveRanking(score) {
   let ranking = JSON.parse(localStorage.getItem('snowboard_bj_ranking')) || [
     {name: "Iván (Pro)", score: 45},
     {name: "Coletinas", score: 35},
     {name: "Anita Dinamita", score: 28},
-    {name: "Rider_León", score: 20},
-    {name: "Pico_Tres_Mares", score: 18},
-    {name: "FreeRide99", score: 15},
-    {name: "CarvingKing", score: 12},
-    {name: "Anayet", score: 10},
-    {name: "Pajares_Local", score: 8}
+    {name: "Rider_León", score: 20}
   ];
 
   let lowestScore = ranking.length < 10 ? 0 : ranking[ranking.length - 1].score;
   if (score > lowestScore) {
     setTimeout(() => {
-      let playerName = prompt(`🏆 ¡Entraste en el Top 10 con ${score} Forfaits! Introduce tu nombre:`, "Rider León");
+      let playerName = prompt(`🏆 ¡Entraste en el Top 10 con ${score} Forfaits! Introduce tu nombre de Rider:`, "Rider León");
       if (playerName) {
         ranking.push({ name: playerName, score: score });
         ranking.sort((a, b) => b.score - a.score);
         ranking = ranking.slice(0, 10);
         localStorage.setItem('snowboard_bj_ranking', JSON.stringify(ranking));
-        showRanking();
       }
-    }, 500);
+    }, 400);
   }
 }
 
@@ -1767,7 +1831,7 @@ function hideRanking() {
   document.getElementById('bj-game-area').style.display = 'block';
 }
 
-// 2. Snake
+// --- Resto de Minijuegos (Snake, Breakout, Sudoku) ---
 let snakeInterval;
 function startSnake() {
   const canvas = document.getElementById('snakeCanvas');
@@ -1781,14 +1845,19 @@ function startSnake() {
   let changingDirection = false;
 
   if (snakeInterval) clearInterval(snakeInterval);
-  document.addEventListener('keydown', changeDirection);
+  document.addEventListener('keydown', e => {
+    const kc = e.keyCode;
+    if (changingDirection) return;
+    if (kc === 37 && dx === 0) { dx = -20; dy = 0; changingDirection = true; }
+    if (kc === 38 && dy === 0) { dx = 0; dy = -20; changingDirection = true; }
+    if (kc === 39 && dx === 0) { dx = 20; dy = 0; changingDirection = true; }
+    if (kc === 40 && dy === 0) { dx = 0; dy = 20; changingDirection = true; }
+  });
 
   function main() {
-    if (hasGameEnded()) return;
     changingDirection = false;
     ctx.fillStyle = "#0f172a";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
     ctx.fillStyle = '#f43f5e';
     ctx.fillRect(food.x, food.y, 18, 18);
 
@@ -1802,7 +1871,6 @@ function startSnake() {
     } else {
       snake.pop();
     }
-
     snake.forEach((part, index) => {
       ctx.fillStyle = index === 0 ? '#38bdf8' : '#0284c7';
       ctx.fillRect(part.x, part.y, 18, 18);
@@ -1810,25 +1878,8 @@ function startSnake() {
     snakeInterval = setTimeout(main, 120);
   }
   main();
-
-  function changeDirection(event) {
-    const keyPressed = event.keyCode;
-    if (changingDirection) return;
-    if (keyPressed === 37 && dx === 0) { dx = -20; dy = 0; changingDirection = true; }
-    if (keyPressed === 38 && dy === 0) { dx = 0; dy = -20; changingDirection = true; }
-    if (keyPressed === 39 && dx === 0) { dx = 20; dy = 0; changingDirection = true; }
-    if (keyPressed === 40 && dy === 0) { dx = 0; dy = 20; changingDirection = true; }
-  }
-
-  function hasGameEnded() {
-    for (let i = 4; i < snake.length; i++) {
-      if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
-    }
-    return snake[0].x < 0 || snake[0].x >= canvas.width || snake[0].y < 0 || snake[0].y >= canvas.height;
-  }
 }
 
-// 3. Breakout
 let breakoutAnim;
 function startBreakout() {
   const canvas = document.getElementById('breakoutCanvas');
@@ -1864,7 +1915,8 @@ function startBreakout() {
       if (x > paddleX && x < paddleX + paddleWidth) dy = -dy;
       else {
         lives--;
-        document.getElementById('breakout-lives').innerText = lives;
+        let lEl = document.getElementById('breakout-lives');
+        if(lEl) lEl.innerText = lives;
         if (!lives) { alert("¡Juego terminado!"); document.location.reload(); return; }
         else { x = canvas.width / 2; y = canvas.height - 30; dx = 2; dy = -2; paddleX = (canvas.width - paddleWidth) / 2; }
       }
@@ -1878,7 +1930,6 @@ function startBreakout() {
   draw();
 }
 
-// 4. Sudoku
 let selectedSudokuCell = null;
 function initSudoku() {
   const grid = document.getElementById('sudoku-grid');
