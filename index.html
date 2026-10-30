@@ -16,12 +16,13 @@
             --accent-purple: #c084fc;
             --accent-snow: #f8fafc;
         }
-/* CORRECCIÓN: Color de la letra visible y clara al escribir */
+/* CORRECCIÓN: Texto oscuro visible sobre fondo claro/blanco */
         #chatInput {
-            color: #ffffff !important;
+            color: #1e293b !important; /* Gris oscuro muy legible */
+            background-color: #ffffff !important; /* Asegura fondo blanco si lo prefieres */
         }
         #chatInput::placeholder {
-            color: #94a3b8 !important;
+            color: #64748b !important; /* Texto del placeholder en gris medio */
         }
         body {
             background: linear-gradient(135deg, #0b1329 0%, #1e293b 50%, #0f172a 100%);
