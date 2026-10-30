@@ -1548,11 +1548,10 @@ const quotesAndImages = [
   </div>
 </div>
     <script>
-// --- LÓGICA DE MINIJUEGOS ---
+// --- LÓGICA DE MINIJUEGOS Y BLACKJACK DE FORFAITS ---
 
 function openGamesModal() {
   document.getElementById('gamesModal').style.display = 'flex';
-  initSolitaire();
 }
 
 function closeGamesModal(e) {
@@ -1565,73 +1564,217 @@ function switchGame(gameId) {
   document.querySelectorAll('.game-tab').forEach(tab => tab.classList.remove('active'));
   document.querySelectorAll('.game-screen').forEach(screen => screen.classList.remove('active'));
   
-  event.target.classList.add('active');
-  document.getElementById('game-' + gameId).classList.add('active');
+  event.currentTarget.classList.add('active');
+  const targetScreen = document.getElementById('game-' + gameId);
+  if (targetScreen) targetScreen.classList.add('active');
 
   if (gameId === 'snake') startSnake();
   if (gameId === 'breakout') startBreakout();
   if (gameId === 'sudoku') initSudoku();
-  if (gameId === 'solitaire') initSolitaire();
 }
 
-// 1. Solitario Klondike Aleatorio (Versión Definitiva)
-function initSolitaire() {
-  const board = document.getElementById('solitaire-board');
-  if (!board) return;
+// --- BLACKJACK DE FORFAITS (4 JUGADORES: TÚ + 3 BOTS + CRUPIER) ---
+let bjBank = 10; 
+let currentBet = 0;
+let deck = [], playerHand = [], dealerHand = [], botHands = [[], [], []];
+let gameActive = false;
+
+function startBlackjackGame(days) {
+  if (bjBank < days) {
+    alert("¡No tienes suficientes forfaits para esta apuesta!");
+    return;
+  }
+  currentBet = days;
+  bjBank -= days;
+  document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
   
-  // Baraja aleatoria de 52 cartas
+  document.getElementById('bj-bet-section').classList.add('d-none');
+  document.getElementById('bj-action-section').classList.remove('d-none');
+  document.getElementById('bj-message').innerText = '';
+
+  // Crear mazo de 52 cartas
+  deck = [];
   const suits = ['♠', '♥', '♦', '♣'];
-  const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  let deck = [];
-  
+  const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
   for (let s of suits) {
     for (let v of values) {
-      deck.push({ val: v, suit: s, color: (s === '♥' || s === '♦') ? 'text-danger' : 'text-light' });
+      deck.push({ val: v, suit: s, color: (s === '♥' || s === '♦') ? 'text-danger' : 'text-dark' });
     }
   }
-  
-  // Algoritmo de barajado Fisher-Yates
+  // Barajar aleatoriamente (Fisher-Yates)
   for (let i = deck.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
 
-  let topCard = deck[0];
+  // Repartir cartas: Usuario, 3 Bots y Crupier (2 cartas cada uno)
+  playerHand = [deck.pop(), deck.pop()];
+  dealerHand = [deck.pop(), deck.pop()];
+  botHands = [
+    [deck.pop(), deck.pop()],
+    [deck.pop(), deck.pop()],
+    [deck.pop(), deck.pop()]
+  ];
 
-  board.innerHTML = `
-    <div class="p-3 text-center">
-      <div class="d-flex justify-content-around align-items-center mb-3">
-        <div class="p-2 border border-secondary rounded bg-dark text-light shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-          <span class="small text-muted">Mazo</span>
-          <span class="fw-bold">(${deck.length})</span>
-        </div>
-        <div class="p-2 border border-info rounded bg-dark shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-          <span class="small text-info">Visible</span>
-          <span class="${topCard.color} fs-3 fw-bold">${topCard.val}${topCard.suit}</span>
-        </div>
-        <div class="p-2 border border-success rounded bg-dark text-success shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; align-items: center; justify-content: center;">
-          ♠ Pila 1
-        </div>
-        <div class="p-2 border border-success rounded bg-dark text-success shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; align-items: center; justify-content: center;">
-          ♥ Pila 2
-        </div>
-      </div>
-      <div class="badge bg-info text-dark p-2 w-100 fs-6 mb-2">
-        ✨ Partida Klondike generada con éxito (Aleatoria y distinta cada vez)
-      </div>
-      <button class="btn btn-outline-info btn-sm px-4 mt-2" onclick="initSolitaire()">🔀 Repartir Nuevo Mazo</button>
-    </div>
-  `;
+  gameActive = true;
+  updateBjBoard(false);
 }
 
-// 2. Snake (Serpiente de Nieve)
+function calculateHand(hand) {
+  let sum = 0, aces = 0;
+  for (let card of hand) {
+    if (card.val === 'A') {
+      aces++;
+      sum += 11;
+    } else if (['K', 'Q', 'J', '10'].includes(card.val)) {
+      sum += 10;
+    } else {
+      sum += parseInt(card.val);
+    }
+  }
+  while (sum > 21 && aces > 0) {
+    sum -= 10;
+    aces--;
+  }
+  return sum;
+}
+
+function renderCardsHtml(hand, hideSecond = false) {
+  return hand.map((c, i) => {
+    if (hideSecond && i === 1) {
+      return `<span class="badge bg-secondary border border-light p-2 m-1 fs-6">🎴 ?</span>`;
+    }
+    return `<span class="badge bg-light ${c.color} border border-dark p-2 m-1 fs-6 shadow-sm">${c.val}${c.suit}</span>`;
+  }).join('');
+}
+
+function updateBjBoard(revealDealer) {
+  document.getElementById('bj-player-cards').innerHTML = renderCardsHtml(playerHand);
+  document.getElementById('bj-player-score').innerText = calculateHand(playerHand);
+  document.getElementById('bj-dealer-cards').innerHTML = renderCardsHtml(dealerHand, !revealDealer);
+
+  let botsHtml = "";
+  botHands.forEach((bot, idx) => {
+    let bScore = calculateHand(bot);
+    let botStatus = bScore > 21 ? '💥 Pasado' : `${bScore} pts`;
+    botsHtml += `<div class="col-4 border-end border-secondary">
+      <p class="small mb-1 text-info">Bot ${idx+1} (${botStatus})</p>
+      <div>${renderCardsHtml(bot)}</div>
+    </div>`;
+  });
+  document.getElementById('bj-bots-container').innerHTML = botsHtml;
+}
+
+function bjHit() {
+  if (!gameActive) return;
+  playerHand.push(deck.pop());
+  updateBjBoard(false);
+  if (calculateHand(playerHand) > 21) {
+    endBjRound("¡Te pasaste de 21! Pierdes tus forfaits.");
+  }
+}
+
+function bjStand() {
+  if (!gameActive) return;
+  gameActive = false;
+  
+  let pScore = calculateHand(playerHand);
+  let dScore = calculateHand(dealerHand);
+
+  while (dScore < 17) {
+    dealerHand.push(deck.pop());
+    dScore = calculateHand(dealerHand);
+  }
+
+  updateBjBoard(true);
+
+  if (pScore > 21) {
+    document.getElementById('bj-message').innerText = `❌ Te pasaste de 21. Pierdes la apuesta.`;
+  } else if (dScore > 21 || pScore > dScore) {
+    let won = currentBet * 2;
+    bjBank += won;
+    document.getElementById('bj-message').innerText = `🎉 ¡Victoria! Has ganado ${won} Forfaits.`;
+    checkAndSaveRanking(bjBank);
+  } else if (pScore === dScore) {
+    bjBank += currentBet;
+    document.getElementById('bj-message').innerText = `🤝 Empate. Recuperas tus forfaits.`;
+  } else {
+    document.getElementById('bj-message').innerText = `❌ El crupier gana con ${dScore} puntos.`;
+  }
+
+  if (bjBank <= 0) {
+    bjBank = 5;
+    alert("¡Te quedaste sin forfaits! Te regalamos 5 nuevos de cortesía.");
+  }
+
+  document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
+  document.getElementById('bj-action-section').classList.add('d-none');
+  document.getElementById('bj-bet-section').classList.remove('d-none');
+}
+
+function endBjRound(msg) {
+  gameActive = false;
+  updateBjBoard(true);
+  document.getElementById('bj-message').innerText = msg;
+  if (bjBank <= 0) bjBank = 5;
+  document.getElementById('bj-bank').innerText = bjBank + ' Forfaits 🎟️';
+  document.getElementById('bj-action-section').classList.add('d-none');
+  document.getElementById('bj-bet-section').classList.remove('d-none');
+}
+
+function checkAndSaveRanking(score) {
+  let ranking = JSON.parse(localStorage.getItem('snowboard_bj_ranking')) || [
+    {name: "Iván (Pro)", score: 45},
+    {name: "Coletinas", score: 35},
+    {name: "Anita Dinamita", score: 28},
+    {name: "Rider_León", score: 20},
+    {name: "Pico_Tres_Mares", score: 18},
+    {name: "FreeRide99", score: 15},
+    {name: "CarvingKing", score: 12},
+    {name: "Anayet", score: 10},
+    {name: "Pajares_Local", score: 8}
+  ];
+
+  let lowestScore = ranking.length < 10 ? 0 : ranking[ranking.length - 1].score;
+  if (score > lowestScore) {
+    setTimeout(() => {
+      let playerName = prompt(`🏆 ¡Entraste en el Top 10 con ${score} Forfaits! Introduce tu nombre:`, "Rider León");
+      if (playerName) {
+        ranking.push({ name: playerName, score: score });
+        ranking.sort((a, b) => b.score - a.score);
+        ranking = ranking.slice(0, 10);
+        localStorage.setItem('snowboard_bj_ranking', JSON.stringify(ranking));
+        showRanking();
+      }
+    }, 500);
+  }
+}
+
+function showRanking() {
+  let ranking = JSON.parse(localStorage.getItem('snowboard_bj_ranking')) || [];
+  let listHtml = "";
+  ranking.forEach((item, index) => {
+    let medal = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : '🔹'));
+    listHtml += `<li class="py-1 border-bottom border-secondary d-flex justify-content-between"><span>${medal} ${index+1}. ${item.name}</span> <span class="text-warning fw-bold">${item.score} Forfaits</span></li>`;
+  });
+  document.getElementById('bj-ranking-list').innerHTML = listHtml;
+  document.getElementById('bj-game-area').style.display = 'none';
+  document.getElementById('bj-ranking-view').style.display = 'block';
+}
+
+function hideRanking() {
+  document.getElementById('bj-ranking-view').style.display = 'none';
+  document.getElementById('bj-game-area').style.display = 'block';
+}
+
+// 2. Snake
 let snakeInterval;
 function startSnake() {
   const canvas = document.getElementById('snakeCanvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let score = 0;
   document.getElementById('snake-score').innerText = score;
-  
   let snake = [{x: 160, y: 160}, {x: 140, y: 160}, {x: 120, y: 160}];
   let food = {x: 200, y: 200};
   let dx = 20, dy = 0;
@@ -1643,47 +1786,30 @@ function startSnake() {
   function main() {
     if (hasGameEnded()) return;
     changingDirection = false;
-    clearCanvas();
-    drawFood();
-    moveSnake();
-    drawSnake();
-    snakeInterval = setTimeout(main, 120);
-  }
-  main();
-
-  function clearCanvas() {
     ctx.fillStyle = "#0f172a";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
+    
+    ctx.fillStyle = '#f43f5e';
+    ctx.fillRect(food.x, food.y, 18, 18);
 
-  function drawSnake() {
-    snake.forEach((part, index) => {
-      ctx.fillStyle = index === 0 ? '#38bdf8' : '#0284c7';
-      ctx.fillRect(part.x, part.y, 18, 18);
-    });
-  }
-
-  function moveSnake() {
     const head = {x: snake[0].x + dx, y: snake[0].y + dy};
     snake.unshift(head);
     if (snake[0].x === food.x && snake[0].y === food.y) {
       score += 10;
       document.getElementById('snake-score').innerText = score;
-      generateFood();
+      food.x = Math.floor(Math.random() * (canvas.width / 20)) * 20;
+      food.y = Math.floor(Math.random() * (canvas.height / 20)) * 20;
     } else {
       snake.pop();
     }
-  }
 
-  function generateFood() {
-    food.x = Math.floor(Math.random() * (canvas.width / 20)) * 20;
-    food.y = Math.floor(Math.random() * (canvas.height / 20)) * 20;
+    snake.forEach((part, index) => {
+      ctx.fillStyle = index === 0 ? '#38bdf8' : '#0284c7';
+      ctx.fillRect(part.x, part.y, 18, 18);
+    });
+    snakeInterval = setTimeout(main, 120);
   }
-
-  function drawFood() {
-    ctx.fillStyle = '#f43f5e';
-    ctx.fillRect(food.x, food.y, 18, 18);
-  }
+  main();
 
   function changeDirection(event) {
     const keyPressed = event.keyCode;
@@ -1702,83 +1828,24 @@ function startSnake() {
   }
 }
 
-// 3. Breakout (Rebote & Bloques)
+// 3. Breakout
 let breakoutAnim;
 function startBreakout() {
   const canvas = document.getElementById('breakoutCanvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let x = canvas.width / 2, y = canvas.height - 30;
-  let dx = 2, dy = -2;
-  let ballRadius = 8;
+  let dx = 2, dy = -2, ballRadius = 8;
   let paddleHeight = 10, paddleWidth = 75;
   let paddleX = (canvas.width - paddleWidth) / 2;
   let rightPressed = false, leftPressed = false;
-  let score = 0, lives = 3;
+  let lives = 3;
 
-  let brickRowCount = 3, brickColumnCount = 6;
-  let brickWidth = 70, brickHeight = 20, brickPadding = 10, brickOffsetTop = 20, brickOffsetLeft = 15;
-  let bricks = [];
-
-  for (let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r++) {
-      bricks[c][r] = { x: 0, y: 0, status: 1 };
-    }
-  }
-
-  document.addEventListener("keydown", keyDownHandler);
-  document.addEventListener("keyup", keyUpHandler);
-  canvas.addEventListener("mousemove", mouseMoveHandler);
-
-  function keyDownHandler(e) {
-    if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
-    else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
-  }
-  function keyUpHandler(e) {
-    if (e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
-    else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
-  }
-  function mouseMoveHandler(e) {
-    let relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-      paddleX = relativeX - paddleWidth / 2;
-    }
-  }
-
-  function collisionDetection() {
-    for (let c = 0; c < brickColumnCount; c++) {
-      for (let r = 0; r < brickRowCount; r++) {
-        let b = bricks[c][r];
-        if (b.status === 1) {
-          if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-            dy = -dy;
-            b.status = 0;
-            score += 10;
-            document.getElementById('breakout-score').innerText = score;
-          }
-        }
-      }
-    }
-  }
+  document.addEventListener("keydown", e => { if(e.key==="ArrowRight") rightPressed=true; else if(e.key==="ArrowLeft") leftPressed=true; });
+  document.addEventListener("keyup", e => { if(e.key==="ArrowRight") rightPressed=false; else if(e.key==="ArrowLeft") leftPressed=false; });
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let c = 0; c < brickColumnCount; c++) {
-      for (let r = 0; r < brickRowCount; r++) {
-        if (bricks[c][r].status === 1) {
-          let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-          let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-          bricks[c][r].x = brickX;
-          bricks[c][r].y = brickY;
-          ctx.beginPath();
-          ctx.rect(brickX, brickY, brickWidth, brickHeight);
-          ctx.fillStyle = r === 0 ? '#f43f5e' : (r === 1 ? '#38bdf8' : '#10b981');
-          ctx.fill();
-          ctx.closePath();
-        }
-      }
-    }
-
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = "#38bdf8";
@@ -1791,8 +1858,6 @@ function startBreakout() {
     ctx.fill();
     ctx.closePath();
 
-    collisionDetection();
-
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
     if (y + dy < ballRadius) dy = -dy;
     else if (y + dy > canvas.height - ballRadius) {
@@ -1800,32 +1865,24 @@ function startBreakout() {
       else {
         lives--;
         document.getElementById('breakout-lives').innerText = lives;
-        if (!lives) {
-          alert("¡Juego terminado!");
-          document.location.reload();
-          return;
-        } else {
-          x = canvas.width / 2; y = canvas.height - 30; dx = 2; dy = -2;
-          paddleX = (canvas.width - paddleWidth) / 2;
-        }
+        if (!lives) { alert("¡Juego terminado!"); document.location.reload(); return; }
+        else { x = canvas.width / 2; y = canvas.height - 30; dx = 2; dy = -2; paddleX = (canvas.width - paddleWidth) / 2; }
       }
     }
-
     if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 5;
     else if (leftPressed && paddleX > 0) paddleX -= 5;
-
     x += dx; y += dy;
     breakoutAnim = requestAnimationFrame(draw);
   }
-
   if (breakoutAnim) cancelAnimationFrame(breakoutAnim);
   draw();
 }
 
-// 4. Sudoku Intermedio Aleatorio
+// 4. Sudoku
 let selectedSudokuCell = null;
 function initSudoku() {
   const grid = document.getElementById('sudoku-grid');
+  if (!grid) return;
   grid.innerHTML = '';
   const sampleBoard = [
     [5,3,0, 0,7,0, 0,0,0],
@@ -1858,7 +1915,6 @@ function initSudoku() {
     }
   }
 }
-
 function setSudokuNum(num) {
   if (selectedSudokuCell && !selectedSudokuCell.classList.contains('fixed')) {
     selectedSudokuCell.innerText = num === 0 ? '' : num;
