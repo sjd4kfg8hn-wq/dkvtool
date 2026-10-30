@@ -1445,7 +1445,7 @@ const quotesAndImages = [
     
     <!-- Pestañas de minijuegos -->
     <div class="games-tabs">
-      <button class="game-tab active" onclick="switchGame('solitaire')">🃏 Solitario</button>
+      <button class="game-tab active" onclick="switchGame('blackjack')">🎰 Blackjack Forfaits</button>
       <button class="game-tab" onclick="switchGame('snake')">🐍 Snake</button>
       <button class="game-tab" onclick="switchGame('breakout')">🧱 Rebotes (Breakout)</button>
       <button class="game-tab" onclick="switchGame('sudoku')">🔢 Sudoku Intermedio</button>
@@ -1453,13 +1453,55 @@ const quotesAndImages = [
 
     <!-- Contenido de los Juegos -->
     <div class="game-container">
-      <!-- SOLITARIO -->
-      <div id="game-solitaire" class="game-screen active">
+      <!-- BLACKJACK DE FORFAITS -->
+      <div id="game-blackjack" class="game-screen active">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Partida Klondike Aleatoria</span>
-          <button class="btn btn-sm btn-outline-info" onclick="initSolitaire()">Nueva Partida</button>
+          <div>Tus Forfaits: <span id="bj-bank" class="fw-bold text-warning">10 Forfaits 🎟️</span></div>
+          <button class="btn btn-sm btn-outline-warning" onclick="showRanking()">🏆 Top 10 Forfaits</button>
         </div>
-        <div id="solitaire-board" class="solitaire-board"></div>
+        
+        <div id="bj-game-area" class="p-3 bg-dark rounded border border-info text-light">
+          <!-- Estado de la mesa -->
+          <div class="mb-3">
+            <h6 class="text-info">Crupier & Bots en pista</h6>
+            <div id="bj-bots-status" class="small text-muted mb-2">Esperando apuesta...</div>
+          </div>
+
+          <!-- Cartas -->
+          <div class="row text-center mb-3">
+            <div class="col-6 border-end border-secondary">
+              <p class="small mb-1">Crupier</p>
+              <div id="bj-dealer-cards" class="fs-5 fw-bold">🎴</div>
+            </div>
+            <div class="col-6">
+              <p class="small mb-1">Tu Mano (<span id="bj-player-score">0</span>)</p>
+              <div id="bj-player-cards" class="fs-5 fw-bold text-info">🎴</div>
+            </div>
+          </div>
+
+          <!-- Área de Apuesta -->
+          <div id="bj-bet-section" class="mb-2">
+            <p class="small text-light mb-1">Selecciona tu apuesta en Forfaits:</p>
+            <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(1)">1 Día 🎿</button>
+            <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(3)">3 Días 🏂</button>
+            <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(7)">7 Días 🏔️</button>
+          </div>
+
+          <!-- Controles de Jugada -->
+          <div id="bj-action-section" class="d-none mt-2">
+            <button class="btn btn-success btn-sm px-3 me-2" onclick="bjHit()">Pedir Carta</button>
+            <button class="btn btn-danger btn-sm px-3" onclick="bjStand()">Plantarse</button>
+          </div>
+          
+          <div id="bj-message" class="mt-2 fw-bold small text-warning"></div>
+        </div>
+
+        <!-- VISTA DE RANKING TOP 10 -->
+        <div id="bj-ranking-view" class="mt-3 p-2 bg-dark rounded border border-secondary" style="display:none;">
+          <h6 class="text-warning mb-2">🏆 Top 10 Reyes de la Nieve</h6>
+          <ol id="bj-ranking-list" class="list-unstyled small text-start px-3 m-0"></ol>
+          <button class="btn btn-sm btn-outline-light mt-2" onclick="hideRanking()">Volver al Juego</button>
+        </div>
       </div>
 
       <!-- SNAKE -->
