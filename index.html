@@ -1,1 +1,1618 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Ventas e Incentivos DKV — Triunfar & Ivysnow</title>
+    <script src="https://cdn.tailwindcss.com">
+        // Funciones robustas para el Modal de Resumen Detallado DKV
+        function openResumenPdfModal() {
+            const modal = document.getElementById('resumenPdfModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeResumenModal() {
+            const modal = document.getElementById('resumenPdfModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        // Cerrar al pulsar fuera del modal
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('resumenPdfModal');
+            if (event.target === modal) {
+                closeResumenModal();
+            }
+        });
+
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tab-active {
+            border-bottom: 3px solid #38bdf8;
+            color: #38bdf8;
+            font-weight: bold;
+        }
+        body {
+            background-color: #020617 !important;
+            color: #f8fafc !important;
+            transition: background-image 1s ease-in-out;
+            position: relative;
+        }
+        /* Landscape weather backgrounds with high landscape visibility */
+        .bg-landscape-snow {
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.45), rgba(15, 23, 42, 0.65)), url('https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+        }
+        .bg-landscape-rain {
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.5), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+        }
+        .bg-landscape-mild {
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.4), rgba(15, 23, 42, 0.6)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+        }
+        .bg-landscape-sunny {
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.35), rgba(15, 23, 42, 0.55)), url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+        }
+        /* Weather Canvas Overlay */
+        #weatherCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .content-layer {
+            position: relative;
+            z-index: 2;
+        }
+        /* Analog Clock Styling */
+        .clock-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid #38bdf8;
+            position: relative;
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4), inset 0 0 15px rgba(0,0,0,0.6);
+        }
+        .clock-center {
+            width: 12px;
+            height: 12px;
+            background: #38bdf8;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 4px;
+            z-index: 5;
+        }
+        .hour-hand {
+            width: 4px;
+            height: 38px;
+            background: #f8fafc;
+        }
+        .minute-hand {
+            width: 3px;
+            height: 52px;
+            background: #38bdf8;
+        }
+        .second-hand {
+            width: 1.5px;
+            height: 58px;
+            background: #f43f5e;
+        }
+    </style>
+
+    <script>
+        // 1. Deshabilitar clic derecho
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // 2. Bloquear atajos de teclado de inspección y copiado de código
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.keyCode === 123 || // F12
+                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || // Ctrl+Shift+I/J/C
+                (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 80)) // Ctrl+U (Ver fuente), Ctrl+S (Guardar), Ctrl+P (Imprimir)
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 3. Bloquear selección de texto para evitar copiado masivo (excepto en inputs)
+        document.addEventListener('selectstart', function(e) {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
+                e.preventDefault();
+            }
+        });
+    </script>
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        input, textarea, select {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+    </style>
+
+</head>
+<body id="mainBody" class="bg-landscape-mild font-sans text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Canvas for Weather Particles (Rain / Snow) -->
+    <canvas id="weatherCanvas"></canvas>
+
+    <div class="content-layer flex-1 flex flex-col justify-between">
+        <div>
+            <!-- Toast Notification -->
+            <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+                <span id="toast-msg" class="text-sm font-medium">Notificación</span>
+            </div>
+
+            <!-- Header Navigation -->
+            <header class="bg-slate-900/80 backdrop-blur-md shadow-lg border-b border-slate-800 sticky top-0 z-40 text-slate-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col lg:flex-row justify-between lg:h-16 items-center py-3 lg:py-0 space-y-3 lg:space-y-0">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-gradient-to-tr from-blue-700 to-sky-500 text-white rounded-xl shadow">
+                                <i class="fa-solid fa-trophy text-xl"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-lg md:text-xl font-bold text-slate-100 leading-tight">Panel de Ventas DKV • <span class="text-sky-400">Ivysnow</span> <span class="inline-flex items-center space-x-2 ml-2.5 bg-slate-950/70 px-3 py-1 rounded-full border border-slate-700/60" title="Lazos Conmemorativos"><i class="fa-solid fa-ribbon text-pink-400 text-base animate-pulse" title="Lazo Rosa - Lucha Contra el Cáncer"></i><i class="fa-solid fa-ribbon text-purple-400 text-base animate-pulse" title="Lazo Morado - Contra el Maltrato y Violencia de Género"></i></span></h1>
+                                <p class="text-xs text-slate-400">Estrategia, Motivación y Control Comercial</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-center gap-1.5 md:gap-2">
+                            <button id="tabTriunfar-btn" onclick="switchTab('tabTriunfar')" class="px-3 py-1.5 text-xs md:text-sm font-medium transition-all tab-active flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-mountain-sun text-amber-400"></i><span>Triunfar</span>
+                            </button>
+                            <button id="tab1-btn" onclick="switchTab('tab1')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-calculator text-sky-400"></i><span>Calculadora</span>
+                            </button>
+                            <button id="tabIntegral-btn" onclick="switchTab('tabIntegral')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-file-medical text-indigo-400"></i><span>DKV Integral</span>
+                            </button>
+                            <button id="tabFamedic-btn" onclick="switchTab('tabFamedic')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-notes-medical text-teal-400"></i><span>Famedic</span>
+                            </button>
+                            <button id="tabProteccion-btn" onclick="switchTab('tabProteccion')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-shield-halved text-emerald-400"></i><span>Protección Familiar</span>
+                            </button>
+                            <button id="tabContactos-btn" onclick="switchTab('tabContactos')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-address-book text-purple-400"></i><span>Medios de Contacto</span>
+                            </button>
+                            <button id="tab2-btn" onclick="switchTab('tab2')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 rounded-lg hover:bg-slate-800/80">
+                                <i class="fa-solid fa-users text-rose-400"></i><span>Histórico</span>
+                            </button>
+                            <button id="tabIvySays-btn" onclick="switchTab('tabIvySays')" class="px-3 py-1.5 text-xs md:text-sm font-medium text-amber-300 bg-amber-950/60 hover:bg-amber-900/80 border border-amber-500/30 rounded-lg transition-all flex items-center space-x-1.5 shadow-sm">
+                                <i class="fa-solid fa-heart text-rose-400 animate-pulse"></i><span>Ivy te dice...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- WIDGET SUPERIOR: TIEMPO, LOCALIZACIÓN, RELOJ DIGITAL & GEMINI -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+                <div id="weatherGeminiBar" class="bg-slate-900/60 backdrop-blur-md border border-slate-700/60 rounded-2xl px-4 py-3 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs shadow-xl">
+                    <div class="flex items-center justify-center md:justify-start space-x-2">
+                        <div id="weatherIcon" class="text-sky-400 text-lg animate-pulse"><i class="fa-solid fa-snowflake"></i></div>
+                        <div>
+                            <span id="locationText" class="font-bold text-slate-200">León, España</span>
+                            <span id="tempText" class="text-slate-300 ml-1.5">Cargando clima...</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 text-slate-200 bg-slate-950/50 py-1.5 px-4 rounded-xl border border-slate-800/80 w-fit mx-auto shadow-inner">
+                        <i class="fa-regular fa-clock text-sky-400"></i>
+                        <span id="liveClockText" class="font-mono font-bold text-slate-100 text-sm">--:--:--</span>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-end">
+                        <button onclick="openGeminiAssistant()" class="px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-md flex items-center space-x-2 transition-all">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                            <span>Asistente Gemini DKV</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+                <!-- PESTAÑA PRINCIPAL: TRIUNFAR -->
+                <div id="tabTriunfar" class="space-y-8 animate-fadeIn">
+                    <div class="bg-slate-900/65 backdrop-blur-md border border-slate-700/60 rounded-3xl p-6 md:p-10 shadow-2xl space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                            <div class="lg:col-span-8 space-y-4">
+                                <div class="inline-flex items-center space-x-2 px-3 py-1 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300 text-xs font-bold uppercase tracking-wider">
+                                    <i class="fa-solid fa-fire"></i>
+                                    <span>Pestaña Principal • Triunfar</span>
+                                </div>
+                                <h2 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                                    Visualiza tus metas y <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400">conquista tu día</span>
+                                </h2>
+                                <p class="text-sm md:text-base text-slate-200 leading-relaxed">
+                                    El fondo muestra el paisaje exterior en tiempo real con efectos meteorológicos dinámicos. Utiliza este panel central para revisar el clima actual, la hora exacta en tu reloj analógico y acceder a todas tus herramientas comerciales de DKV.
+                                </p>
+                                
+                                <div class="bg-slate-950/50 border border-slate-800/80 p-4 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div id="triunfarWeatherIcon" class="text-4xl text-sky-400 p-3 bg-slate-900/80 rounded-2xl border border-slate-800">
+                                            <i class="fa-solid fa-cloud-sun"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-slate-300 uppercase font-bold tracking-wider">Tiempo en León</div>
+                                            <div id="triunfarTempText" class="text-2xl font-black text-white">-- °C</div>
+                                            <div id="triunfarConditionText" class="text-xs text-teal-300 font-medium">Actualizando clima...</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-800 text-xs space-y-1">
+                                        <span class="font-bold text-slate-200 block"><i class="fa-solid fa-mountain text-amber-400 mr-1"></i> Estado del Paisaje:</span>
+                                        <p id="landscapeStatusMsg" class="text-slate-300">Cargando condiciones climáticas...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RELOJ ANALÓGICO EN VIVO EN TRIUNFAR -->
+                            <div class="lg:col-span-4 flex flex-col items-center justify-center space-y-3 bg-slate-950/60 p-6 rounded-3xl border border-slate-800/80 shadow-xl">
+                                <div class="text-xs font-bold text-sky-400 uppercase tracking-widest flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span>Reloj Analógico</span>
+                                </div>
+                                <div class="clock-circle">
+                                    <div class="clock-center"></div>
+                                    <div id="hourHand" class="hand hour-hand"></div>
+                                    <div id="minHand" class="hand minute-hand"></div>
+                                    <div id="secHand" class="hand second-hand"></div>
+                                </div>
+                                <div id="triunfarDigitalClock" class="font-mono text-sm font-bold text-slate-200">--:--:--</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    
+                    <!-- BANNER DE LAZOS CONMEMORATIVOS Y ESPACIO SEGURO EN PANTALLA PRINCIPAL -->
+                    <div class="bg-gradient-to-r from-slate-900/90 via-purple-950/70 to-slate-900/90 border border-slate-700/80 rounded-3xl p-5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 backdrop-blur-md">
+                        <div class="flex items-center space-x-4 text-center md:text-left">
+                            <div class="flex items-center space-x-2 justify-center">
+                                <div class="w-12 h-12 bg-pink-500/20 border border-pink-400/50 rounded-2xl flex items-center justify-center text-pink-400 text-2xl shadow-lg" title="Lazo Rosa">
+                                    <i class="fa-solid fa-ribbon"></i>
+                                </div>
+                                <div class="w-12 h-12 bg-purple-500/20 border border-purple-400/50 rounded-2xl flex items-center justify-center text-purple-400 text-2xl shadow-lg" title="Lazo Morado">
+                                    <i class="fa-solid fa-ribbon"></i>
+                                </div>
+                                <!-- FRANZAS DE COLORES LGBTY+ BIEN VISIBLES Y DISTINGUIBLES -->
+                                <div class="h-12 px-3 rounded-2xl flex items-center justify-center space-x-1 shadow-lg border border-white/20 bg-slate-950/80" title="Orgullo LGBTQ+">
+                                    <div class="w-2.5 h-8 bg-red-500 rounded-sm"></div>
+                                    <div class="w-2.5 h-8 bg-orange-500 rounded-sm"></div>
+                                    <div class="w-2.5 h-8 bg-yellow-400 rounded-sm"></div>
+                                    <div class="w-2.5 h-8 bg-green-500 rounded-sm"></div>
+                                    <div class="w-2.5 h-8 bg-blue-500 rounded-sm"></div>
+                                    <div class="w-2.5 h-8 bg-purple-600 rounded-sm"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-base font-bold text-white flex items-center justify-center md:justify-start space-x-2">
+                                    <span>Espacio Seguro</span>
+                                </h4>
+                                <p class="text-xs text-slate-300">Respeto, inclusión y apoyo constante integrados en tu pantalla principal.</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-center gap-2.5 text-xs font-semibold">
+                            <!-- BOTÓN / DISTINTIVO CON LOS COLORES LGBTY+ BIEN VISIBLES -->
+                            <div class="px-3.5 py-1.5 bg-slate-950/90 text-slate-100 rounded-xl border border-slate-700 flex items-center space-x-2 shadow-md">
+                                <div class="flex space-x-0.5 items-center">
+                                    <span class="w-2 h-3.5 bg-red-500 rounded-xs inline-block"></span>
+                                    <span class="w-2 h-3.5 bg-orange-500 rounded-xs inline-block"></span>
+                                    <span class="w-2 h-3.5 bg-yellow-400 rounded-xs inline-block"></span>
+                                    <span class="w-2 h-3.5 bg-green-500 rounded-xs inline-block"></span>
+                                    <span class="w-2 h-3.5 bg-blue-500 rounded-xs inline-block"></span>
+                                    <span class="w-2 h-3.5 bg-purple-600 rounded-xs inline-block"></span>
+                                </div>
+                                <span class="font-bold tracking-wide">LGBTY+</span>
+                            </div>
+
+                            <!-- ENLACE A TOLERANCIA CERO AL MALTRATO -->
+                            <a href="https://violenciagenero.igualdad.gob.es/informacion-3/queHacer/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 bg-purple-900/90 hover:bg-purple-800 text-purple-200 hover:text-white rounded-xl border border-purple-600/80 flex items-center space-x-2 shadow-md transition-all hover:scale-105 group" title="Ir a Información Oficial de Violencia de Género">
+                                <i class="fa-solid fa-ribbon text-purple-400 group-hover:text-purple-300 text-sm"></i>
+                                <span class="font-bold">Tolerancia Cero al Maltrato</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300 ml-0.5"></i>
+                            </a>
+
+                            <!-- INSIGNIA ESPACIO SEGURO -->
+                            <span class="px-3.5 py-1.5 bg-emerald-950/90 text-emerald-300 rounded-xl border border-emerald-700/80 flex items-center space-x-2 shadow-md">
+                                <i class="fa-solid fa-shield-heart text-emerald-400 text-sm"></i>
+                                <span>Espacio Seguro</span>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <!-- ACCESOS RÁPIDOS A TODAS LAS PESTAÑAS DESDE TRIUNFAR -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-compass text-sky-400"></i>
+                            <span>Accesos Directos a Pestañas Comerciales y Herramientas</span>
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <button onclick="switchTab('tab1')" class="p-4 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-sky-500 rounded-2xl text-left transition-all group flex items-start space-x-3.5 shadow-lg">
+                                <div class="p-3 bg-sky-500/20 text-sky-400 rounded-xl group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-calculator text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm group-hover:text-sky-300">Calculadora & Registro</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Registra pólizas de clientes, simula puntos y calcula tu objetivo mensual.</p>
+                                </div>
+                            </button>
+
+                            <button onclick="switchTab('tabIntegral')" class="p-4 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-indigo-500 rounded-2xl text-left transition-all group flex items-start space-x-3.5 shadow-lg">
+                                <div class="p-3 bg-indigo-500/20 text-indigo-400 rounded-xl group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-file-medical text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm group-hover:text-indigo-300">DKV Integral</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Guía oficial de coberturas, modalidades de copago y baremo dental.</p>
+                                </div>
+                            </button>
+
+                            <button onclick="switchTab('tabFamedic')" class="p-4 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-teal-500 rounded-2xl text-left transition-all group flex items-start space-x-3.5 shadow-lg">
+                                <div class="p-3 bg-teal-500/20 text-teal-400 rounded-xl group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-notes-medical text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm group-hover:text-teal-300">DKV Famedic</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Famedic Plus, Famedic Pro, especialidades, fisioterapia y baremo dental.</p>
+                                </div>
+                            </button>
+
+                            <button onclick="switchTab('tabProteccion')" class="p-4 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-emerald-500 rounded-2xl text-left transition-all group flex items-start space-x-3.5 shadow-lg">
+                                <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm group-hover:text-emerald-300">Protección Familiar</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Servicio funerario integral, gestoría post-mortem y apoyo psicológico.</p>
+                                </div>
+                            </button>
+
+                            <button onclick="switchTab('tabContactos')" class="p-4 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-purple-500 rounded-2xl text-left transition-all group flex items-start space-x-3.5 shadow-lg">
+                                <div class="p-3 bg-purple-500/20 text-purple-400 rounded-xl group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-address-book text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm group-hover:text-purple-300">Medios de Contacto</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Directorio telefónico, WhatsApp, email comercial y de atención ATC DKV.</p>
+                                </div>
+                            </button>
+
+                            <button onclick="switchTab('tab2')" class="p-4 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-rose-500 rounded-2xl text-left transition-all group flex items-start space-x-3.5 shadow-lg">
+                                <div class="p-3 bg-rose-500/20 text-rose-400 rounded-xl group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-users text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm group-hover:text-rose-300">Histórico de Ventas</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Listado de pólizas guardadas, filtros por producto y exportación a Excel / CSV.</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA NUTRITIVA Y MOTIVACIONAL: "Ivy te dice..." -->
+                <div id="tabIvySays" class="hidden space-y-8 animate-fadeIn">
+                    <div class="bg-gradient-to-r from-purple-950/80 via-slate-900/80 to-rose-950/80 backdrop-blur-md border border-purple-800/50 rounded-3xl p-8 shadow-2xl text-center space-y-6">
+                        <div class="w-20 h-20 bg-gradient-to-tr from-rose-500 to-amber-400 rounded-3xl mx-auto flex items-center justify-center text-white text-3xl shadow-lg shadow-rose-500/20 animate-bounce">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div class="space-y-2 max-w-2xl mx-auto">
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-white">Ivy te dice...</h2>
+                            <p class="text-sm md:text-base text-rose-200">
+                                Tu rincón diario de apoyo, motivación y fuerza. Recuerda que cada paso que das cuenta y que eres capaz de lograr todo lo que te propongas.
+                            </p>
+                        </div>
+
+                        <div>
+                            <button onclick="generateIvyMotivation()" class="px-8 py-4 bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-extrabold text-base rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95 flex items-center space-x-3 mx-auto">
+                                <i class="fa-solid fa-wand-sparkles text-amber-200 text-xl"></i>
+                                <span>Haz clic para recibir tu mensaje de hoy</span>
+                            </button>
+                        </div>
+
+                        <div class="max-w-3xl mx-auto bg-slate-950/80 border border-slate-800 p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl"></div>
+                            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
+                            <i class="fa-solid fa-quote-left text-4xl text-rose-500/20 absolute top-4 left-4"></i>
+                            <div class="relative z-10 space-y-4">
+                                <p id="ivyMotivationText" class="text-lg md:text-xl font-semibold text-slate-100 italic leading-relaxed">
+                                    "Confía en el proceso. Cada pequeño esfuerzo de hoy se transforma en el éxito del mañana. ¡Vales mucho más de lo que imaginas!"
+                                </p>
+                                <div id="ivyAuthorTag" class="text-xs font-bold text-amber-400 uppercase tracking-widest">— Mensaje de Apoyo & Ánimo Ivysnow</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-slate-900/70 backdrop-blur-sm border border-slate-800 p-6 rounded-2xl space-y-3">
+                            <div class="w-10 h-10 bg-rose-950 text-rose-400 rounded-xl flex items-center justify-center font-bold text-lg"><i class="fa-solid fa-face-smile"></i></div>
+                            <h4 class="font-bold text-white text-base">Reconoce tus logros</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">No esperes a conseguir una gran meta para sentirte orgulloso. Cada llamada realizada y cada conversación aprendida es una victoria personal.</p>
+                        </div>
+                        <div class="bg-slate-900/70 backdrop-blur-sm border border-slate-800 p-6 rounded-2xl space-y-3">
+                            <div class="w-10 h-10 bg-amber-950 text-amber-400 rounded-xl flex items-center justify-center font-bold text-lg"><i class="fa-solid fa-battery-full"></i></div>
+                            <h4 class="font-bold text-white text-base">Cuida tu energía</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">Recuerda tomar pequeños descansos, respirar profundo y mantener una actitud positiva. Tu bienestar es la clave de tu éxito.</p>
+                        </div>
+                        <div class="bg-slate-900/70 backdrop-blur-sm border border-slate-800 p-6 rounded-2xl space-y-3">
+                            <div class="w-10 h-10 bg-sky-950 text-sky-400 rounded-xl flex items-center justify-center font-bold text-lg"><i class="fa-solid fa-shield-heart"></i></div>
+                            <h4 class="font-bold text-white text-base">Perseverancia constante</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">Los días difíciles solo demuestran lo fuerte que eres. Sigue adelante con la firme certeza de que tu potencial no tiene límites.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SELECTOR DE MES Y AÑO (PARA PESTAÑAS COMERCIALES) -->
+                <div id="periodSelectorBox" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-4 text-slate-800 hidden">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-calendar-check text-blue-900 text-lg"></i>
+                        <div>
+                            <span class="text-xs text-slate-500 font-semibold block uppercase">Periodo de Cómputo</span>
+                            <span id="currentPeriodLabel" class="text-sm font-bold text-slate-800">Cargando...</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <label for="filterMonth" class="text-xs font-semibold text-slate-600">Mes activo:</label>
+                        <input type="month" id="filterMonth" onchange="onPeriodChange()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm bg-slate-50 font-medium focus:ring-2 focus:ring-blue-800 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- TAB 1: CALCULADORA Y REGISTRO -->
+                <div id="tab1" class="hidden space-y-8">
+                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden text-slate-800">
+                        <div class="bg-slate-800 px-6 py-4 text-white flex justify-between items-center">
+                            <h2 class="text-base md:text-lg font-semibold flex items-center space-x-2">
+                                <i class="fa-solid fa-user-plus text-blue-400"></i>
+                                <span>Registro de Nuevo Cliente / Póliza</span>
+                            </h2>
+                            <span class="text-xs bg-slate-700 text-slate-300 px-3 py-1 rounded-full hidden sm:inline">Conforme RGPD</span>
+                        </div>
+                        <form id="clientForm" onsubmit="registerClient(event)" class="p-6">
+                            <input type="hidden" id="editIndex" value="-1">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div>
+                                    <label for="date" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha Operación</label>
+                                    <input type="date" id="date" required class="w-full px-3 py-2 border border-slate-300 rounded-md bg-slate-50 text-sm">
+                                </div>
+                                <div>
+                                    <label for="nombre" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nombre / Cliente</label>
+                                    <input type="text" id="nombre" placeholder="Ej. Juan P." required class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label for="polizaId" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nº Póliza / Ref.</label>
+                                    <input type="text" id="polizaId" placeholder="Ej. POL-99823" required class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label for="movil" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Teléfono Contacto</label>
+                                    <input type="tel" id="movil" placeholder="Ej. 600000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label for="modalidad" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Modalidad DKV</label>
+                                    <select id="modalidad" required class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white">
+                                        <option value="Famedic Plus">Famedic Plus (20 pts)</option>
+                                        <option value="Famedic Pro">Famedic Pro (26 pts)</option>
+                                        <option value="DKV Integral">DKV Integral (Prima)</option>
+                                        <option value="Resto (Prima)">Resto (Prima) (1 pt / 40€)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="prima" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Prima Anual (€)</label>
+                                    <input type="number" id="prima" placeholder="Ej. 240.00" step="0.01" min="0" required class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                            <div class="mt-6 flex justify-end space-x-3">
+                                <button type="button" id="cancelEditBtn" onclick="resetForm()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-4 py-2 rounded-lg text-sm">Cancelar</button>
+                                <button type="submit" id="submitBtn" class="bg-blue-900 hover:bg-blue-800 text-white font-medium px-6 py-2.5 rounded-lg shadow-sm transition-all flex items-center space-x-2 text-sm">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    <span id="submitBtnText">Guardar Cliente en el Mes Activo</span>
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div class="lg:col-span-7 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden text-slate-800">
+                            <div class="bg-emerald-800 px-6 py-4 text-white flex justify-between items-center">
+                                <h2 class="text-base md:text-lg font-semibold flex items-center space-x-2">
+                                    <i class="fa-solid fa-calculator text-emerald-300"></i>
+                                    <span>Puntos Reales de Ventas (Calculados)</span>
+                                </h2>
+                                <span class="text-xs bg-emerald-700 text-emerald-100 px-3 py-1 rounded-full">Objetivo: 400 Pts</span>
+                            </div>
+                            <div class="p-6 space-y-6">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+                                            <th class="py-2">Producto</th>
+                                            <th class="py-2">Factor</th>
+                                            <th class="py-2 text-center">Ventas / Importe Mes</th>
+                                            <th class="py-2 text-right">Puntos Pólizas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100 text-sm">
+                                        <tr><td class="py-3 font-medium">Famedic Plus</td><td class="py-3 text-xs text-slate-500">20 pts/u</td><td class="py-3 text-center font-bold" id="real_plus_count">0 u</td><td class="py-3 text-right font-bold" id="pts_plus">0</td></tr>
+                                        <tr><td class="py-3 font-medium">Famedic Pro</td><td class="py-3 text-xs text-slate-500">26 pts/u</td><td class="py-3 text-center font-bold" id="real_pro_count">0 u</td><td class="py-3 text-right font-bold" id="pts_pro">0</td></tr>
+                                        <tr><td class="py-3 font-medium">Resto / Integral</td><td class="py-3 text-xs text-slate-500">1 pt / 40 €</td><td class="py-3 text-center font-bold" id="real_resto_val">0,00 €</td><td class="py-3 text-right font-bold" id="pts_resto">0</td></tr>
+                                    </tbody>
+                                </table>
+                                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
+                                    <span class="text-xs font-bold text-slate-700 uppercase block flex items-center space-x-1">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i>
+                                        <span>Simulador Adicional</span>
+                                    </span>
+                                    <div class="grid grid-cols-3 gap-2 pt-1 text-xs">
+                                        <div><label class="block font-medium text-slate-600">+ Plus extra:</label><input type="number" id="simPlus" min="0" value="0" oninput="recalculate()" class="w-full px-2 py-1 border border-slate-300 rounded text-center font-bold"></div>
+                                        <div><label class="block font-medium text-slate-600">+ Pro extra:</label><input type="number" id="simPro" min="0" value="0" oninput="recalculate()" class="w-full px-2 py-1 border border-slate-300 rounded text-center font-bold"></div>
+                                        <div><label class="block font-medium text-slate-600">+ Prima (€):</label><input type="number" id="simResto" min="0" step="0.01" value="0" oninput="recalculate()" class="w-full px-2 py-1 border border-slate-300 rounded text-center font-bold"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100 space-y-3">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="font-medium text-slate-600">Total Puntos Conseguidos Mes:</span>
+                                        <span id="total_pts" class="text-2xl font-black text-emerald-800">0 pts</span>
+                                    </div>
+                                    <div id="status_box" class="p-2.5 rounded-lg text-center text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                        Faltan 400 puntos para alcanzar el objetivo.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col text-slate-800">
+                            <div class="bg-slate-800 px-6 py-4 text-white">
+                                <h2 class="text-base md:text-lg font-semibold flex items-center space-x-2">
+                                    <i class="fa-solid fa-bars-progress text-emerald-400"></i>
+                                    <span>Progreso Objetivo Mensual</span>
+                                </h2>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col justify-center space-y-6">
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2">
+                                        <span class="text-slate-700">Porcentaje Cumplido:</span>
+                                        <span id="progressPctText" class="text-emerald-700">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 rounded-full h-6 overflow-hidden p-0.5 border border-slate-300">
+                                        <div id="progressBarFill" class="bg-emerald-600 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 text-xs font-bold text-white" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-xs text-slate-600">
+                                    <div class="flex justify-between border-b border-slate-200 pb-2"><span>Puntos Reales Registrados:</span><strong id="cardRealPts" class="text-slate-800">0 pts</strong></div>
+                                    <div class="flex justify-between border-b border-slate-200 pb-2"><span>Puntos Simulados Extra:</span><strong id="cardSimPts" class="text-amber-700">+0 pts</strong></div>
+                                    <div class="flex justify-between pt-1 text-sm font-bold text-slate-800"><span>Total Estimado:</span><span id="cardTotalPts" class="text-emerald-800">0 pts</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB DKV INTEGRAL -->
+                <div id="tabIntegral" class="hidden space-y-8">
+                    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-md space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-3 bg-blue-600 rounded-xl text-white cursor-pointer hover:bg-blue-500 transition-all shadow-lg" onclick="openResumenPdfModal()" title="Pulsa aquí para ver el resumen detallado de los documentos oficiales">
+                                    <i class="fa-solid fa-file-medical text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl md:text-2xl font-bold">DKV Integral — Guía Oficial de Coberturas y Copagos</h2>
+                                    <p class="text-xs md:text-sm text-blue-200">Seguro médico completo con libre elección de cuadro médico, habitación individual y límite de copagos.</p>
+                                </div>
+                            </div>
+                            <button onclick="openResumenPdfModal()" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center space-x-2 whitespace-nowrap">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                                <span>Abrir Resumen Detallado</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-stethoscope text-lg"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">1. Medicina Primaria y Especialidades</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">Acceso completo a medicina general, pediatría, enfermería y todas las especialidades médicas y quirúrgicas sin restricciones.</p>
+                                <div class="flex flex-wrap gap-2 pt-1">
+                                    <button onclick="openCopayModal()" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-900 font-semibold rounded text-[11px] transition-all flex items-center space-x-1">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i><span>Modalidades de Copago</span>
+                                    </button>
+                                    <a href="https://medicos.dkv.es" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-blue-900 font-semibold rounded text-[11px] transition-all flex items-center space-x-1">
+                                        <i class="fa-solid fa-user-doctor text-blue-700"></i><span>Cuadro Médico Integral</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100 text-[11px] text-blue-900 font-semibold"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> Cobertura ambulatoria total</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-hospital text-lg"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">2. Hospitalización y Quirófanos</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed">Ingreso hospitalario en habitación individual con cama para acompañante, manutención, UCI y prótesis quirúrgicas.</p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100 text-[11px] text-emerald-800 font-semibold"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> Habitación individual garantizada</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-shield-halved text-lg"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">3. Límite de Copagos (600 € / año)</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed">Tope máximo protegido de <strong>600 € por año y asegurado</strong> en copagos. Al llegar al límite, no se paga nada más.</p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100 text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> Tope económico garantizado</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-tooth text-lg"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">4. Franquicias y Dental Integral</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">Limpiezas de boca anuales, ortopantomografía y telerradiografía 100% gratuitas (0 €).</p>
+                                <div>
+                                    <button onclick="openDentalIntegralModal()" class="px-2.5 py-1 bg-teal-100 hover:bg-teal-200 text-teal-900 font-semibold rounded text-[11px] transition-all flex items-center space-x-1">
+                                        <i class="fa-solid fa-tooth"></i><span>Ver Baremo Dental Integral</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100 text-[11px] text-teal-800 font-semibold"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> Higiene dental anual gratis</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-globe text-lg"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">5. Asistencia en Viaje en el Extranjero</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed">Cobertura mundial en viajes de hasta 90 días, con hasta 18.000 € para gastos médicos en el extranjero.</p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100 text-[11px] text-sky-800 font-semibold"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> Hasta 18.000 € internacionales</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-laptop-medical text-lg"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">6. Salud Digital (App Quiero cuidarme Más)</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed">Chat médico 24h, receta electrónica, videoconsulta con especialistas y carpeta de salud.</p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100 text-[11px] text-rose-800 font-semibold"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> App digital integrada</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB FAMEDIC -->
+                <div id="tabFamedic" class="hidden space-y-8">
+                    <div class="bg-gradient-to-r from-teal-900 via-blue-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-md space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-3 bg-teal-600 rounded-xl text-white"><i class="fa-solid fa-notes-medical text-2xl"></i></div>
+                            <div>
+                                <h2 class="text-xl md:text-2xl font-bold">DKV Famedic — Guía Comercial, Especialistas y Coberturas</h2>
+                                <p class="text-xs md:text-sm text-teal-200">Explicación de la póliza, consultas ilimitadas, fisioterapia y ventajas profesionales.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-teal-900/40 border border-teal-500/30 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 text-slate-800">
+                        <div class="flex items-center space-x-3 text-white">
+                            <i class="fa-solid fa-globe text-teal-400 text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-sm">Cuadro Médico Oficial DKV Famedic</h4>
+                                <p class="text-xs text-teal-200">Consulte todos los médicos y centros concertados de Famedic.</p>
+                            </div>
+                        </div>
+                        <a href="https://www.dkvfamedic.com" target="_blank" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-lg shadow-sm transition-all flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-external-link-alt"></i><span>Acceder a dkvfamedic.com</span>
+                        </a>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6 text-slate-800">
+                        <div>
+                            <h3 class="text-base font-bold text-teal-900 mb-2 flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-info text-teal-700"></i>
+                                <span>¿Qué es DKV Famedic y qué incluye sin coste adicional?</span>
+                            </h3>
+                            <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4">
+                                DKV Famedic es un seguro de asistencia médica ambulatoria diseñado para ofrecer acceso ilimitado a consultas con especialistas en centros concertados, sin listas de espera y sin necesidad de declaración de salud previa.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 space-y-1">
+                                    <span class="font-bold text-teal-900 block"><i class="fa-solid fa-user-doctor text-teal-700 mr-1"></i> Medicina General y Pediatría</span>
+                                    <span class="text-slate-600">Consultas ilimitadas en centros Plus y profesionales concertados.</span>
+                                </div>
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 space-y-1">
+                                    <span class="font-bold text-teal-900 block"><i class="fa-solid fa-venus text-teal-700 mr-1"></i> Ginecología y Citología</span>
+                                    <span class="text-slate-600">Revisiones preventivas y citología anual incluida.</span>
+                                </div>
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 space-y-1">
+                                    <span class="font-bold text-teal-900 block"><i class="fa-solid fa-eye text-teal-700 mr-1"></i> Oftalmología y Dermatología</span>
+                                    <span class="text-slate-600">Especialidades esenciales de acceso directo.</span>
+                                </div>
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 space-y-1">
+                                    <span class="font-bold text-teal-900 block"><i class="fa-solid fa-bone text-teal-700 mr-1"></i> Traumatología y Enfermería</span>
+                                    <span class="text-slate-600">Atención de lesiones, curas e inyectables.</span>
+                                </div>
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 space-y-1">
+                                    <span class="font-bold text-teal-900 block"><i class="fa-solid fa-tooth text-teal-700 mr-1"></i> Odontología Básica / Gratuita</span>
+                                    <span class="text-slate-600">Revisiones, limpiezas y franquicias preferentes.</span>
+                                </div>
+                                <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 space-y-1">
+                                    <span class="font-bold text-teal-900 block"><i class="fa-solid fa-mobile-screen text-teal-700 mr-1"></i> Telemedicina 24h</span>
+                                    <span class="text-slate-600">Acceso a chat médico y recetas a través de la app.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-6 text-slate-800">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="p-3 bg-blue-50 text-blue-900 rounded-xl font-bold"><i class="fa-solid fa-user-shield text-2xl"></i></div>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-900 font-bold rounded-full text-xs">Famedic Plus</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">DKV Famedic Plus</h3>
+                                <p class="text-xs text-slate-600 mb-6">Seguro de asistencia médica ambulatoria y odontológica con acceso ilimitado a consultas en centros "Plus".</p>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 mb-6">
+                                    <h4 class="font-bold text-xs uppercase text-slate-700 tracking-wider">Tarifas (Famedic Plus)</h4>
+                                    <div class="grid grid-cols-3 gap-2 text-center">
+                                        <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="text-[10px] text-slate-500 block font-semibold">MENSUAL</span><span class="text-sm font-bold text-blue-900">25,50 €</span></div>
+                                        <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="text-[10px] text-slate-500 block font-semibold">SEMESTRAL</span><span class="text-sm font-bold text-blue-900">153,00 €</span></div>
+                                        <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="text-[10px] text-slate-500 block font-semibold">ANUAL</span><span class="text-sm font-bold text-emerald-700">306,00 €</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
+                                <button type="button" onclick="openDentalFamedicModal()" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white rounded text-xs font-semibold shadow-sm"><i class="fa-solid fa-eye mr-1"></i> Ver Baremo Dental</button>
+                                <span class="text-xs font-bold text-blue-900">20 Puntos Venta</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-6 text-slate-800">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="p-3 bg-teal-50 text-teal-800 rounded-xl font-bold"><i class="fa-solid fa-briefcase-medical text-2xl"></i></div>
+                                    <span class="px-3 py-1 bg-teal-100 text-teal-800 font-bold rounded-full text-xs">Famedic Profesional</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">DKV Famedic Profesional</h3>
+                                <p class="text-xs text-slate-600 mb-4">Diseñado para autónomos y profesionales, añadiendo ventajas exclusivas:</p>
+                                
+                                <div class="space-y-2 mb-6 text-xs">
+                                    <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center space-x-2 text-emerald-900 font-bold">
+                                        <i class="fa-solid fa-check text-emerald-600 text-base"></i>
+                                        <span>20 sesiones de Fisioterapia anuales gratuitas</span>
+                                    </div>
+                                    <div class="p-2.5 bg-blue-50 border border-blue-200 rounded-lg flex items-center space-x-2 text-blue-900 font-bold">
+                                        <i class="fa-solid fa-file-invoice text-blue-600 text-base"></i>
+                                        <span>Factuconta: Servicio de facturación y gestoría online</span>
+                                    </div>
+                                </div>
+
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 mb-6">
+                                    <h4 class="font-bold text-xs uppercase text-slate-700 tracking-wider">Tarifas (Famedic Profesional)</h4>
+                                    <div class="grid grid-cols-3 gap-2 text-center">
+                                        <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="text-[10px] text-slate-500 block font-semibold">MENSUAL</span><span class="text-sm font-bold text-teal-900">35,50 €</span></div>
+                                        <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="text-[10px] text-slate-500 block font-semibold">SEMESTRAL</span><span class="text-sm font-bold text-teal-900">213,00 €</span></div>
+                                        <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="text-[10px] text-slate-500 block font-semibold">ANUAL</span><span class="text-sm font-bold text-emerald-700">426,00 €</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
+                                <span class="text-xs text-slate-500 font-semibold">Autónomos y Negocios</span>
+                                <span class="text-xs font-bold text-teal-900">26 Puntos Venta</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB PROTECCION FAMILIAR -->
+                <div id="tabProteccion" class="hidden space-y-8">
+                    <div class="bg-gradient-to-r from-indigo-900 via-blue-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-md space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-3 bg-indigo-600 rounded-xl text-white"><i class="fa-solid fa-shield-heart text-2xl"></i></div>
+                            <div>
+                                <h2 class="text-xl md:text-2xl font-bold">DKV Protección Familiar — Guía de Coberturas</h2>
+                                <p class="text-xs md:text-sm text-indigo-200">Garantías de servicio funerario integral, traslados nacionales e internacionales y gestoría legal.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 text-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-dove text-lg"></i></div>
+                            <h3 class="font-bold text-slate-800 text-base mb-1">1. Servicio Funerario Integral</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">Atención, gestión y realización integral del sepelio con féretro, tanatorio y traslados en todo el territorio nacional.</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 text-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-file-lines text-lg"></i></div>
+                            <h3 class="font-bold text-slate-800 text-base mb-1">2. Gestoría y Trámites Post-Mortem</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">Tramitación de certificados, pensiones de viudedad, últimas voluntades y asesoramiento legal completo para la familia.</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3 text-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-800 flex items-center justify-center font-bold mb-3"><i class="fa-solid fa-brain text-lg"></i></div>
+                            <h3 class="font-bold text-slate-800 text-base mb-1">3. Asistencia Psicológica en el Duelo</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">Línea telefónica de apoyo psicológico 24h y acompañamiento especializado para familiares directos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB MEDIOS DE CONTACTO -->
+                <div id="tabContactos" class="hidden space-y-8">
+                    <div class="bg-gradient-to-r from-emerald-900 via-blue-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-md space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-3 bg-emerald-600 rounded-xl text-white"><i class="fa-solid fa-address-book text-2xl"></i></div>
+                            <div>
+                                <h2 class="text-xl md:text-2xl font-bold">Medios de Contacto Oficiales — DKV</h2>
+                                <p class="text-xs md:text-sm text-blue-200">Directorio completo de teléfonos, correos y canales de atención comercial y médica DKV.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl mb-4 font-bold"><i class="fa-solid fa-envelope"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">Correo Electrónico</h3>
+                                <p class="text-xs text-slate-500 mb-3">Consultas comerciales y soporte</p>
+                                <a href="mailto:info-dkv@market360.es" class="text-blue-900 font-mono font-bold text-sm hover:underline block break-all">info-dkv@market360.es</a>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400">Respuesta estimada: 24h</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl mb-4 font-bold"><i class="fa-solid fa-phone-volume"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">Devolución de Llamadas</h3>
+                                <p class="text-xs text-slate-500 mb-3">Línea directa de atención</p>
+                                <a href="tel:913302699" class="text-blue-900 font-mono font-bold text-base hover:underline block">913 30 26 99</a>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400">Atención comercial DKV</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4 font-bold"><i class="fa-brands fa-whatsapp"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">Número de WhatsApp</h3>
+                                <p class="text-xs text-slate-500 mb-3">Gestiones rápidas</p>
+                                <a href="https://wa.me/34643843018" target="_blank" class="text-blue-900 font-mono font-bold text-base hover:underline block">643 84 30 18</a>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400">Disponible L-V</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between text-slate-800">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center text-xl mb-4 font-bold"><i class="fa-solid fa-headset"></i></div>
+                                <h3 class="font-bold text-slate-800 text-base mb-1">Teléfono de ATC</h3>
+                                <p class="text-xs text-slate-500 mb-3">Atención general al cliente</p>
+                                <a href="tel:900810072" class="text-blue-900 font-mono font-bold text-base hover:underline block">900 810 072</a>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400">Urgencias y cuadro médico</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: HISTÓRICO DE CLIENTES -->
+                <div id="tab2" class="hidden space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden text-slate-800">
+                        <div class="bg-slate-800 px-6 py-4 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h2 class="text-base md:text-lg font-semibold flex items-center space-x-2">
+                                    <i class="fa-solid fa-folder-open text-blue-400"></i>
+                                    <span>Histórico Registrado</span>
+                                </h2>
+                                <p class="text-xs text-slate-400">Pólizas guardadas en local</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button onclick="exportCSV()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold flex items-center space-x-1 shadow-sm">
+                                    <i class="fa-solid fa-file-excel"></i>
+                                    <span>Exportar a Excel / CSV</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap gap-4 items-center justify-between text-xs">
+                            <div class="flex items-center space-x-2">
+                                <label for="filterModalidad" class="font-bold text-slate-600">Filtrar Producto:</label>
+                                <select id="filterModalidad" onchange="renderHistoricoTable()" class="px-2 py-1 border border-slate-300 rounded bg-white font-medium">
+                                    <option value="TODOS">Todos los productos</option>
+                                    <option value="Famedic Plus">Famedic Plus</option>
+                                    <option value="Famedic Pro">Famedic Pro</option>
+                                    <option value="DKV Integral">DKV Integral</option>
+                                    <option value="Resto (Prima)">Resto (Prima)</option>
+                                </select>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-slate-500">Prima Total del Periodo:</span>
+                                <span id="total_prima_historico" class="text-sm font-bold text-emerald-700 ml-1">0,00 €</span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase">
+                                        <th class="px-4 py-3">Fecha</th>
+                                        <th class="px-4 py-3">Cliente</th>
+                                        <th class="px-4 py-3">Nº Póliza</th>
+                                        <th class="px-4 py-3">Teléfono</th>
+                                        <th class="px-4 py-3">Modalidad</th>
+                                        <th class="px-4 py-3 text-right">Prima (€)</th>
+                                        <th class="px-4 py-3 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historico_body" class="divide-y divide-slate-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- MODALES -->
+        <!-- MODAL DE RESUMEN AMPLIADO Y DETALLADO DE LOS DOCUMENTOS IP (DKV INTEGRAL Y PROFESIONAL) -->
+        <div id="resumenPdfModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[85vh] flex flex-col overflow-hidden text-slate-100">
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-teal-900 px-6 py-4 flex justify-between items-center border-b border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-file-lines text-sky-400 text-xl"></i>
+                        <h3 class="font-bold text-base md:text-lg">Resumen Amplio y Detallado • DKV Integral & DKV Profesional</h3>
+                    </div>
+                    <button onclick="closeResumenModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-slate-300 leading-relaxed">
+                    
+                    <!-- BLOQUE 1: DKV INTEGRAL -->
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-blue-500/30 space-y-3">
+                        <h4 class="text-base font-bold text-sky-400 flex items-center space-x-2">
+                            <i class="fa-solid fa-file-medical"></i>
+                            <span>1. DKV Integral (Información del Producto)</span>
+                        </h4>
+                        <p><strong>Naturaleza del producto:</strong> Seguro de salud que permite elegir libremente médico o centro dentro del cuadro médico concertado por DKV Seguros.</p>
+                        <p><strong>Modalidades de Copago:</strong> Dispone de 5 modalidades de seguro que se diferencian en los importes de copago: <em>Élite, Classic, Plus, Complet y Elección</em>.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                            <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 space-y-2">
+                                <span class="font-bold text-emerald-400 block mb-1">✔ ¿Qué se asegura?</span>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                    <li>Asistencia primaria y urgencias 24h, especialidades médicas.</li>
+                                    <li>Hospitalización, cirugía, medios de diagnóstico y métodos terapéuticos.</li>
+                                    <li>Servicio dental y asistencia sanitaria en accidentes (laboral y tráfico).</li>
+                                    <li>Programas de salud, psicología, prótesis e indemnización diaria por hospitalización.</li>
+                                    <li>Asistencia en viaje mundial (hasta 90/180 días, límite 30.000€).</li>
+                                    <li>Salud digital (App Quiero cuidarme Más) y líneas médicas 24h.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 space-y-2">
+                                <span class="font-bold text-rose-400 block mb-1">✘ Exclusiones y Restricciones principales</span>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                    <li>Enfermedades o lesiones preexistentes en el momento de la contratación.</li>
+                                    <li>Cirugía estética, actos violentos, epidemias, catástrofes o riesgos deportivos altos.</li>
+                                    <li>Hospitalización psiquiátrica: máx. 60 días/año. Prótesis vasculares/cardiacas: máx. 12.000€.</li>
+                                    <li>Periodos de carencia: de 6 a 12 meses según el tipo de prestación sanitaria.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: DKV PROFESIONAL -->
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-teal-500/30 space-y-3">
+                        <h4 class="text-base font-bold text-teal-400 flex items-center space-x-2">
+                            <i class="fa-solid fa-briefcase-medical"></i>
+                            <span>2. DKV Profesional (Información del Producto)</span>
+                        </h4>
+                        <p><strong>Naturaleza del producto:</strong> Seguro modular diseñado para autónomos y profesionales que combina coberturas de salud, prestación económica por incapacidad temporal u hospitalización, accidentes y decesos.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                            <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 space-y-2">
+                                <span class="font-bold text-emerald-400 block mb-1">✔ Módulos y Coberturas</span>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                    <li><strong>Salud (Módulos A, B, C):</strong> Asistencia primaria, especialistas, hospitalización y cirugía con copagos.</li>
+                                    <li><strong>Incapacidad Temporal:</strong> Indemnización diaria por baja laboral o baremada por enfermedad.</li>
+                                    <li><strong>Accidentes y Decesos:</strong> Indemnización por muerte/invalidez y servicio funerario integral.</li>
+                                    <li><strong>Club Salud y Bienestar:</strong> Acceso preferente a servicios de prevención.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 space-y-2">
+                                <span class="font-bold text-rose-400 block mb-1">✘ Obligaciones, Pagos y Duración</span>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                    <li><strong>Obligaciones:</strong> Pago anual/fraccionado por domiciliación bancaria, declarar dolencias previas.</li>
+                                    <li><strong>Vigencia y Extinción:</strong> Las coberturas de incapacidad, accidentes y decesos se extinguen al final del año en que el asegurado cumple 70 años.</li>
+                                    <li><strong>Rescisión:</strong> Oposición a la prórroga anual con preaviso mínimo de 1 mes antes del vencimiento.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="bg-slate-950 px-6 py-4 border-t border-slate-800 flex justify-between items-center">
+                    <span class="text-xs text-slate-400 font-mono">Documentos oficiales procesados: IP.001 & IP.011 (DKV)</span>
+                    <button onclick="closeResumenModal()" class="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl transition-all shadow-md">Cerrar Resumen</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="copayModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-slate-200 text-slate-800">
+                <div class="bg-blue-900 px-6 py-4 text-white flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-file-invoice-dollar text-blue-300 text-xl"></i>
+                        <h3 class="text-base md:text-lg font-bold">Modalidades de Copago — DKV Integral</h3>
+                    </div>
+                    <button onclick="closeCopayModal()" class="text-blue-200 hover:text-white text-xl font-bold p-1"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm">
+                    <p class="text-slate-600 bg-blue-50 p-3 rounded-lg border border-blue-100"><i class="fa-solid fa-circle-info text-blue-800 mr-1"></i> DKV Integral ofrece tope máximo de <strong>600 € por año y asegurado</strong> en copagos.</p>
+                </div>
+                <div class="bg-slate-100 px-6 py-3 border-t border-slate-200 text-right">
+                    <button onclick="closeCopayModal()" class="px-5 py-2 bg-slate-800 text-white font-medium text-xs rounded-lg">Cerrar Ventana</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="dentalIntegralModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-slate-200 text-slate-800">
+                <div class="bg-teal-800 px-6 py-4 text-white flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-tooth text-teal-300 text-xl"></i>
+                        <h3 class="text-base md:text-lg font-bold">Baremo Dental — DKV Integral</h3>
+                    </div>
+                    <button onclick="closeDentalIntegralModal()" class="text-teal-200 hover:text-white text-xl font-bold p-1"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm">
+                    <p class="text-slate-600 bg-teal-50 p-3 rounded-lg border border-teal-100"><i class="fa-solid fa-circle-info text-teal-700 mr-1"></i> Limpiezas de boca anuales y radiografías 100% gratuitas (0 €).</p>
+                </div>
+                <div class="bg-slate-100 px-6 py-3 border-t border-slate-200 text-right">
+                    <button onclick="closeDentalIntegralModal()" class="px-5 py-2 bg-slate-800 text-white font-medium text-xs rounded-lg">Cerrar Ventana</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="dentalFamedicModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-slate-200 text-slate-800">
+                <div class="bg-teal-800 px-6 py-4 text-white flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-tooth text-teal-300 text-xl"></i>
+                        <h3 class="text-base md:text-lg font-bold">Baremo Dental — DKV Famedic</h3>
+                    </div>
+                    <button onclick="closeDentalFamedicModal()" class="text-teal-200 hover:text-white text-xl font-bold p-1"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm">
+                    <p class="text-slate-600 bg-teal-50 p-3 rounded-lg border border-teal-100"><i class="fa-solid fa-circle-info text-teal-700 mr-1"></i> Franquicias preferentes para asegurados de Famedic.</p>
+                </div>
+                <div class="bg-slate-100 px-6 py-3 border-t border-slate-200 text-right">
+                    <button onclick="closeDentalFamedicModal()" class="px-5 py-2 bg-slate-800 text-white font-medium text-xs rounded-lg">Cerrar Ventana</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL GEMINI -->
+        <div id="geminiModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl max-w-xl w-full flex flex-col overflow-hidden text-slate-100">
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-teal-900 px-6 py-4 flex justify-between items-center border-b border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xl"></i>
+                        <h3 class="font-bold text-base">Asistente Inteligente Gemini — DKV & Asesoría</h3>
+                    </div>
+                    <button onclick="closeGeminiAssistant()" class="text-slate-400 hover:text-white text-lg font-bold"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto text-xs sm:text-sm" id="geminiChatBox">
+                    <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/60 space-y-2">
+                        <div class="font-bold text-sky-400 flex items-center space-x-1.5"><i class="fa-solid fa-robot"></i><span>Gemini AI (Modo Colaborador)</span></div>
+                        <p class="text-slate-300 leading-relaxed">¡Hola Ivysnow! Estoy listo para ayudarte con las estrategias comerciales de DKV, resolver dudas sobre baremos, calcular incentivos o redactar argumentos de venta.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-950 border-t border-slate-800 flex items-center space-x-2">
+                    <input type="text" id="geminiPromptInput" placeholder="Pregúntale algo a Gemini sobre DKV..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500" onkeydown="if(event.key==='Enter') sendGeminiQuery()">
+                    <button onclick="sendGeminiQuery()" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-sm"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="py-8 border-t border-slate-800 bg-slate-950/80 backdrop-blur-md mt-12 text-slate-100">
+            <div class="max-w-7xl mx-auto text-center flex flex-col items-center justify-center space-y-3">
+                <svg class="w-20 h-20 drop-shadow-md" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 15L85 75H15L50 15Z" fill="#1e3a8a"/>
+                    <path d="M50 15L62 38L55 42L50 35L44 42L38 38L50 15Z" fill="#ffffff"/>
+                    <path d="M22 78L78 32" stroke="#059669" stroke-width="4.5" stroke-linecap="round"/>
+                    <path d="M78 78L22 32" stroke="#059669" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="38" cy="48" r="3" fill="#ffffff"/>
+                    <circle cx="62" cy="48" r="3" fill="#ffffff"/>
+                    <circle cx="50" cy="52" r="9" fill="#ffffff" stroke="#1e3a8a" stroke-width="2.5"/>
+                    <path d="M43 52C43 47 57 47 57 52" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div class="flex items-center justify-center space-x-2 text-lg font-mono font-bold tracking-widest text-slate-200 uppercase">
+                    <span>Ivysnow</span>
+                </div>
+                <div class="flex items-center justify-center space-x-2 text-xs text-slate-400 font-medium bg-slate-900/90 px-4 py-1.5 rounded-full border border-slate-800 shadow-inner">
+                    <i class="fa-regular fa-copyright text-sky-400"></i>
+                    <span>Todos los derechos reservados</span>
+                    <span class="text-slate-600">•</span>
+                    <span class="text-amber-400 font-bold">León MMXXVI</span>
+                </div>
+                <div class="w-16 h-1 bg-gradient-to-r from-sky-500 via-teal-400 to-emerald-500 rounded-full mt-1"></div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const ivyMotivations = [
+            "Confía en el proceso. Cada pequeño esfuerzo de hoy se transforma en el éxito del mañana. ¡Vales mucho más de lo que imaginas!",
+            "No dejes que el miedo a equivocarte te impida intentarlo. Tu valentía y constancia son tu mayor fuerza.",
+            "Recuerda que los momentos difíciles son solo peldaños para llegar más alto. ¡Hoy es un excelente día para brillar!",
+            "Tienes la capacidad, el talento y la garra para superar cualquier obstáculo. Cree en ti tanto como nosotros creemos en ti.",
+            "Cada llamada y cada cliente es una oportunidad para conectar y ayudar. Trabajas con un propósito increíble.",
+            "La perseverancia no es una carrera larga, es una serie de pequeñas carreras una tras otra. ¡Sigue adelante!",
+            "El éxito es la suma de pequeños esfuerzos repetidos día tras día. Estás haciendo un gran trabajo.",
+            "Sonríe y recuerda lo lejos que has llegado. Tu actitud transforma cualquier reto en un triunfo asegurado."
+        ];
+
+        function generateIvyMotivation() {
+            const textEl = document.getElementById('ivyMotivationText');
+            const randomMsg = ivyMotivations[Math.floor(Math.random() * ivyMotivations.length)];
+            textEl.classList.add('opacity-0');
+            setTimeout(() => {
+                textEl.textContent = '"' + randomMsg + '"';
+                textEl.classList.remove('opacity-0');
+            }, 200);
+        }
+
+        function switchTab(tabId) {
+            const tabsList = ['tabTriunfar', 'tab1', 'tabIntegral', 'tabFamedic', 'tabProteccion', 'tabContactos', 'tab2', 'tabIvySays'];
+            tabsList.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const btnMap = {
+                'tabTriunfar': 'tabTriunfar-btn',
+                'tab1': 'tab1-btn',
+                'tabIntegral': 'tabIntegral-btn',
+                'tabFamedic': 'tabFamedic-btn',
+                'tabProteccion': 'tabProteccion-btn',
+                'tabContactos': 'tabContactos-btn',
+                'tab2': 'tab2-btn',
+                'tabIvySays': 'tabIvySays-btn'
+            };
+
+            Object.keys(btnMap).forEach(key => {
+                const b = document.getElementById(btnMap[key]);
+                if (b && key !== 'tabIvySays') {
+                    b.classList.remove('tab-active', 'text-slate-100');
+                    b.classList.add('text-slate-300');
+                }
+            });
+
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(btnMap[tabId]);
+            if (activeBtn && tabId !== 'tabIvySays') {
+                activeBtn.classList.add('tab-active', 'text-slate-100');
+                activeBtn.classList.remove('text-slate-300');
+            }
+
+            const selectorBox = document.getElementById('periodSelectorBox');
+            if (selectorBox) {
+                if (tabId === 'tab1' || tabId === 'tab2') {
+                    selectorBox.classList.remove('hidden');
+                } else {
+                    selectorBox.classList.add('hidden');
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Live Analog & Digital Clock Update (Instant execution)
+        function updateClockAndHands() {
+            const now = new Date();
+            const sec = now.getSeconds();
+            const min = now.getMinutes();
+            const hr = now.getHours();
+
+            const secDeg = (sec / 60) * 360;
+            const minDeg = ((min + sec / 60) / 60) * 360;
+            const hrDeg = (((hr % 12) + min / 60) / 12) * 360;
+
+            const secH = document.getElementById('secHand');
+            const minH = document.getElementById('minHand');
+            const hrH = document.getElementById('hourHand');
+
+            if (secH) secH.style.transform = `rotate(${secDeg}deg)`;
+            if (minH) minH.style.transform = `rotate(${minDeg}deg)`;
+            if (hrH) hrH.style.transform = `rotate(${hrDeg}deg)`;
+
+            const timeStr = String(hr).padStart(2,'0') + ':' + String(min).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+            const digClock = document.getElementById('triunfarDigitalClock');
+            if (digClock) digClock.textContent = timeStr;
+            const liveClockText = document.getElementById('liveClockText');
+            if (liveClockText) liveClockText.textContent = timeStr;
+        }
+        setInterval(updateClockAndHands, 1000);
+        updateClockAndHands();
+
+        // Weather Canvas Particle System (Rain / Snow)
+        let currentWeatherType = 'mild'; // 'snow', 'rain', 'sunny', 'mild'
+        const canvas = document.getElementById('weatherCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function initParticles(type) {
+            currentWeatherType = type;
+            particles = [];
+            const count = type === 'snow' ? 100 : (type === 'rain' ? 150 : 30);
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: type === 'snow' ? (Math.random() * 3 + 1) : (Math.random() * 1.5 + 0.5),
+                    speedY: type === 'snow' ? (Math.random() * 1.5 + 0.8) : (type === 'rain' ? (Math.random() * 8 + 6) : (Math.random() * 0.5 + 0.2)),
+                    speedX: type === 'snow' ? (Math.random() * 1 - 0.5) : (type === 'rain' ? 0.5 : 0),
+                    length: type === 'rain' ? (Math.random() * 15 + 10) : 0
+                });
+            }
+        }
+
+        function animateWeather() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (currentWeatherType === 'snow') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+                ctx.beginPath();
+                particles.forEach(p => {
+                    ctx.moveTo(p.x, p.y);
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+                });
+                ctx.fill();
+            } else if (currentWeatherType === 'rain') {
+                ctx.strokeStyle = 'rgba(135, 206, 250, 0.6)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                particles.forEach(p => {
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x + p.speedX, p.y + p.length);
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    if (p.y > canvas.height) { p.y = -20; p.x = Math.random() * canvas.width; }
+                });
+                ctx.stroke();
+            }
+            requestAnimationFrame(animateWeather);
+        }
+        animateWeather();
+
+        async function fetchLiveWeather() {
+            try {
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=42.5987&longitude=-5.5671&current=temperature_2m,weather_code');
+                const data = await res.json();
+                if (data && data.current) {
+                    const temp = Math.round(data.current.temperature_2m);
+                    const code = data.current.weather_code;
+                    let weatherDesc = "Despejado";
+                    let iconHTML = '<i class="fa-solid fa-sun text-amber-400"></i>';
+                    let landscapeClass = "bg-landscape-mild";
+                    let landscapeMsg = "Temperatura agradable con paisaje de montaña y vegetación vibrante.";
+                    let particleType = 'mild';
+
+                    if (code >= 51 || (code >= 61 && code <= 99)) {
+                        weatherDesc = "Lluvioso / Húmedo";
+                        iconHTML = '<i class="fa-solid fa-cloud-showers-heavy text-blue-400"></i>';
+                        landscapeClass = "bg-landscape-rain";
+                        landscapeMsg = "Día lluvioso: Paisaje de bosque húmedo con lluvia cayendo en pantalla.";
+                        particleType = 'rain';
+                    } else if (temp <= 7 || code === 71 || code === 73 || code === 75) {
+                        weatherDesc = "Frío / Nevado";
+                        iconHTML = '<i class="fa-solid fa-snowflake text-sky-300"></i>';
+                        landscapeClass = "bg-landscape-snow";
+                        landscapeMsg = "Clima frío: Paisaje de montaña nevada con copos de nieve cayendo en pantalla.";
+                        particleType = 'snow';
+                    } else if (temp >= 22) {
+                        weatherDesc = "Cálido / Soleado";
+                        iconHTML = '<i class="fa-solid fa-sun text-amber-400"></i>';
+                        landscapeClass = "bg-landscape-sunny";
+                        landscapeMsg = "Cielo despejado: Paisaje soleado y resplandeciente.";
+                        particleType = 'sunny';
+                    }
+
+                    document.body.className = landscapeClass + " font-sans text-slate-100 min-h-screen flex flex-col justify-between";
+                    initParticles(particleType);
+
+                    document.getElementById('tempText').textContent = temp + "°C • " + weatherDesc;
+                    document.getElementById('weatherIcon').innerHTML = iconHTML;
+
+                    document.getElementById('triunfarTempText').textContent = temp + " °C";
+                    document.getElementById('triunfarConditionText').textContent = weatherDesc;
+                    document.getElementById('triunfarWeatherIcon').innerHTML = iconHTML;
+                    document.getElementById('landscapeStatusMsg').textContent = landscapeMsg;
+                }
+            } catch (err) {
+                document.getElementById('tempText').textContent = "12°C • León";
+                document.getElementById('triunfarTempText').textContent = "12 °C";
+                initParticles('mild');
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount || 0);
+        }
+
+        function formatDateEs(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+            return dateStr;
+        }
+
+        function openCopayModal() { document.getElementById('copayModal').classList.remove('hidden'); }
+        function closeCopayModal() { document.getElementById('copayModal').classList.add('hidden'); }
+        function openDentalIntegralModal() { document.getElementById('dentalIntegralModal').classList.remove('hidden'); }
+        function closeDentalIntegralModal() { document.getElementById('dentalIntegralModal').classList.add('hidden'); }
+        function openDentalFamedicModal() { document.getElementById('dentalFamedicModal').classList.remove('hidden'); }
+        function closeDentalFamedicModal() { document.getElementById('dentalFamedicModal').classList.add('hidden'); }
+
+        let clientsList = [];
+        try { clientsList = JSON.parse(localStorage.getItem('ivysnow_clients_v2')) || []; } catch (err) { clientsList = []; }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(function() { toast.classList.add('opacity-0', 'pointer-events-none'); }, 3000);
+        }
+
+        function onPeriodChange() {
+            recalculate();
+            renderHistoricoTable();
+        }
+
+        function recalculate() {
+            const filterInput = document.getElementById('filterMonth');
+            let selectedPeriod = filterInput ? filterInput.value : '';
+            if (!selectedPeriod) {
+                const now = new Date();
+                selectedPeriod = now.toISOString().slice(0, 7);
+            }
+            if (selectedPeriod) {
+                const parts = selectedPeriod.split('-');
+                const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1);
+                const monthName = dateObj.toLocaleString('es-ES', { month: 'long', year: 'numeric' });
+                document.getElementById('currentPeriodLabel').textContent = monthName.toUpperCase();
+            }
+
+            const monthClients = clientsList.filter(c => c.fecha && c.fecha.startsWith(selectedPeriod));
+
+            let countPlus = 0, countPro = 0, sumResto = 0;
+            monthClients.forEach(c => {
+                if (c.modalidad === 'Famedic Plus') countPlus++;
+                else if (c.modalidad === 'Famedic Pro') countPro++;
+                else sumResto += (parseFloat(c.prima) || 0);
+            });
+
+            document.getElementById('real_plus_count').textContent = countPlus + " u";
+            document.getElementById('real_pro_count').textContent = countPro + " u";
+            document.getElementById('real_resto_val').textContent = formatMoney(sumResto);
+
+            const realPtsPlus = countPlus * 20;
+            const realPtsPro = countPro * 26;
+            const realPtsResto = Math.floor(sumResto / 40);
+            const totalRealPts = realPtsPlus + realPtsPro + realPtsResto;
+
+            document.getElementById('pts_plus').textContent = realPtsPlus;
+            document.getElementById('pts_pro').textContent = realPtsPro;
+            document.getElementById('pts_resto').textContent = realPtsResto;
+
+            const simPlus = parseInt(document.getElementById('simPlus').value) || 0;
+            const simPro = parseInt(document.getElementById('simPro').value) || 0;
+            const simRestoVal = parseFloat(document.getElementById('simResto').value) || 0;
+
+            const simPts = (simPlus * 20) + (simPro * 26) + Math.floor(simRestoVal / 40);
+            const totalPts = totalRealPts + simPts;
+
+            document.getElementById('total_pts').textContent = totalPts + " pts";
+            document.getElementById('cardRealPts').textContent = totalRealPts + " pts";
+            document.getElementById('cardSimPts').textContent = "+" + simPts + " pts";
+            document.getElementById('cardTotalPts').textContent = totalPts + " pts";
+
+            const pct = Math.min(Math.round((totalPts / 400) * 100), 100);
+            const barFill = document.getElementById('progressBarFill');
+            barFill.style.width = pct + "%";
+            barFill.textContent = pct + "%";
+            document.getElementById('progressPctText').textContent = pct + "%";
+
+            const statusBox = document.getElementById('status_box');
+            if (totalPts >= 400) {
+                statusBox.className = 'p-2.5 rounded-lg text-center text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200';
+                statusBox.textContent = '¡Felicidades! Se ha alcanzado el objetivo de 400 puntos este mes.';
+            } else {
+                statusBox.className = 'p-2.5 rounded-lg text-center text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200';
+                statusBox.textContent = 'Faltan ' + (400 - totalPts) + ' puntos para el objetivo mensual.';
+            }
+        }
+
+        function registerClient(e) {
+            e.preventDefault();
+            const editIndex = parseInt(document.getElementById('editIndex').value);
+            const clientData = {
+                fecha: document.getElementById('date').value,
+                nombre: escapeHTML(document.getElementById('nombre').value),
+                polizaId: escapeHTML(document.getElementById('polizaId').value),
+                movil: escapeHTML(document.getElementById('movil').value),
+                modalidad: document.getElementById('modalidad').value,
+                prima: parseFloat(document.getElementById('prima').value) || 0
+            };
+
+            if (editIndex >= 0 && editIndex < clientsList.length) {
+                clientsList[editIndex] = clientData;
+                showToast("Cliente actualizado correctamente.");
+            } else {
+                clientsList.push(clientData);
+                showToast("Póliza registrada con éxito.");
+            }
+
+            localStorage.setItem('ivysnow_clients_v2', JSON.stringify(clientsList));
+            if (clientData.fecha) {
+                document.getElementById('filterMonth').value = clientData.fecha.slice(0, 7);
+            }
+            resetForm();
+            recalculate();
+            renderHistoricoTable();
+        }
+
+        function resetForm() {
+            document.getElementById('clientForm').reset();
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('submitBtnText').textContent = "Guardar Cliente en el Mes Activo";
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+        }
+
+        function renderHistoricoTable() {
+            const tbody = document.getElementById('historico_body');
+            tbody.innerHTML = '';
+            const selectedPeriod = document.getElementById('filterMonth').value;
+            const filterMod = document.getElementById('filterModalidad').value;
+
+            const filtered = [];
+            clientsList.forEach((c, idx) => {
+                const matchPeriod = !selectedPeriod || (c.fecha && c.fecha.startsWith(selectedPeriod));
+                const matchMod = filterMod === 'TODOS' || c.modalidad === filterMod;
+                if (matchPeriod && matchMod) {
+                    const item = Object.assign({}, c);
+                    item._originalIndex = idx;
+                    filtered.push(item);
+                }
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400 text-sm"><i class="fa-solid fa-inbox text-3xl mb-2 block"></i>No hay clientes o pólizas registradas para este periodo y filtro.</td></tr>';
+                document.getElementById('total_prima_historico').textContent = '0,00 €';
+                return;
+            }
+
+            let totalPrima = 0;
+            filtered.forEach(client => {
+                totalPrima += client.prima;
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors border-b border-slate-100';
+                tr.innerHTML = `<td class="px-4 py-3 font-medium text-slate-600">${formatDateEs(client.fecha)}</td>` +
+                    `<td class="px-4 py-3 text-slate-800 font-semibold">${escapeHTML(client.nombre)}</td>` +
+                    `<td class="px-4 py-3 text-slate-600 font-mono text-xs">${escapeHTML(client.polizaId)}</td>` +
+                    `<td class="px-4 py-3 text-slate-600">${escapeHTML(client.movil || '-')}</td>` +
+                    `<td class="px-4 py-3"><span class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs font-medium">${escapeHTML(client.modalidad)}</span></td>` +
+                    `<td class="px-4 py-3 text-right font-bold text-slate-800">${formatMoney(client.prima)}</td>` +
+                    `<td class="px-4 py-3 text-center space-x-2">` +
+                        `<button onclick="editClient(${client._originalIndex})" class="p-1 text-blue-700 hover:text-blue-900" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>` +
+                        `<button onclick="deleteClient(${client._originalIndex})" class="p-1 text-rose-600 hover:text-rose-800" title="Eliminar"><i class="fa-solid fa-trash-can"></i></button>` +
+                    `</td>`;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('total_prima_historico').textContent = formatMoney(totalPrima);
+        }
+
+        function exportCSV() {
+            if (clientsList.length === 0) {
+                showToast("No hay registros para exportar.");
+                return;
+            }
+            let csv = "Fecha,Cliente,No_Poliza,Modalidad,Prima_Anual_EUR\n";
+            clientsList.forEach(c => {
+                csv += `"${c.fecha}","${c.nombre}","${c.polizaId}","${c.modalidad}",${c.prima}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "historico_dkv_" + document.getElementById('filterMonth').value + ".csv";
+            a.click();
+            showToast("Exportando archivo CSV...");
+        }
+
+        function openGeminiAssistant() { document.getElementById('geminiModal').classList.remove('hidden'); }
+        function closeGeminiAssistant() { document.getElementById('geminiModal').classList.add('hidden'); }
+
+        async function sendGeminiQuery() {
+            const input = document.getElementById('geminiPromptInput');
+            const query = input.value.trim();
+            if (!query) return;
+            const chatBox = document.getElementById('geminiChatBox');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'bg-blue-950/80 p-3 rounded-xl border border-blue-800/60 ml-6 text-right space-y-1';
+            userMsg.innerHTML = '<div class="font-bold text-blue-300 text-[11px]">Tú</div><div class="text-slate-100">' + escapeHTML(query) + '</div>';
+            chatBox.appendChild(userMsg);
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'bg-slate-800/90 p-3.5 rounded-xl border border-slate-700/80 mr-6 space-y-2';
+                aiMsg.innerHTML = '<div class="font-bold text-sky-400 flex items-center space-x-1.5"><i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i><span>Gemini AI</span></div><div class="text-slate-200">Hola Ivysnow, todo está operativo. Disfruta de tu panel con paisajes dinámicos y efectos meteorológicos.</div>';
+                chatBox.appendChild(aiMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 600);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchLiveWeather();
+            const now = new Date();
+            const yearMonthNow = now.toISOString().slice(0, 7);
+            const inputMonth = document.getElementById('filterMonth');
+            if (inputMonth) inputMonth.value = yearMonthNow;
+            const inputDate = document.getElementById('date');
+            if (inputDate) inputDate.valueAsDate = now;
+            recalculate();
+            renderHistoricoTable();
+        });
+    
+        // Funciones robustas para el Modal de Resumen Detallado DKV
+        function openResumenPdfModal() {
+            const modal = document.getElementById('resumenPdfModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeResumenModal() {
+            const modal = document.getElementById('resumenPdfModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        // Cerrar al pulsar fuera del modal
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('resumenPdfModal');
+            if (event.target === modal) {
+                closeResumenModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
