@@ -450,22 +450,28 @@
             </div>
 
             <!-- Search & Filter Controls -->
-            <div class="row mb-4" id="searchFilterRow">
-                <div class="col-md-8 mb-2">
-                    <input type="text" id="searchInput" class="form-control glass-panel text-light py-2 px-3 fs-5" placeholder="🔍 Buscar estación (ej. Boí Taüll, Formigal, Baqueira, Pajares...)" onkeyup="searchStations()">
-                </div>
-                <div class="col-md-4 mb-2">
-                    <select id="regionSelect" class="form-select glass-panel text-light py-2 px-3 fs-5" onchange="filterRegion(this.value)">
-                        <option value="all" class="bg-dark text-light">Todas las Regiones</option>
-                        <option value="favs" class="bg-dark text-light">Mis Favoritas ❤️</option>
-                        <option value="aragon" class="bg-dark text-light">Pirineo Aragonés</option>
-                        <option value="cataluna" class="bg-dark text-light">Pirineo Catalán</option>
-                        <option value="cantabrica" class="bg-dark text-light">Cordillera Cantábrica</option>
-                        <option value="nevada" class="bg-dark text-light">Sierra Nevada</option>
-                        <option value="central" class="bg-dark text-light">Sistema Central</option>
-                    </select>
-                </div>
-            </div>
+            
+<div class="row mb-4 align-items-center" id="searchFilterRow">
+  <div class="col-md-6 mb-2">
+    <input type="text" id="searchInput" class="form-control glass-panel text-light py-2 px-3 fs-5" placeholder="🔍 Buscar estación...">
+  </div>
+  <div class="col-md-4 mb-2">
+    <select id="regionSelect" class="form-select glass-panel text-light py-2 px-3 fs-5" onchange="filterRegion(this.value)">
+      <option value="all" class="bg-dark text-light">Todas las Regiones</option>
+      <option value="favs" class="bg-dark text-light">Mis Favoritas ❤️</option>
+      <option value="aragon" class="bg-dark text-light">Pirineo Aragonés</option>
+      <option value="cataluna" class="bg-dark text-light">Pirineo Catalán</option>
+      <option value="cantabrica" class="bg-dark text-light">Cordillera Cantábrica</option>
+      <option value="nevada" class="bg-dark text-light">Sierra Nevada</option>
+      <option value="central" class="bg-dark text-light">Sistema Central</option>
+    </select>
+  </div>
+  <div class="col-md-2 mb-2 text-end">
+    <button class="btn btn-info w-100 py-2 fs-5 text-dark fw-bold shadow-sm" onclick="openGamesModal()">
+      🎮 Juegos
+    </button>
+  </div>
+</div>
 
             <!-- Stations Cards Grid -->
             <div class="row g-4" id="stationsGrid">
