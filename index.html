@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- PANTALLA DE ACCESO / CONTRASEÑA CON FONDO DE MONTAÑA NEVADA -->
+<!-- PANTALLA DE ACCESO / CONTRASEÑA CON FONDO DE MONTAÑA NEVADA Y SEGURIDAD -->
     <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md">
         <div class="relative w-full max-w-md p-8 mx-4 bg-slate-900/90 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden text-center">
             <!-- Fondo de montaña nevada decorativo -->
@@ -18,39 +18,83 @@
                 </div>
 
                 <div class="space-y-4">
-                    <input type="password" id="accessPassword" placeholder="Contraseña de acceso..." class="w-full px-4 py-3 bg-slate-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-center focus:outline-none focus:border-sky-400 transition-all font-mono text-sm" />
+                    <!-- Campo con ojito para mostrar/ocultar contraseña -->
+                    <div class="relative">
+                        <input type="password" id="accessPassword" placeholder="Contraseña de acceso..." class="w-full pl-4 pr-11 py-3 bg-slate-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-center focus:outline-none focus:border-sky-400 transition-all font-mono text-sm" />
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-sky-400 focus:outline-none p-1 transition-colors">
+                            <i id="toggleEyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
                     
-                    <button onclick="checkPassword()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-bold rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 text-sm">
+                    <button id="submitPassBtn" onclick="checkPassword()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-bold rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 text-sm">
                         Acceder al Sistema
                     </button>
                     
                     <p id="authError" class="text-xs text-rose-400 font-medium hidden">Contraseña incorrecta. Inténtalo de nuevo.</p>
+                    <p id="lockoutMsg" class="text-xs text-rose-500 font-bold hidden bg-rose-950/60 border border-rose-800/80 p-3 rounded-xl leading-relaxed">
+                        <i class="fa-solid fa-lock text-sm mb-1 block text-rose-400"></i>
+                        Acceso bloqueado tras 3 intentos fallidos.<br>Ponte en contacto con el administrador del sistema.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Función para validar la contraseña de acceso
-        function checkPassword() {
-            const passInput = document.getElementById('accessPassword').value;
-            const modal = document.getElementById('authModal');
-            const errorMsg = document.getElementById('authError');
+        let loginAttempts = 0;
+        const maxAttempts = 3;
+
+        // Función para mostrar/ocultar la contraseña con el ojito
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('accessPassword');
+            const eyeIcon = document.getElementById('toggleEyeIcon');
             
-            if (passInput === 'Formigalparaiso26+') {
-                modal.classList.add('hidden');
-                // Guardar sesión para que no la pida todo el rato si recarga
-                sessionStorage.setItem('ivysnow_auth', 'true');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
             } else {
-                errorMsg.classList.remove('hidden');
-                document.getElementById('accessPassword').value = '';
+                passInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
             }
         }
 
-        // Permitir entrar pulsando la tecla Enter en el input de contraseña
+        // Función para validar la contraseña y controlar intentos
+        function checkPassword() {
+            if (loginAttempts >= maxAttempts) return;
+
+            const passInput = document.getElementById('accessPassword');
+            const modal = document.getElementById('authModal');
+            const errorMsg = document.getElementById('authError');
+            const lockoutMsg = document.getElementById('lockoutMsg');
+            const submitBtn = document.getElementById('submitPassBtn');
+
+            if (passInput.value === 'Formigalparaiso26+') {
+                modal.classList.add('hidden');
+                sessionStorage.setItem('ivysnow_auth', 'true');
+            } else {
+                loginAttempts++;
+                passInput.value = '';
+                
+                if (loginAttempts >= maxAttempts) {
+                    errorMsg.classList.add('hidden');
+                    lockoutMsg.classList.remove('hidden');
+                    passInput.disabled = true;
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    const remaining = maxAttempts - loginAttempts;
+                    errorMsg.textContent = `Contraseña incorrecta. Te quedan ${remaining} intento(s).`;
+                    errorMsg.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Manejo de la tecla Enter
         document.addEventListener('DOMContentLoaded', () => {
             const passInput = document.getElementById('accessPassword');
-            if(passInput) {
+            if (passInput) {
                 passInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         checkPassword();
@@ -58,10 +102,9 @@
                 });
             }
             
-            // Si ya se había logueado en esta sesión, ocultar el modal directamente
             if (sessionStorage.getItem('ivysnow_auth') === 'true') {
                 const modal = document.getElementById('authModal');
-                if(modal) modal.classList.add('hidden');
+                if (modal) modal.classList.add('hidden');
             }
         });
     </script>
