@@ -1175,7 +1175,42 @@
             localStorage.setItem('ivysnow_shihtzu_visits', count);
             document.getElementById('visitorCountVal').textContent = count.toLocaleString();
         }
+const quotesAndImages = [
+            {
+                quote: "La montaña no es más alta que tus sueños, ni la nieve más fría que la pasión de un rider.",
+                img: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80"
+            },
+            {
+                quote: "En la traza virgen y el silencio de las cumbres es donde el alma encuentra su verdadera línea.",
+                img: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1200&q=80"
+            },
+            {
+                quote: "El carving perfecto no busca velocidad, busca la armonía exacta entre el acero, la pendiente y el vacío.",
+                img: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1200&q=80"
+            },
+            {
+                quote: "Cada descenso empieza con un respeto profundo por la montaña y termina con una sonrisa en el pecho.",
+                img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+            },
+            {
+                quote: "No hay atajos hacia la cima; cada metro de desnivel forja el carácter de los que aman la libertad blanca.",
+                img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80"
+            }
+        ];
 
+        function openIvysnowModal() {
+            generateNewQuote();
+            const modal = new bootstrap.Modal(document.getElementById('ivysnowModal'));
+            modal.show();
+        }
+
+        function generateNewQuote() {
+            const randomIndex = Math.floor(Math.random() * quotesAndImages.length);
+            const selected = quotesAndImages[randomIndex];
+            
+            document.getElementById('quoteText').textContent = `"${selected.quote}"`;
+            document.getElementById('quoteImageBg').style.backgroundImage = `url('${selected.img}')`;
+        }
         initShihTzuCounter();
         updateFavCount();
         renderStations(stations);
