@@ -1532,48 +1532,52 @@ function switchGame(gameId) {
   if (gameId === 'solitaire') initSolitaire();
 }
 
-// 1. Solitario Klondike Aleatorio (Versión Interactiva Mejorada)
+// 1. Solitario Klondike Aleatorio (Versión Definitiva)
 function initSolitaire() {
   const board = document.getElementById('solitaire-board');
+  if (!board) return;
   
-  // Baraja aleatoria de cartas (Palo y Valor)
+  // Baraja aleatoria de 52 cartas
   const suits = ['♠', '♥', '♦', '♣'];
   const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
   let deck = [];
   
   for (let s of suits) {
     for (let v of values) {
-      deck.push({ suit: v, symbol: s, color: (s === '♥' || s === '♦') ? 'text-danger' : 'text-dark' });
+      deck.push({ val: v, suit: s, color: (s === '♥' || s === '♦') ? 'text-danger' : 'text-light' });
     }
   }
   
-  // Barajar aleatoriamente (Algoritmo Fisher-Yates)
+  // Algoritmo de barajado Fisher-Yates
   for (let i = deck.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
 
-  // Pintar diseño interactivo en el tablero
+  let topCard = deck[0];
+
   board.innerHTML = `
     <div class="p-3 text-center">
-      <div class="d-flex justify-content-around mb-3">
-        <div class="p-2 border border-secondary rounded bg-dark text-light" style="min-width: 70px; min-height: 95px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="alert('¡Mazo barajado aleatoriamente! Carta superior: ${deck[0].suit} ${deck[0].symbol}')">
-          🎴 Mazo (${deck.length})
+      <div class="d-flex justify-content-around align-items-center mb-3">
+        <div class="p-2 border border-secondary rounded bg-dark text-light shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="small text-muted">Mazo</span>
+          <span class="fw-bold">(${deck.length})</span>
         </div>
-        <div class="p-2 border border-info rounded bg-dark text-light" style="min-width: 70px; min-height: 95px; display: flex; align-items: center; justify-content: center;">
-          <span class="${deck[0].color} fs-4 fw-bold">${deck[0].suit}${deck[0].symbol}</span>
+        <div class="p-2 border border-info rounded bg-dark shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="small text-info">Visible</span>
+          <span class="${topCard.color} fs-3 fw-bold">${topCard.val}${topCard.suit}</span>
         </div>
-        <div class="p-2 border border-success rounded bg-dark text-success" style="min-width: 70px; min-height: 95px; display: flex; align-items: center; justify-content: center;">
+        <div class="p-2 border border-success rounded bg-dark text-success shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; align-items: center; justify-content: center;">
           ♠ Pila 1
         </div>
-        <div class="p-2 border border-success rounded bg-dark text-success" style="min-width: 70px; min-height: 95px; display: flex; align-items: center; justify-content: center;">
+        <div class="p-2 border border-success rounded bg-dark text-success shadow-sm" style="min-width: 75px; min-height: 100px; display: flex; align-items: center; justify-content: center;">
           ♥ Pila 2
         </div>
       </div>
-      <div class="alert alert-secondary py-2 m-0 text-dark fw-bold" style="background: #38bdf8; border: none;">
+      <div class="badge bg-info text-dark p-2 w-100 fs-6 mb-2">
         ✨ Partida Klondike generada con éxito (Aleatoria y distinta cada vez)
       </div>
-      <button class="btn btn-outline-info btn-sm mt-3" onclick="initSolitaire()">🔀 Repartir Nuevo Mazo</button>
+      <button class="btn btn-outline-info btn-sm px-4 mt-2" onclick="initSolitaire()">🔀 Repartir Nuevo Mazo</button>
     </div>
   `;
 }
