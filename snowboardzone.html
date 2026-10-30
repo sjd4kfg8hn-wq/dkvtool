@@ -325,6 +325,65 @@
             color: var(--accent-blue);
             letter-spacing: 1px;
         }
+        /* Efecto de copos de nieve cayendo */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    background: #ffffff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10px) translateX(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(105vh) translateX(20px);
+        opacity: 0.2;
+    }
+}
+
+/* Reproductor de música flotante */
+.music-player-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 30px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9998;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    color: #f8fafc;
+    font-size: 0.85rem;
+}
+
+.music-player-float button {
+    background: var(--accent-blue);
+    border: none;
+    color: #0f172a;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.music-player-float button:hover {
+    transform: scale(1.1);
+}
     </style>
 </head>
 <body>
@@ -1211,9 +1270,87 @@ const quotesAndImages = [
             document.getElementById('quoteText').textContent = `"${selected.quote}"`;
             document.getElementById('quoteImageBg').style.backgroundImage = `url('${selected.img}')`;
         }
+        // --- 1. GENERADOR DE COPOS DE NIEVE ---
+        function createSnowflake() {
+            const snow = document.createElement('div');
+            snow.classList.add('snowflake');
+            
+            const size = Math.random() * 5 + 3;
+            snow.style.width = `${size}px`;
+            snow.style.height = `${size}px`;
+            snow.style.left = `${Math.random() * window.innerWidth}px`;
+            
+            const duration = Math.random() * 5 + 4;
+            snow.style.animationDuration = `${duration}s`;
+            snow.style.opacity = Math.random() * 0.6 + 0.3;
+            
+            document.body.appendChild(snow);
+            
+            setTimeout(() => {
+                snow.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createSnowflake, 150);
+
+        // --- 2. REPRODUCTOR DE MÚSICA ALEATORIA ---
+        const playlist = [
+            { title: "Mountain Chill Beat", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { title: "Alpine Breeze", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { title: "Snowy Peaks Acoustic", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+            { title: "Freeride Energy", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
+
+        let isPlaying = false;
+
+        function loadRandomSong() {
+            const randomIndex = Math.floor(Math.random() * playlist.length);
+            const song = playlist[randomIndex];
+            
+            const audio = document.getElementById('bgAudio');
+            audio.src = song.url;
+            document.getElementById('songTitle').textContent = song.title;
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bgAudio');
+            const icon = document.getElementById('playIcon');
+            
+            if (!audio.src) {
+                loadRandomSong();
+            }
+
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                icon.className = "fa-solid fa-play";
+            } else {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    icon.className = "fa-solid fa-pause";
+                }).catch(e => console.log("Audio play blocked by browser policy", e));
+            }
+        }
+
+        function nextRandomSong() {
+            loadRandomSong();
+            const audio = document.getElementById('bgAudio');
+            audio.play();
+            isPlaying = true;
+            document.getElementById('playIcon').className = "fa-solid fa-pause";
+        }
         initShihTzuCounter();
         updateFavCount();
         renderStations(stations);
     </script>
+    <!-- Reproductor de música ambiental / aleatoria -->
+<div class="music-player-float">
+    <i class="fa-solid fa-music text-info"></i>
+    <span id="songTitle" style="max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Música de Montaña</span>
+    <button onclick="toggleMusic()" id="playPauseBtn" title="Reproducir / Pausar"><i class="fa-solid fa-play" id="playIcon"></i></button>
+    <button onclick="nextRandomSong()" title="Siguiente canción aleatoria"><i class="fa-solid fa-forward"></i></button>
+</div>
+
+<audio id="bgAudio" onended="nextRandomSong()"></audio>
 </body>
 </html>
