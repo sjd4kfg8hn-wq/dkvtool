@@ -241,32 +241,16 @@
         .badge-roja { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
         .badge-negra { background: rgba(15, 23, 42, 0.8); color: #e2e8f0; border: 1px solid #64748b; }
 
-        /* Contenedor del mapa con imagen oficial de pistas de alta calidad */
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: #000;
+        /* Letra visible en el input del chat */
+        .chat-input-bright {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            border: 1px solid #cbd5e1 !important;
         }
-        .map-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #111;
-        }
-
-        /* Tarjeta de pronóstico 7 días */
-        .forecast-day-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 8px;
-            text-align: center;
-            flex: 1;
-            min-width: 70px;
+        .chat-input-bright::placeholder {
+            color: #64748b !important;
+            font-weight: 400 !important;
         }
 
         /* Footer con logo ivysnow y contador Shih Tzu Snowboarder */
@@ -326,14 +310,6 @@
             color: var(--accent-blue);
             letter-spacing: 1px;
         }
-
-        /* CORRECCIÓN: Color de la letra visible al escribir en el chat */
-        #chatInput {
-            color: #ffffff !important;
-        }
-        #chatInput::placeholder {
-            color: #94a3b8 !important;
-        }
     </style>
 </head>
 <body>
@@ -361,7 +337,7 @@
 
                 <!-- Header Action Buttons -->
                 <div class="d-flex justify-content-center flex-wrap gap-3">
-                    <a href="https://chat.whatsapp.com/Hx7p8iGndpEG5tsxvZ49In" target="_blank" class="btn btn-whatsapp btn-lg px-4 py-3 shadow d-inline-flex align-items-center gap-2">
+                    <a href="https://chat.whatsapp.com/Hx7p8iGndpEG5tsxvZ49In" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg px-4 py-3 shadow d-inline-flex align-items-center gap-2">
                         <i class="fa-brands fa-whatsapp fs-3"></i> Comunidad WhatsApp
                     </a>
 
@@ -378,7 +354,7 @@
 
         <!-- Main Content Container -->
         <div class="container my-4">
-            <!-- Dynamic Region Tabs (SIN IvyAsesor en la barra) -->
+            <!-- Dynamic Region Tabs -->
             <div class="glass-panel p-2 mb-4">
                 <ul class="nav nav-pills justify-content-center gap-1 flex-wrap" id="regionTabs">
                     <li class="nav-item"><a class="nav-link text-light px-3 active-tab" id="tab-all" href="#" onclick="filterRegion('all')">Todas</a></li>
@@ -449,8 +425,9 @@
                             ¡Hola! Soy <strong>IvyAsesor</strong>, tu experto integrado en snowboard. ¿En qué te puedo ayudar hoy? Puedes preguntarme sobre tablas con perfil híbrido o camber, marcas de botas normativas, cuáles son los mejores spots de freeride en el Pirineo o recomendaciones de estaciones según las valoraciones de la comunidad.
                         </div>
                     </div>
+                    <!-- INPUT CON LETRA OSCURA Y FONDO BLANCO -->
                     <div class="input-group">
-                        <input type="text" id="chatInput" class="form-control glass-panel text-light py-2" placeholder="Pregunta sobre material, freeride, estaciones..." onkeypress="handleChatKey(event)">
+                        <input type="text" id="chatInput" class="form-control chat-input-bright py-2" placeholder="Pregunta sobre material, freeride, estaciones..." onkeypress="handleChatKey(event)">
                         <button class="btn btn-custom px-4" onclick="sendToIvy()"><i class="fa-solid fa-paper-plane me-1"></i> Preguntar</button>
                     </div>
                 </div>
@@ -472,7 +449,7 @@
                     <p class="small opacity-75 mb-4">
                         Tu aportación voluntaria ayuda a mantener la web activa, actualizar los enlaces a webcams oficiales en directo, meteorología y los partes de nieve en tiempo real.
                     </p>
-                    <a href="https://paypal.me/ivymaravillas" target="_blank" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow">
+                    <a href="https://paypal.me/ivymaravillas" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow">
                         <i class="fa-brands fa-paypal me-2 fs-5"></i> Donar vía paypal.me/ivymaravillas
                     </a>
                 </div>
@@ -519,114 +496,231 @@
                 opening: "28 Nov 2026", 
                 kmTotal: 182, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "2°C Soleado", snowpark: "Cerrado (Pretemporada)",
                 pistes: { verdes: 7, azules: 36, rojas: 51, negras: 43 },
-                mapaImg: "data:image/png;base64,..." // (Mantiene intactos tus datos de estaciones)
+                mapaImg: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+            },
+            { 
+                id: "cerler",
+                name: "Aramón Cerler", 
+                region: "aragon", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/cerler/7/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/cerler/7/webcams/", 
+                opening: "28 Nov 2026", 
+                kmTotal: 80, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "1°C Parcial", snowpark: "Cerrado (Pretemporada)",
+                pistes: { verdes: 10, azules: 19, rojas: 27, negras: 14 },
+                mapaImg: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1000&q=80"
+            },
+            // PIRINEO CATALÁN
+            { 
+                id: "baqueira",
+                name: "Baqueira Beret", 
+                region: "cataluna", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/baqueira-beret/3/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/baqueira-beret/3/webcams/", 
+                opening: "29 Nov 2026", 
+                kmTotal: 170, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "0°C Nublado", snowpark: "Abierto",
+                pistes: { verdes: 6, azules: 43, rojas: 49, negras: 17 },
+                mapaImg: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1000&q=80"
+            },
+            { 
+                id: "boitaull",
+                name: "Boí Taüll", 
+                region: "cataluna", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/boi-taull/2/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/boi-taull/2/webcams/", 
+                opening: "29 Nov 2026", 
+                kmTotal: 45, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "-1°C Nieve", snowpark: "Disponible",
+                pistes: { verdes: 8, azules: 10, rojas: 19, negras: 9 },
+                mapaImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80"
+            },
+            // CORDILLERA CANTÁBRICA
+            { 
+                id: "pajares",
+                name: "Valgrande-Pajares", 
+                region: "cantabrica", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/valgrande-pajares/21/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/valgrande-pajares/21/webcams/", 
+                opening: "Dic 2026", 
+                kmTotal: 35, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "-1°C Nieve", snowpark: "Disponible",
+                pistes: { verdes: 4, azules: 11, rojas: 10, negras: 5 },
+                mapaImg: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80"
+            },
+            { 
+                id: "sanisidro",
+                name: "San Isidro", 
+                region: "cantabrica", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/san-isidro/22/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/san-isidro/22/webcams/", 
+                opening: "Dic 2026", 
+                kmTotal: 31, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "0°C Viento", snowpark: "Disponible",
+                pistes: { verdes: 5, azules: 9, rojas: 15, negras: 2 },
+                mapaImg: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1000&q=80"
+            },
+            // SIERRA NEVADA
+            { 
+                id: "sierranevada",
+                name: "Sierra Nevada", 
+                region: "nevada", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/sierra-nevada/30/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/sierra-nevada/30/webcams/", 
+                opening: "30 Nov 2026", 
+                kmTotal: 110, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "8°C Sol", snowpark: "Sulayr Activo",
+                pistes: { verdes: 19, azules: 45, rojas: 53, negras: 7 },
+                mapaImg: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+            },
+            // SISTEMA CENTRAL
+            { 
+                id: "navacerrada",
+                name: "Puerto de Navacerrada", 
+                region: "central", 
+                infonieve: "https://www.infonieve.es/estacion-esqui/puerto-de-navacerrada/25/", 
+                webcam: "https://www.infonieve.es/estacion-esqui/puerto-de-navacerrada/25/webcams/", 
+                opening: "Dic 2026", 
+                kmTotal: 10, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "3°C Nublado", snowpark: "No disponible",
+                pistes: { verdes: 2, azules: 7, rojas: 2, negras: 0 },
+                mapaImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80"
             }
         ];
 
-        // --- GESTIÓN DEL HISTORIAL DEL CHAT DE IVYASESOR (Evita el bucle y la repetición) ---
-        let chatHistoryArray = [
-            {
-                role: "model",
-                parts: [{ text: "¡Hola! Soy IvyAsesor, tu experto integrado en snowboard. ¿En qué te puedo ayudar hoy? Puedes preguntarme sobre tablas con perfil híbrido o camber, marcas de botas normativas, cuáles son los mejores spots de freeride en el Pirineo o recomendaciones de estaciones según las valoraciones de la comunidad." }]
+        let favorites = [];
+
+        function renderStations(items) {
+            const grid = document.getElementById('stationsGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            
+            if (items.length === 0) {
+                grid.innerHTML = '<div class="col-12 text-center text-light py-5"><h5>No se encontraron estaciones.</h5></div>';
+                return;
             }
-        ];
 
-        function openIvyModal() {
-            const myModal = new bootstrap.Modal(document.getElementById('ivyModal'));
-            myModal.show();
-        }
-
-        function handleChatKey(event) {
-            if (event.key === 'Enter') {
-                sendToIvy();
-            }
-        }
-
-        async function sendToIvy() {
-            const inputField = document.getElementById('chatInput');
-            const userText = inputField.value.trim();
-            if (!userText) return;
-
-            const chatHistoryContainer = document.getElementById('chatHistory');
-
-            // 1. Mostrar mensaje del usuario en la interfaz
-            chatHistoryContainer.innerHTML += `
-                <div class="chat-bubble user" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; margin-left: auto; font-size: 0.95rem; line-height: 1.4; background: rgba(56, 189, 248, 0.2); color: #f8fafc; border: 1px solid rgba(56, 189, 248, 0.4); text-align: right;">
-                    ${userText}
-                </div>
-            `;
-
-            inputField.value = '';
-            chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
-
-            // 2. Añadir mensaje al historial de la API
-            chatHistoryArray.push({
-                role: "user",
-                parts: [{ text: userText }]
+            items.forEach(st => {
+                const isFav = favorites.includes(st.id);
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4';
+                col.innerHTML = `
+                    <div class="station-card">
+                        <div class="card-img-wrapper">
+                            <img src="${st.mapaImg}" alt="${st.name}">
+                            <div class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, '${st.id}')">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div class="opening-badge"><i class="fa-regular fa-calendar me-1"></i>Apertura: ${st.opening}</div>
+                        </div>
+                        <div class="card-body-content">
+                            <h5 class="fw-bold mb-2 text-light">${st.name}</h5>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <div class="metric-pill">
+                                        <div class="metric-label">Km Esquiables</div>
+                                        <div class="metric-value">${st.kmOpen} / ${st.kmTotal} km</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="metric-pill">
+                                        <div class="metric-label">Espesor Nieve</div>
+                                        <div class="metric-value">${st.snowCm}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="${st.webcam}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-video me-1"></i> Webcam</a>
+                                <button class="btn btn-sm btn-custom" onclick="openStationModal('${st.id}')">Ficha Técnica</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(col);
             });
-
-            // Indicador de "escribiendo..."
-            const loadingId = 'loading-' + Date.now();
-            chatHistoryContainer.innerHTML += `
-                <div id="${loadingId}" class="chat-bubble ivy" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: rgba(30, 41, 59, 0.9); color: #94a3b8; border: 1px solid rgba(192, 132, 252, 0.3);">
-                    <em>IvyAsesor está pensando...</em>
-                </div>
-            `;
-            chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
-
-            try {
-                // Aquí se realiza la llamada enviando TODO el array de historial actualizado (`chatHistoryArray`)
-                /* 
-                   NOTA: Asegúrate de incluir tu clave de API correspondiente al endpoint que utilices (por ejemplo, Google Gemini API). 
-                   Ejemplo de estructura de petición:
-                */
-                // const response = await fetch('TU_ENDPOINT_DE_API_GEMINI', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ contents: chatHistoryArray })
-                // });
-                // const data = await response.json();
-                // const botReply = data.candidates[0].content.parts[0].text;
-
-                // Simulación de respuesta dinámica basada en historial (reemplaza esto con tu llamada real a fetch si procede):
-                let botReply = "Entendido sobre tu consulta de snowboard. Basándome en lo que comentamos, te recomiendo revisar los perfiles de camber híbrido y las cotas de las tablas.";
-
-                // Remover indicador de carga
-                document.getElementById(loadingId).remove();
-
-                // Mostrar respuesta del bot
-                chatHistoryContainer.innerHTML += `
-                    <div class="chat-bubble ivy" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: rgba(30, 41, 59, 0.9); color: #f8fafc; border: 1px solid rgba(192, 132, 252, 0.3);">
-                        ${botReply}
-                    </div>
-                `;
-
-                // Registrar la respuesta del modelo en el historial para mantener el contexto en la siguiente pregunta
-                chatHistoryArray.push({
-                    role: "model",
-                    parts: [{ text: botReply }]
-                });
-
-            } catch (error) {
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                chatHistoryContainer.innerHTML += `
-                    <div class="chat-bubble ivy" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">
-                        Error al conectar con IvyAsesor. Inténtalo de nuevo.
-                    </div>
-                `;
-            }
-
-            chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
         }
 
-        // Funciones auxiliares y de filtrado de estaciones (Respetando el resto de tu app original)
+        function toggleFav(e, id) {
+            e.stopPropagation();
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(f => f !== id);
+            } else {
+                favorites.push(id);
+            }
+            document.getElementById('favCount').innerText = favorites.length;
+            renderStations(stations);
+        }
+
         function filterRegion(region) {
-            // Lógica de filtrado original
+            document.querySelectorAll('#regionTabs .nav-link').forEach(el => el.classList.remove('active-tab'));
+            const activeTab = document.getElementById('tab-' + region);
+            if(activeTab) activeTab.classList.add('active-tab');
+
+            if (region === 'all') {
+                renderStations(stations);
+            } else if (region === 'favs') {
+                renderStations(stations.filter(s => favorites.includes(s.id)));
+            } else {
+                renderStations(stations.filter(s => s.region === region));
+            }
         }
 
         function searchStations() {
-            // Lógica de búsqueda original
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            renderStations(stations.filter(s => s.name.toLowerCase().includes(q)));
         }
+
+        function openStationModal(id) {
+            const st = stations.find(s => s.id === id);
+            if(!st) return;
+            document.getElementById('modalStationTitle').innerHTML = `<i class="fa-solid fa-snowflake text-info me-2"></i>${st.name} - Ficha Técnica`;
+            const body = document.getElementById('modalStationBody');
+            body.innerHTML = `
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-3">Estado actual</h5>
+                        <p><strong>Clima:</strong> ${st.weather}</p>
+                        <p><strong>Riesgo de aludes:</strong> ${st.avalanche}</p>
+                        <p><strong>Snowpark:</strong> ${st.snowpark}</p>
+                        <div class="d-flex gap-2 mt-3">
+                            <a href="${st.infonieve}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info btn-sm">Ver Parte en Infonieve</a>
+                            <a href="${st.webcam}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger btn-sm">Ver Webcams Oficiales</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-3">Pistas</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="piste-badge badge-verde">🟢 Verdes: ${st.pistes.verdes}</span>
+                            <span class="piste-badge badge-azul">🔵 Azules: ${st.pistes.azules}</span>
+                            <span class="piste-badge badge-roja">🔴 Rojas: ${st.pistes.rojas}</span>
+                            <span class="piste-badge badge-negra">⚫ Negras: ${st.pistes.negras}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            const modal = new bootstrap.Modal(document.getElementById('stationModal'));
+            modal.show();
+        }
+
+        function openIvyModal() {
+            const modal = new bootstrap.Modal(document.getElementById('ivyModal'));
+            modal.show();
+        }
+
+        function handleChatKey(e) {
+            if (e.key === 'Enter') sendToIvy();
+        }
+
+        function sendToIvy() {
+            const input = document.getElementById('chatInput');
+            const history = document.getElementById('chatHistory');
+            if (!input.value.trim()) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.style.cssText = "padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: rgba(56, 189, 248, 0.2); color: #f8fafc; border: 1px solid rgba(56, 189, 248, 0.4); margin-left: auto;";
+            userMsg.textContent = input.value;
+            history.appendChild(userMsg);
+
+            input.value = '';
+            history.scrollTop = history.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStations(stations);
+        });
     </script>
 </body>
 </html>
