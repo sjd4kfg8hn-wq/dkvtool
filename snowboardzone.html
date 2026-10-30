@@ -16,7 +16,14 @@
             --accent-purple: #c084fc;
             --accent-snow: #f8fafc;
         }
-
+#chatInput {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    font-weight: 600 !important;
+}
+#chatInput::placeholder {
+    color: #666666 !important;
+}
         body {
             background: linear-gradient(135deg, #0b1329 0%, #1e293b 50%, #0f172a 100%);
             background-attachment: fixed;
@@ -442,7 +449,7 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <input type="text" id="chatInput" class="form-control glass-panel text-light py-2" placeholder="Pregunta sobre material, freeride, estaciones..." onkeypress="handleChatKey(event)">
+                        <input type="text" id="chatInput" class="form-control chat-input-bright py-2" placeholder="Pregunta sobre material, freeride, estaciones..." onkeypress="handleChatKey(event)">
                         <button class="btn btn-custom px-4" onclick="sendToIvy()"><i class="fa-solid fa-paper-plane me-1"></i> Preguntar</button>
                     </div>
                 </div>
