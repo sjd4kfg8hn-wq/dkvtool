@@ -617,6 +617,8 @@
             } else if (playerWon === null) {
                 forfaits += currentBet;
             }
+            localStorage.setItem('snowboard_bj_bank', forfaits);
+    updateUI();
 
             document.getElementById('status-msg').innerText = message;
             document.getElementById('action-controls').style.display = 'none';
@@ -711,6 +713,11 @@
         }
 
         updateUI();
+        
+        gameOver = false;
+    document.getElementById('action-controls').style.display = 'none';
+    document.getElementById('bet-controls').style.display = 'flex';
+        
     </script>
 </body>
 </html>
