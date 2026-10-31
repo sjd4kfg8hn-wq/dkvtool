@@ -2108,17 +2108,19 @@ function startSnakeGame() {
       ctx.fillRect(powerUp.x, powerUp.y, 18, 18);
     }
 
-    // Mover serpiente con efecto túnel en los bordes
+   // Mover serpiente con efecto túnel en los bordes
 const canvas = document.getElementById('snakeCanvas');
 let newX = snake[0].x + dx;
 let newY = snake[0].y + dy;
 
+// Efecto túnel horizontal
 if (newX < 0) {
   newX = canvas.width - 20;
 } else if (newX >= canvas.width) {
   newX = 0;
 }
 
+// Efecto túnel vertical
 if (newY < 0) {
   newY = canvas.height - 20;
 } else if (newY >= canvas.height) {
