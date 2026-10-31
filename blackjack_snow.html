@@ -545,18 +545,29 @@
 }
 
         function calculateScore(hand) {
-            let score = 0;
-            let aces = 0;
-            for (let card of hand) {
-                score += getCardValue(card);
-                if (card.value === 'A') aces++;
-            }
-            while (score > 21 && aces > 0) {
-                score -= 10;
-                aces--;
-            }
-            return score;
+    let score = 0;
+    let aces = 0;
+
+    for (let i = 0; i < hand.length; i++) {
+        let card = hand.value;
+        if (card === 'A') {
+            aces++;
+            score += 11;
+        } else if (['K', 'Q', 'J', '10'].includes(card)) {
+            score += 10;
+        } else {
+            score += parseInt(card);
         }
+    }
+
+    // Si nos pasamos de 21 y tenemos Ases, restamos 10 por cada As hasta ajustar
+    while (score > 21 && aces > 0) {
+        score -= 10;
+        aces--;
+    }
+
+    return score;
+}
 
         function updateUI() {
             document.getElementById('forfaits-count').innerText = forfaits;
@@ -608,6 +619,14 @@
     playerHand = [deck.pop(), deck.pop()];
     dealerHand = [deck.pop(), deck.pop()];
 
+            // Comprobar si hay 21 inicial (SNOWJACK de mano)
+    let initialScore = calculateScore(playerHand);
+    if (initialScore === 21) {
+        document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
+        endRound(true, "¡Impresionante! ¡Has cantado el SNOWJACK!");
+        return;
+    }
+            
     // Oculta botones de apuesta y muestra los de pedir/plantarse
     document.getElementById('bet-controls').style.display = 'none';
     document.getElementById('action-controls').style.display = 'flex';
@@ -621,14 +640,24 @@
         }
 
         function hit() {
-            if (gameOver) return;
-            playerHand.push(deck.pop());
-            updateUI();
-
-            if (calculateScore(playerHand) > 21) {
-                endRound(false, "¡Te has pasado de 21! Gana el Croupier.");
-            }
-        }
+    if (gameOver) return;
+    playerHand.push(deck.pop());
+    
+    let playerScore = calculateScore(playerHand);
+    
+    if (playerScore === 21) {
+        document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
+        endRound(true, "¡21 Clavado! ¡SNOWJACK!");
+        return;
+    }
+    
+    if (playerScore > 21) {
+        endRound(false, "¡Te has pasado de 21! Gana la banca.");
+        return;
+    }
+    
+    updateUI();
+}
 
         function stand() {
             if (gameOver) return;
