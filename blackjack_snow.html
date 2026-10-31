@@ -23,7 +23,28 @@
             margin: 0;
             padding: 0;
         }
+        
+/* Efecto de luces LED rítmicas estilo Afrohouse en el marco del juego */
+@keyframes afroNeonPulse {
+    0% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
+    33% { box-shadow: 0 0 25px #ff007f, inset 0 0 25px #ff007f; border-color: #ff007f; }
+    66% { box-shadow: 0 0 25px #7928ca, inset 0 0 25px #7928ca; border-color: #7928ca; }
+    100% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
+}
 
+.music-active-lights {
+    animation: afroNeonPulse 2s infinite ease-in-out;
+}
+
+.audio-player-container {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
         body {
             background: #020617;
             font-family: 'Nunito', sans-serif;
@@ -382,7 +403,17 @@
                 <button class="close-game-btn" onclick="closeGameWindow()" title="Cerrar juego">✕</button>
             </div>
         </div>
-
+        <!-- Reproductor y Control de Luces Afrohouse -->
+    <div style="padding: 8px 15px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="audio-player-container">
+            <span style="color: #fff; font-size: 12px; font-weight: bold;">🎧 Aaron Sevilla - Afrohouse</span>
+            <button onclick="toggleMusicLights()" id="lights-btn" style="background: #ff007f; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">✨ Activar Luces Rítmicas</button>
+        </div>
+        <div style="font-size: 0; line-height: 0; margin-top: 6px;">
+            <iframe width="100%" height="40" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/aaron-sevilla/afrohouse-tengo&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+        </div>
+    </div>
+        
         <!-- MESA SNOWBOARD -->
         <div class="snowboard-table">
             <!-- CROUPIER (MUÑECO DE NIEVE) -->
@@ -500,10 +531,11 @@
         }
 
         function getCardValue(card) {
-            if (['J', 'Q', 'K'].includes(card.value)) return 10;
-            if (card.value === 'A') return 11;
-            return parseInt(card.value);
-        }
+    if (card.value === 'A') return 11;
+    if (['K', 'Q', 'J'].includes(card.value)) return 10;
+    let val = parseInt(card.value);
+    return isNaN(val) ? 0 : val;
+}
 
         function calculateScore(hand) {
             let score = 0;
@@ -552,24 +584,30 @@
         }
 
         function placeBet(amount) {
-            if (forfaits < amount) {
-                document.getElementById('status-msg').innerText = "¡No tienes suficientes Forfaits!";
-                return;
-            }
+    if (forfaits < amount) {
+        document.getElementById('status-msg').innerText = "¡No tienes suficientes Forfaits!";
+        return;
+    }
 
-            currentBet = amount;
-            forfaits -= amount;
-            gameOver = false;
-            createDeck();
+    currentBet = amount;
+    forfaits -= amount;
+    
+    // Guarda el saldo actualizado al instante en la memoria del navegador
+    localStorage.setItem('snowboard_bj_bank', forfaits);
 
-            playerHand = [deck.pop(), deck.pop()];
-            dealerHand = [deck.pop(), deck.pop()];
+    gameOver = false;
+    createDeck();
 
-            document.getElementById('bet-controls').style.display = 'none';
-            document.getElementById('action-controls').style.display = 'flex';
-            document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
+    playerHand = [deck.pop(), deck.pop()];
+    dealerHand = [deck.pop(), deck.pop()];
 
-            updateUI();
+    // Oculta botones de apuesta y muestra los de pedir/plantarse
+    document.getElementById('bet-controls').style.display = 'none';
+    document.getElementById('action-controls').style.display = 'flex';
+    document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
+
+    updateUI();
+}
 
             if (calculateScore(playerHand) === 21) {
                 stand();
@@ -717,7 +755,28 @@
         gameOver = false;
     document.getElementById('action-controls').style.display = 'none';
     document.getElementById('bet-controls').style.display = 'flex';
+       gameOver = false;
+    document.getElementById('action-controls').style.display = 'none';
+    document.getElementById('bet-controls').style.display = 'flex';
+
+    // --- FUNCIÓN DE LUCES RÍTMICAS NEÓN ---
+    function toggleMusicLights() {
+        const gameContainer = document.querySelector('.casino-window') || document.body;
+        const btn = document.getElementById('lights-btn');
         
+        gameContainer.classList.toggle('music-active-lights');
+        
+        if (gameContainer.classList.contains('music-active-lights')) {
+            btn.style.background = '#00f2fe';
+            btn.style.color = '#000';
+            btn.innerText = '✨ Luces Activadas';
+        } else {
+            btn.style.background = '#ff007f';
+            btn.style.color = '#fff';
+            btn.innerText = '✨ Activar Luces Rítmicas';
+        }
+    }
+</script> 
     </script>
 </body>
 </html>
