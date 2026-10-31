@@ -2356,75 +2356,100 @@ function setSudokuNum(num) {
 }
 
 </script>
-    <!-- PESTAÑA FLOTANTE FWT Y CALENDARIO PREVIEW -->
-  <div class="fwt-floating-tab" onclick="openFwtMonitor()">
+ <!-- PESTAÑA FLOTANTE FWT (Estilo Estaciones) -->
+  <div class="fwt-floating-tab" onclick="openFwtCalendarModal()">
     <span>❄️ FWT</span>
-    <div class="fwt-calendar-preview">
-      <div class="small fw-bold text-danger mb-1 text-center">📅 CALENDARIO FWT 2027</div>
-      <img src="https://i.imgur.com/vH9H8w2.jpeg" alt="Calendario FWT 2027">
+  </div>
+
+  <!-- VENTANA MODAL DEL CALENDARIO FWT (Igual que las estaciones) -->
+  <div id="fwtCalendarModal" class="fwt-custom-modal" onclick="closeFwtCalendarModal(event)">
+    <div class="fwt-modal-content">
+      <button class="fwt-close-modal" onclick="closeFwtCalendarModal()">✕</button>
+      <h3 class="text-danger fw-bold text-center mb-3">📅 CALENDARIO FWT 2027</h3>
+      <div class="fwt-calendar-img-container mb-3">
+        <img src="https://i.imgur.com/vH9H8w2.jpeg" alt="Calendario FWT 2027" class="img-fluid rounded border border-danger">
+      </div>
+      <div class="text-center">
+        <button class="btn btn-danger fw-bold px-4 py-2" onclick="openFwtVideoMonitor()">
+          🎬 Ver Vídeos FWT en Bucle
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- MONITOR DE VÍDEO FLOTANTE (ESTILO CINE DE MONTAÑA) -->
-  <div id="fwtVideoModal" class="fwt-video-modal" onclick="closeFwtMonitor(event)">
-    <button class="fwt-close-monitor" onclick="closeFwtMonitor()">✕</button>
+  <!-- MONITOR DE VÍDEO FLOTANTE -->
+  <div id="fwtVideoModal" class="fwt-video-modal" onclick="closeFwtVideoModal(event)">
+    <button class="fwt-close-monitor" onclick="closeFwtVideoModal()">✕</button>
     <div class="fwt-monitor-container" id="fwtMonitorBox">
-      <!-- Reel 1 -->
       <div class="fwt-video-slide active">
-        <iframe src="https://www.instagram.com/reel/DfC_Fw9CWsP/embed" allow="autoplay"></iframe>
+        <iframe src="https://www.instagram.com/reel/DfC_Fw9CWsP/embed" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
       </div>
-      <!-- Reel 2 -->
       <div class="fwt-video-slide">
-        <iframe src="https://www.instagram.com/reel/DeE7PPaMf66/embed" allow="autoplay"></iframe>
+        <iframe src="https://www.instagram.com/reel/DeE7PPaMf66/embed" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
       </div>
-      <!-- Reel 3 -->
       <div class="fwt-video-slide">
-        <iframe src="https://www.instagram.com/reel/DWv4I2xjg4t/embed" allow="autoplay"></iframe>
+        <iframe src="https://www.instagram.com/reel/DWv4I2xjg4t/embed" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
       </div>
     </div>
   </div>
     <script>
-  // --- LÓGICA DE LA PESTAÑA Y MONITOR FWT (20 SEGUNDOS) ---
   let fwtSlideInterval = null;
-  let currentFwtSlide = 0;
+let currentFwtSlide = 0;
 
-  function openFwtMonitor() {
+// Abre el modal del calendario al hacer clic en la pestaña FWT
+function openFwtCalendarModal() {
+  const modal = document.getElementById('fwtCalendarModal');
+  if (modal) modal.classList.add('active');
+}
+
+// Cierra el modal del calendario
+function closeFwtCalendarModal(e) {
+  if (!e || e.target.id === 'fwtCalendarModal' || e.target.classList.contains('fwt-close-modal')) {
+    const modal = document.getElementById('fwtCalendarModal');
+    if (modal) modal.classList.remove('active');
+  }
+}
+
+// Abre el monitor de vídeo desde el botón del calendario y arranca el bucle de 20s
+function openFwtVideoMonitor() {
+  closeFwtCalendarModal(); // Cierra el modal del calendario
+  const videoModal = document.getElementById('fwtVideoModal');
+  if (videoModal) {
+    videoModal.classList.add('active');
+    currentFwtSlide = 0;
+    updateFwtSlides();
+    if (fwtSlideInterval) clearInterval(fwtSlideInterval);
+    
+    // Rota los reels de Instagram en bucle cada 20 segundos exactos
+    fwtSlideInterval = setInterval(() => {
+      const slides = document.querySelectorAll('.fwt-video-slide');
+      if (slides.length > 0) {
+        slides[currentFwtSlide].classList.remove('active');
+        currentFwtSlide = (currentFwtSlide + 1) % slides.length;
+        slides[currentFwtSlide].classList.add('active');
+      }
+    }, 20000);
+  }
+}
+
+// Cierra el monitor de vídeo
+function closeFwtVideoModal(e) {
+  if (!e || e.target.id === 'fwtVideoModal' || e.target.classList.contains('fwt-close-monitor')) {
     const modal = document.getElementById('fwtVideoModal');
     if (modal) {
-      modal.classList.add('active');
-      currentFwtSlide = 0;
-      updateFwtSlides();
+      modal.classList.remove('active');
       if (fwtSlideInterval) clearInterval(fwtSlideInterval);
-      
-      // Rota los reels en bucle cada 20 segundos exactos
-      fwtSlideInterval = setInterval(() => {
-        const slides = document.querySelectorAll('.fwt-video-slide');
-        if (slides.length > 0) {
-          slides[currentFwtSlide].classList.remove('active');
-          currentFwtSlide = (currentFwtSlide + 1) % slides.length;
-          slides[currentFwtSlide].classList.add('active');
-        }
-      }, 20000);
     }
   }
+}
 
-  function closeFwtMonitor(e) {
-    if (!e || e.target.id === 'fwtVideoModal' || e.target.classList.contains('fwt-close-monitor')) {
-      const modal = document.getElementById('fwtVideoModal');
-      if (modal) {
-        modal.classList.remove('active');
-        if (fwtSlideInterval) clearInterval(fwtSlideInterval);
-      }
-    }
-  }
-
-  function updateFwtSlides() {
-    const slides = document.querySelectorAll('.fwt-video-slide');
-    slides.forEach((slide, idx) => {
-      if (idx === currentFwtSlide) slide.classList.add('active');
-      else slide.classList.remove('active');
-    });
-  }
+function updateFwtSlides() {
+  const slides = document.querySelectorAll('.fwt-video-slide');
+  slides.forEach((slide, idx) => {
+    if (idx === currentFwtSlide) slide.classList.add('active');
+    else slide.classList.remove('active');
+  });
+}
 </script>
 </body>
 </html>
