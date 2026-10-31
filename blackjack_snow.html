@@ -655,25 +655,27 @@
         }
 
         function endRound(playerWon, message) {
-            gameOver = true;
-            if (playerWon === true) {
-                forfaits += currentBet * 2;
-            } else if (playerWon === null) {
-                forfaits += currentBet;
-            }
-            localStorage.setItem('snowboard_bj_bank', forfaits);
+    gameOver = true;
+    
+    if (playerWon === true) {
+        forfaits += currentBet * 2;
+    } else if (playerWon === null) {
+        forfaits += currentBet; // Empate (Push)
+    }
+    
+    localStorage.setItem('snowboard_bj_bank', forfaits);
     updateUI();
 
-            document.getElementById('status-msg').innerText = message;
-            document.getElementById('action-controls').style.display = 'none';
-            document.getElementById('bet-controls').style.display = 'flex';
+    document.getElementById('status-msg').innerText = message;
+    
+    // Liberar controles de apuesta y ocultar botones de acción
+    document.getElementById('action-controls').style.display = 'none';
+    document.getElementById('bet-controls').style.display = 'flex';
 
-            updateUI();
-
-            if (forfaits <= 0) {
-                setTimeout(checkTop5Eligibility, 1000);
-            }
-        }
+    // LIMPIEZA DE MESA PARA LA SIGUIENTE PARTIDA:
+    playerHand = [];
+    dealerHand = [];
+}
 
         function renderTopList() {
             const container = document.getElementById('top-list-container');
