@@ -2098,10 +2098,12 @@ function startSnakeGame() {
       ctx.fillRect(obs.x, obs.y, 18, 18);
     });
 
-    // Dibujar comida
-    ctx.fillStyle = '#f43f5e';
-    ctx.fillRect(food.x, food.y, 18, 18);
+      // Dibujar comida
+    drawFood();
 
+    // Dibujar serpiente
+    drawSnake();
+      
     // Dibujar powerup (premio velocidad) si existe
     if (powerUp) {
       ctx.fillStyle = '#10b981';
