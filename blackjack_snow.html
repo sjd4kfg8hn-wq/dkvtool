@@ -397,7 +397,7 @@
             </div>
             <div class="stats-bar">
                 <div class="stat-item forfaits">
-                    🎫 <span id="forfaits-count">10</span>
+                    🎫 <span id="forfaits-count">25</span>
                 </div>
                 <button class="top-btn" id="open-top-btn">TOP 5</button>
                 <button class="close-game-btn" onclick="closeGameWindow()" title="Cerrar juego">✕</button>
@@ -454,11 +454,11 @@
         <div class="controls-area">
             <div class="status-msg" id="status-msg">¡Haz tu apuesta en Forfaits!</div>
             
-            <div class="bet-buttons" id="bet-controls">
-                <button class="btn btn-bet" onclick="placeBet(3)">🎫 3</button>
-                <button class="btn btn-bet" onclick="placeBet(5)">🎫 5</button>
-                <button class="btn btn-bet" onclick="placeBet(7)">🎫 7</button>
-            </div>
+            <div id="bet-controls" class="bet-controls">
+    <button onclick="placeBet(1)">🪙 1 Forfait</button>
+    <button onclick="placeBet(5)">🪙 5 Forfaits</button>
+    <button onclick="placeBet(10)">🪙 10 Forfaits</button>
+</div>
 
             <div class="action-buttons" id="action-controls" style="display: none;">
                 <button class="btn btn-hit" id="hit-btn" onclick="hit()">PEDIR</button>
@@ -544,23 +544,25 @@
     return isNaN(val) ? 0 : val;
 }
 
-        function calculateScore(hand) {
+       function calculateScore(hand) {
     let score = 0;
     let aces = 0;
 
+    if (!hand || !Array.isArray(hand)) return 0;
+
     for (let i = 0; i < hand.length; i++) {
-        let card = hand.value;
-        if (card === 'A') {
+        let cardVal = hand[i].value !== undefined ? hand[i].value : hand[i];
+        
+        if (cardVal === 'A' || cardVal === 1 || cardVal === '1') {
             aces++;
             score += 11;
-        } else if (['K', 'Q', 'J', '10'].includes(card)) {
+        } else if (['K', 'Q', 'J', '10', 10].includes(cardVal)) {
             score += 10;
         } else {
-            score += parseInt(card);
+            score += parseInt(cardVal) || 0;
         }
     }
 
-    // Si nos pasamos de 21 y tenemos Ases, restamos 10 por cada As hasta ajustar
     while (score > 21 && aces > 0) {
         score -= 10;
         aces--;
@@ -601,7 +603,7 @@
             });
         }
 
-        function placeBet(amount) {
+       function placeBet(amount) {
     if (forfaits < amount) {
         document.getElementById('status-msg').innerText = "¡No tienes suficientes Forfaits!";
         return;
@@ -609,8 +611,7 @@
 
     currentBet = amount;
     forfaits -= amount;
-    
-    // Guarda el saldo actualizado al instante en la memoria del navegador
+
     localStorage.setItem('snowboard_bj_bank', forfaits);
 
     gameOver = false;
@@ -619,31 +620,29 @@
     playerHand = [deck.pop(), deck.pop()];
     dealerHand = [deck.pop(), deck.pop()];
 
-            // Comprobar si hay 21 inicial (SNOWJACK de mano)
+    // Oculta botones de apuesta y muestra los de acción
+    document.getElementById('bet-controls').style.display = 'none';
+    document.getElementById('action-controls').style.display = 'flex';
+    document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
+
+    // Comprobar si hay 21 inicial de mano (SNOWJACK)
     let initialScore = calculateScore(playerHand);
     if (initialScore === 21) {
         document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
         endRound(true, "¡Impresionante! ¡Has cantado el SNOWJACK!");
         return;
     }
-            
-    // Oculta botones de apuesta y muestra los de pedir/plantarse
-    document.getElementById('bet-controls').style.display = 'none';
-    document.getElementById('action-controls').style.display = 'flex';
-    document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
 
     updateUI();
+}
 
-            if (calculateScore(playerHand) === 21) {
-                stand();
-            }
-        }
-
-        function hit() {
+       function hit() {
     if (gameOver) return;
+    
     playerHand.push(deck.pop());
     
     let playerScore = calculateScore(playerHand);
+    updateUI();
     
     if (playerScore === 21) {
         document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
@@ -652,11 +651,13 @@
     }
     
     if (playerScore > 21) {
-        endRound(false, "¡Te has pasado de 21! Gana la banca.");
+        gameOver = true;
+        const actionControls = document.getElementById('action-controls');
+        if (actionControls) actionControls.style.display = 'none';
+        
+        endRound(false, "¡Te has pasado de 21! Te has quedado fuera de pista.");
         return;
     }
-    
-    updateUI();
 }
 
         function stand() {
