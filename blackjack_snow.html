@@ -511,14 +511,21 @@
 
         // FUNCIÓN PARA CERRAR LA VENTANA / IFRAME
         function closeGameWindow() {
-            // Envía orden a la ventana principal para ocultar el iframe o contenedor
-            if (window.parent && window.parent.closeBlackjackModal) {
-                window.parent.closeBlackjackModal();
-            } else {
-                // Si no hay modal externo, borra el contenedor
-                document.body.style.display = 'none';
-            }
-        }
+    const audio = document.getElementById('afro-audio');
+    const consoleBox = document.getElementById('sound-console');
+    const gameWindow = document.querySelector('.casino-window');
+    
+    if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    if (consoleBox) consoleBox.classList.remove('playing-bass');
+    if (gameWindow) gameWindow.classList.remove('music-active-lights');
+
+    // Código para cerrar la ventana o modal del juego
+    const modal = document.getElementById('blackjack-window') || document.getElementById('game-modal');
+    if (modal) modal.style.display = 'none';
+}
 
         function createDeck() {
             deck = [];
