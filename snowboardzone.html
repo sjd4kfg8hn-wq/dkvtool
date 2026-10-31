@@ -1596,88 +1596,19 @@ const quotesAndImages = [
     </div>
 
     <!-- Contenido de los Juegos -->
-    <div class="game-container">
+    <div id="game-blackjack" class="game-screen active">
       <!-- BLACKJACK DE FORFAITS (BLACK SNOW) -->
-      <div id="game-blackjack" class="game-screen active">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div>Tus Forfaits: <span id="bj-bank" class="fw-bold text-warning">20 Forfaits 🎟️</span></div>
-          <button class="btn btn-sm btn-outline-warning" onclick="showRanking()">🏆 Top 10 Forfaits</button>
+      <iframe src="blackjack_snow.html" style="width: 400px; height: 400px; border: none; border-radius: 20px;"></iframe>
         </div>
-        
-        <div id="bj-game-area" class="p-3 bg-dark rounded border border-info text-light">
-          <!-- Temporizador de Bloqueo por 12h (si aplica) -->
-          <div id="bj-lock-banner" class="alert alert-danger py-2 text-center" style="display:none;">
-            ⏳ Te has quedado sin forfaits. Vuelve en 12 horas!!!. Tiempo restante: <span id="bj-timer">12:00:00</span>
-          </div>
-
-          <div id="bj-play-interface">
-            <!-- Estado de la mesa (Crupier vs Tú) -->
-            <div class="row text-center mb-3 border-bottom border-secondary pb-2">
-              <div class="col-6 border-end border-secondary">
-                <p class="small mb-1 text-danger fw-bold">Crupier</p>
-                <div id="bj-dealer-cards" class="fs-6">🎴</div>
-                <div class="small text-muted mt-1">Puntuación: <span id="bj-dealer-score">-</span></div>
-              </div>
-              <div class="col-6">
-                <p class="small mb-1 text-warning fw-bold">Tu Mano</p>
-                <div id="bj-player-cards" class="fs-6">🎴</div>
-                <div class="small text-muted mt-1">Puntuación: <span id="bj-player-score">0</span></div>
-              </div>
-            </div>
-
-            <!-- Área de Apuesta (Se muestra antes de empezar la ronda) -->
-            <div id="bj-bet-section" class="text-center mb-2">
-              <p class="small text-light mb-1">Selecciona tu apuesta en Forfaits para la ronda:</p>
-              <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(1)">1 Día 🎿</button>
-              <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(3)">3 Días 🏂</button>
-              <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(7)">7 Días 🏔️</button>
-            </div>
-
-            <!-- Controles de Jugada (Se muestran durante la partida activa) -->
-            <div id="bj-action-section" class="d-none text-center mt-2">
-              <button class="btn btn-success btn-sm px-4 me-2" onclick="bjHit()">Pedir Carta</button>
-              <button class="btn btn-danger btn-sm px-4" onclick="bjStand()">Plantarse</button>
-            </div>
-            
-            <div id="bj-message" class="mt-2 text-center fw-bold small text-warning"></div>
-          </div>
-        </div>
-
-        <!-- VISTA DE RANKING TOP 10 -->
-        <div id="bj-ranking-view" class="mt-3 p-2 bg-dark rounded border border-secondary" style="display:none;">
-          <h6 class="text-warning mb-2 text-center">🏆 Top 10 Reyes de la Nieve</h6>
-          <ol id="bj-ranking-list" class="list-unstyled small text-start px-3 m-0"></ol>
-          <div class="text-center mt-2">
-            <button class="btn btn-sm btn-outline-light" onclick="hideRanking()">Volver al Juego</button>
-          </div>
-        </div>
-      </div>
-
-          <!-- Área de Apuesta -->
-          <div id="bj-bet-section" class="mb-2">
-            <p class="small text-light mb-1">Selecciona tu apuesta en Forfaits:</p>
-            <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(1)">1 Día 🎿</button>
-            <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(3)">3 Días 🏂</button>
-            <button class="btn btn-outline-info btn-sm m-1" onclick="startBlackjackGame(7)">7 Días 🏔️</button>
-          </div>
-
-          <!-- Controles de Jugada -->
-          <div id="bj-action-section" class="d-none mt-2">
-            <button class="btn btn-success btn-sm px-3 me-2" onclick="bjHit()">Pedir Carta</button>
-            <button class="btn btn-danger btn-sm px-3" onclick="bjStand()">Plantarse</button>
-          </div>
-          
-          <div id="bj-message" class="mt-2 fw-bold small text-warning"></div>
-        </div>
-
-        <!-- VISTA DE RANKING TOP 10 -->
-        <div id="bj-ranking-view" class="mt-3 p-2 bg-dark rounded border border-secondary" style="display:none;">
-          <h6 class="text-warning mb-2">🏆 Top 10 Reyes de la Nieve</h6>
-          <ol id="bj-ranking-list" class="list-unstyled small text-start px-3 m-0"></ol>
-          <button class="btn btn-sm btn-outline-light mt-2" onclick="hideRanking()">Volver al Juego</button>
-        </div>
-      </div>
-
+<script>
+    function closeBlackjackModal() {
+        // Oculta el contenedor del juego o cambia la vista según prefieras
+        const bjContainer = document.getElementById('game-blackjack');
+        if (bjContainer) {
+            bjContainer.style.display = 'none';
+        }
+    }
+</script>
       <!-- SNAKE DE NIEVE PROFESIONAL -->
       <div id="game-snake" class="game-screen">
         <div class="d-flex justify-content-between align-items-center mb-2">
