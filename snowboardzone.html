@@ -2108,38 +2108,40 @@ function startSnakeGame() {
       ctx.fillRect(powerUp.x, powerUp.y, 18, 18);
     }
 
-   // Mover serpiente con efecto túnel en los bordes
+   // --- MOVIMIENTO DE LA SERPIENTE Y EFECTO TÚNEL ---
 const canvas = document.getElementById('snakeCanvas');
-let newX = snake[0].x + dx;
-let newY = snake[0].y + dy;
+if (canvas) {
+  let newX = snake[0].x + dx;
+  let newY = snake[0].y + dy;
 
-// Efecto túnel horizontal
-if (newX < 0) {
-  newX = canvas.width - 20;
-} else if (newX >= canvas.width) {
-  newX = 0;
+  // Efecto túnel horizontal (atraviesa los laterales)
+  if (newX < 0) {
+    newX = canvas.width - 20;
+  } else if (newX >= canvas.width) {
+    newX = 0;
+  }
+
+  // Efecto túnel vertical (atraviesa arriba y abajo)
+  if (newY < 0) {
+    newY = canvas.height - 20;
+  } else if (newY >= canvas.height) {
+    newY = 0;
+  }
+
+  const head = { x: newX, y: newY };
+  snake.unshift(head);
 }
 
-// Efecto túnel vertical
-if (newY < 0) {
-  newY = canvas.height - 20;
-} else if (newY >= canvas.height) {
-  newY = 0;
+   // --- COMPROBAR COMIDA ---
+if (snake[0].x === food.x && snake[0].y === food.y) {
+  snakeScore += 10;
+  const scoreElement = document.getElementById('snake-score');
+  if (scoreElement) scoreElement.innerText = snakeScore;
+  generateFood();
+  if (gameSpeed > 50) gameSpeed -= 2;
+} else {
+  snake.pop(); // Elimina el último elemento si no come (mantiene la longitud)
 }
-
-const head = { x: newX, y: newY };
-snake.unshift(head);
-
-    // Comprobar comida
-    if (snake[0].x === food.x && snake[0].y === food.y) {
-      snakeScore += 10;
-      document.getElementById('snake-score').innerText = snakeScore;
-      generateFood();
-      // Incrementar velocidad ligeramente al crecer
-      if (gameSpeed > 50) gameSpeed -= 2;
-    } else {
-      snake.pop();
-    }
 
     // Comprobar powerup
     if (powerUp && snake[0].x === powerUp.x && snake[0].y === powerUp.y) {
@@ -2177,18 +2179,16 @@ function generateFood() {
 }
 
 function hasGameEnded() {
-  const canvas = document.getElementById('snakeCanvas');
-  
-  // NOTA: Eliminamos la colisión con paredes para permitir el paso por los bordes.
-  
-  // Colisión con sí misma
+  // Colisión con sí misma (omitiendo la cabeza)
   for (let i = 4; i < snake.length; i++) {
     if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
   }
   
-  // Colisión con obstáculos (bloques de dificultad)
-  for (let obs of obstacles) {
-    if (obs.x === snake[0].x && obs.y === snake[0].y) return true;
+  // Colisión con obstáculos de dificultad (si existen)
+  if (typeof obstacles !== 'undefined' && Array.isArray(obstacles)) {
+    for (let obs of obstacles) {
+      if (obs.x === snake[0].x && obs.y === snake[0].y) return true;
+    }
   }
   
   return false;
@@ -2268,20 +2268,35 @@ function checkAndSaveSnakeRanking(score) {
 }
 
 function showSnakeRanking() {
-  let ranking = JSON.parse(localStorage.getItem('snowboard_snake_ranking')) || [];
-  let listHtml = "";
-  ranking.forEach((item, index) => {
-    let medal = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : '🔹'));
-    listHtml += `<li class="py-1 border-bottom border-secondary d-flex justify-content-between"><span>${medal} ${index+1}. ${item.name}</span> <span class="text-warning fw-bold">${item.score} pts</span></li>`;
-  });
-  document.getElementById('snake-ranking-list').innerHTML = listHtml;
-  document.getElementById('snake-game-area').style.display = 'none';
-  document.getElementById('snake-ranking-view').style.display = 'block';
+    let ranking = [];
+    try {
+        ranking = JSON.parse(localStorage.getItem('snowboard_snake_ranking')) || [];
+    } catch (e) {
+        ranking = [];
+    }
+    
+    let listHtml = "";
+    ranking.forEach((item, index) => {
+        let medal = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : '🔹'));
+        listHtml += `<li class="py-1 border-bottom border-secondary d-flex justify-content-between"><span>${medal} ${index + 1}. ${item.name || 'Jugador'}</span><span>${item.score || 0} pts</span></li>`;
+    });
+
+    const rankingList = document.getElementById('snake-ranking-list');
+    if (rankingList) rankingList.innerHTML = listHtml;
+
+    const gameArea = document.getElementById('snake-game-area');
+    if (gameArea) gameArea.style.display = 'none';
+
+    const rankingView = document.getElementById('snake-ranking-view');
+    if (rankingView) rankingView.style.display = 'block';
 }
 
 function hideSnakeRanking() {
-  document.getElementById('snake-ranking-view').style.display = 'none';
-  document.getElementById('snake-game-area').style.display = 'block';
+    const rankingView = document.getElementById('snake-ranking-view');
+    if (rankingView) rankingView.style.display = 'none';
+
+    const gameArea = document.getElementById('snake-game-area');
+    if (gameArea) gameArea.style.display = 'block';
 }
 
 let breakoutAnim;
