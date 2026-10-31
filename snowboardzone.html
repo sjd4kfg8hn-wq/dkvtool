@@ -2354,75 +2354,77 @@ function setSudokuNum(num) {
     selectedSudokuCell.innerText = num === 0 ? '' : num;
   }
 }
-<!-- PESTAÑA FLOTANTE FWT Y CALENDARIO PREVIEW -->
-<div class="fwt-floating-tab" onclick="openFwtMonitor()">
-  <span>❄️ FWT</span>
-  <div class="fwt-calendar-preview">
-    <div class="small fw-bold text-danger mb-1 text-center">📅 CALENDARIO FWT 2027</div>
-    <!-- Imagen del calendario FWT 2027 -->
-    <img src="https://i.imgur.com/vH9H8w2.jpeg" alt="Calendario FWT 2027">
-  </div>
-</div>
 
-<!-- MONITOR DE VÍDEO FLOTANTE (ESTILO CINE DE MONTAÑA) -->
-<div id="fwtVideoModal" class="fwt-video-modal" onclick="closeFwtMonitor(event)">
-  <button class="fwt-close-monitor" onclick="closeFwtMonitor()">✕</button>
-  <div class="fwt-monitor-container" id="fwtMonitorBox">
-    <!-- Reel 1 -->
-    <div class="fwt-video-slide active">
-      <iframe src="https://www.instagram.com/reel/DfC_Fw9CWsP/embed" allow="autoplay"></iframe>
-    </div>
-    <!-- Reel 2 -->
-    <div class="fwt-video-slide">
-      <iframe src="https://www.instagram.com/reel/DeE7PPaMf66/embed" allow="autoplay"></iframe>
-    </div>
-    <!-- Reel 3 -->
-    <div class="fwt-video-slide">
-      <iframe src="https://www.instagram.com/reel/DWv4I2xjg4t/embed" allow="autoplay"></iframe>
+</script>
+    <!-- PESTAÑA FLOTANTE FWT Y CALENDARIO PREVIEW -->
+  <div class="fwt-floating-tab" onclick="openFwtMonitor()">
+    <span>❄️ FWT</span>
+    <div class="fwt-calendar-preview">
+      <div class="small fw-bold text-danger mb-1 text-center">📅 CALENDARIO FWT 2027</div>
+      <img src="https://i.imgur.com/vH9H8w2.jpeg" alt="Calendario FWT 2027">
     </div>
   </div>
-</div>
+
+  <!-- MONITOR DE VÍDEO FLOTANTE (ESTILO CINE DE MONTAÑA) -->
+  <div id="fwtVideoModal" class="fwt-video-modal" onclick="closeFwtMonitor(event)">
+    <button class="fwt-close-monitor" onclick="closeFwtMonitor()">✕</button>
+    <div class="fwt-monitor-container" id="fwtMonitorBox">
+      <!-- Reel 1 -->
+      <div class="fwt-video-slide active">
+        <iframe src="https://www.instagram.com/reel/DfC_Fw9CWsP/embed" allow="autoplay"></iframe>
+      </div>
+      <!-- Reel 2 -->
+      <div class="fwt-video-slide">
+        <iframe src="https://www.instagram.com/reel/DeE7PPaMf66/embed" allow="autoplay"></iframe>
+      </div>
+      <!-- Reel 3 -->
+      <div class="fwt-video-slide">
+        <iframe src="https://www.instagram.com/reel/DWv4I2xjg4t/embed" allow="autoplay"></iframe>
+      </div>
+    </div>
+  </div>
+    <script>
   // --- LÓGICA DE LA PESTAÑA Y MONITOR FWT (20 SEGUNDOS) ---
-let fwtSlideInterval = null;
-let currentFwtSlide = 0;
+  let fwtSlideInterval = null;
+  let currentFwtSlide = 0;
 
-function openFwtMonitor() {
-  const modal = document.getElementById('fwtVideoModal');
-  if (modal) {
-    modal.classList.add('active');
-    currentFwtSlide = 0;
-    updateFwtSlides();
-    if (fwtSlideInterval) clearInterval(fwtSlideInterval);
-    
-    // Rota los reels en bucle cada 20 segundos exactos
-    fwtSlideInterval = setInterval(() => {
-      const slides = document.querySelectorAll('.fwt-video-slide');
-      if (slides.length > 0) {
-        slides[currentFwtSlide].classList.remove('active');
-        currentFwtSlide = (currentFwtSlide + 1) % slides.length;
-        slides[currentFwtSlide].classList.add('active');
-      }
-    }, 20000);
-  }
-}
-
-function closeFwtMonitor(e) {
-  if (!e || e.target.id === 'fwtVideoModal' || e.target.classList.contains('fwt-close-monitor')) {
+  function openFwtMonitor() {
     const modal = document.getElementById('fwtVideoModal');
     if (modal) {
-      modal.classList.remove('active');
+      modal.classList.add('active');
+      currentFwtSlide = 0;
+      updateFwtSlides();
       if (fwtSlideInterval) clearInterval(fwtSlideInterval);
+      
+      // Rota los reels en bucle cada 20 segundos exactos
+      fwtSlideInterval = setInterval(() => {
+        const slides = document.querySelectorAll('.fwt-video-slide');
+        if (slides.length > 0) {
+          slides[currentFwtSlide].classList.remove('active');
+          currentFwtSlide = (currentFwtSlide + 1) % slides.length;
+          slides[currentFwtSlide].classList.add('active');
+        }
+      }, 20000);
     }
   }
-}
 
-function updateFwtSlides() {
-  const slides = document.querySelectorAll('.fwt-video-slide');
-  slides.forEach((slide, idx) => {
-    if (idx === currentFwtSlide) slide.classList.add('active');
-    else slide.classList.remove('active');
-  });
-}      
+  function closeFwtMonitor(e) {
+    if (!e || e.target.id === 'fwtVideoModal' || e.target.classList.contains('fwt-close-monitor')) {
+      const modal = document.getElementById('fwtVideoModal');
+      if (modal) {
+        modal.classList.remove('active');
+        if (fwtSlideInterval) clearInterval(fwtSlideInterval);
+      }
+    }
+  }
+
+  function updateFwtSlides() {
+    const slides = document.querySelectorAll('.fwt-video-slide');
+    slides.forEach((slide, idx) => {
+      if (idx === currentFwtSlide) slide.classList.add('active');
+      else slide.classList.remove('active');
+    });
+  }
 </script>
 </body>
 </html>
