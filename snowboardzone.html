@@ -1882,17 +1882,6 @@ function endBjRound(msg, wonGame) {
     checkAndSaveRanking(bjBank);
   }
 
-  // Comprobar si el usuario se quedó sin forfaits
-  if (bjBank <= 0) {
-    let lockTime = new Date().getTime() + (12 * 60 * 60 * 12 * 1000); // 12 horas exactas
-    // (Nota: 12 * 3600 * 1000 para 12 horas reales)
-    lockTime = new Date().getTime() + (12 * 3600 * 1000);
-    localStorage.setItem('snowboard_bj_lock', lockTime);
-    alert("¡Te has quedado sin forfaits! Sanción aplicada: no podrás jugar en 12 horas.");
-    checkBjLockStatus();
-  }
-}
-
 // Sistema de Ranking Top 10 Interactivo
 function checkAndSaveRanking(score) {
   let ranking = JSON.parse(localStorage.getItem('snowboard_bj_ranking')) || [
