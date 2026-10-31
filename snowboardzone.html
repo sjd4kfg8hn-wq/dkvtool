@@ -2108,9 +2108,25 @@ function startSnakeGame() {
       ctx.fillRect(powerUp.x, powerUp.y, 18, 18);
     }
 
-    // Mover serpiente
-    const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-    snake.unshift(head);
+    // Mover serpiente con efecto túnel en los bordes
+const canvas = document.getElementById('snakeCanvas');
+let newX = snake[0].x + dx;
+let newY = snake[0].y + dy;
+
+if (newX < 0) {
+  newX = canvas.width - 20;
+} else if (newX >= canvas.width) {
+  newX = 0;
+}
+
+if (newY < 0) {
+  newY = canvas.height - 20;
+} else if (newY >= canvas.height) {
+  newY = 0;
+}
+
+const head = { x: newX, y: newY };
+snake.unshift(head);
 
     // Comprobar comida
     if (snake[0].x === food.x && snake[0].y === food.y) {
@@ -2160,16 +2176,19 @@ function generateFood() {
 
 function hasGameEnded() {
   const canvas = document.getElementById('snakeCanvas');
-  // Colisión con paredes
-  if (snake[0].x < 0 || snake[0].x >= canvas.width || snake[0].y < 0 || snake[0].y >= canvas.height) return true;
+  
+  // NOTA: Eliminamos la colisión con paredes para permitir el paso por los bordes.
+  
   // Colisión con sí misma
   for (let i = 4; i < snake.length; i++) {
     if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
   }
-  // Colisión con obstáculos
+  
+  // Colisión con obstáculos (bloques de dificultad)
   for (let obs of obstacles) {
     if (obs.x === snake[0].x && obs.y === snake[0].y) return true;
   }
+  
   return false;
 }
 
@@ -2226,7 +2245,7 @@ function stopTetrisMusic() {
 // Sistema de Ranking Top 10 Snake
 function checkAndSaveSnakeRanking(score) {
   let ranking = JSON.parse(localStorage.getItem('snowboard_snake_ranking')) || [
-    {name: "Iván (Pro)", score: 150},
+    {name: "Ivy (Pro)", score: 150},
     {name: "Coletinas", score: 120},
     {name: "Anita Dinamita", score: 90},
     {name: "Rider_León", score: 60}
