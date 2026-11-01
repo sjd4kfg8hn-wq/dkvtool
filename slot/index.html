@@ -65,7 +65,7 @@
         }
         .slot-container {
             flex: 1;
-            padding: 20px;
+            padding: 15px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -82,7 +82,7 @@
         .subtitle {
             color: #8b949e;
             font-size: 11px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .reels-container {
             display: flex;
@@ -90,8 +90,8 @@
             background: #0d1117;
             border: 2px solid #30363d;
             border-radius: 12px;
-            padding: 12px 10px;
-            margin-bottom: 15px;
+            padding: 10px;
+            margin-bottom: 12px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
             width: 100%;
         }
@@ -100,34 +100,28 @@
             border: 1px solid #30363d;
             border-radius: 8px;
             width: 75px;
-            height: 80px;
+            height: 75px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 38px;
             user-select: none;
-            transition: transform 0.1s ease;
-        }
-        .button-group {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-            margin-bottom: 10px;
         }
         .spin-btn {
             background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             color: #0f172a;
             border: none;
-            padding: 10px 15px;
-            font-size: 14px;
+            padding: 12px 20px;
+            font-size: 15px;
             font-weight: 800;
             border-radius: 12px;
             cursor: pointer;
-            flex: 1;
+            width: 100%;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
             transition: all 0.2s;
+            margin-bottom: 8px;
         }
         .spin-btn:hover {
             transform: translateY(-2px);
@@ -144,6 +138,7 @@
             background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
             color: #fff !important;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+            margin-bottom: 8px;
         }
         .btn-saka:hover {
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6) !important;
@@ -157,13 +152,14 @@
             border-radius: 10px;
             font-size: 13px;
             border: 1px solid #30363d;
+            margin-top: 5px;
         }
         .message {
-            margin-top: 10px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            min-height: 20px;
+            min-height: 18px;
             color: #38bdf8;
+            margin-bottom: 5px;
         }
 
         /* MODALES */
@@ -265,7 +261,7 @@
         </div>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL ESTÉTICA ORIGINAL -->
+    <!-- CONTENEDOR PRINCIPAL ESTÉTICA ORIGINAL EXACTA -->
     <div class="slot-container">
         <h2>🎫 FORFAIT SLOT</h2>
         <div class="subtitle">¡Consigue 3 iguales para ganar tu pase VIP!</div>
@@ -276,12 +272,10 @@
             <div class="reel" id="reel3">⛷️</div>
         </div>
 
-        <div class="button-group">
-            <button class="spin-btn" id="spinBtn" onclick="spin()">¡TIRAR!</button>
-            <button class="spin-btn btn-saka" id="sakaBtn" onclick="aLaSaka()">¡A LA SAKA!</button>
-        </div>
+        <button class="spin-btn" id="spinBtn" onclick="spin()">¡TIRAR DE LA PALANCA!</button>
+        <button class="spin-btn btn-saka" id="sakaBtn" onclick="aLaSaka()">¡A LA SAKA!</button>
 
-        <div class="message" id="message">¡Prueba tu suerte, Rider!</div>
+        <div class="message" id="message">✨ ¡Prueba tu suerte, Rider!</div>
 
         <div class="stats">
             <span>Copos: <strong id="credits" style="color: #38bdf8;">100</strong></span>
@@ -401,7 +395,9 @@
         } else {
             alert(`¡Te has retirado con ${credits} copos, pero no alcanza para el Top 5!`);
             credits = 100;
+            wins = 0;
             document.getElementById('credits').innerText = credits;
+            document.getElementById('wins').innerText = wins;
         }
     }
 
