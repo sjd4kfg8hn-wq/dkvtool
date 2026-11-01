@@ -1668,7 +1668,6 @@ function switchGame(gameId) {
   const targetScreen = document.getElementById('game-' + gameId);
   if (targetScreen) targetScreen.classList.add('active');
 
-  if (gameId === 'snake') startSnake();
   if (gameId === 'breakout') startBreakout();
   if (gameId === 'sudoku') initSudoku();
   if (gameId === 'blackjack') checkBjLockStatus();
