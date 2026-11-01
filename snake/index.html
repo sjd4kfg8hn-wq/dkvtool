@@ -128,7 +128,7 @@
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 12px;
         }
 
         .btn-start:hover { background: #0284c7; }
@@ -276,7 +276,7 @@
     <script>
         const canvas = document.getElementById('snakeCanvas');
         const ctx = canvas.getContext('2d');
-        const gridSize = 18; // 20x20 casillas (360px / 18px)
+        const gridSize = 18; 
         const tileCount = canvas.width / gridSize;
 
         let snake = [];
@@ -293,12 +293,11 @@
         let obstacles = [];
         let playerName = "";
 
-        // Web Audio API Synth para música estilo Tetris sin dependencias
+        // Audio Synth
         let audioCtx = null;
         let musicTimer = null;
         let currentNoteIndex = 0;
 
-        // Notas Korobeiniki (Tetris)
         const tetrisMelody = [
             { note: 76, duration: 400 }, { note: 71, duration: 200 }, { note: 72, duration: 200 }, { note: 74, duration: 400 },
             { note: 72, duration: 200 }, { note: 71, duration: 200 }, { note: 69, duration: 400 }, { note: 69, duration: 200 },
@@ -316,56 +315,61 @@
         ];
 
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            } catch (e) {}
         }
 
         function playTetrisNote() {
             if (!isRunning || !audioCtx) return;
-            const noteData = tetrisMelody[currentNoteIndex];
-            
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            // Frecuencia MIDI a Hz
-            const freq = 440 * Math.pow(2, (noteData.note - 69) / 12);
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            osc.type = 'square';
+            try {
+                const noteData = tetrisMelody[currentNoteIndex];
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                const freq = 440 * Math.pow(2, (noteData.note - 69) / 12);
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.type = 'square';
 
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (noteData.duration / 1000) * 0.8);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (noteData.duration / 1000) * 0.8);
 
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-            osc.start();
-            osc.stop(audioCtx.currentTime + (noteData.duration / 1000));
+                osc.start();
+                osc.stop(audioCtx.currentTime + (noteData.duration / 1000));
 
-            currentNoteIndex = (currentNoteIndex + 1) % tetrisMelody.length;
-
-            // Velocidad de la música vinculada al ritmo del juego
-            const nextDelay = (noteData.duration) / speedMultiplier;
-            musicTimer = setTimeout(playTetrisNote, Math.max(100, nextDelay));
+                currentNoteIndex = (currentNoteIndex + 1) % tetrisMelody.length;
+                const nextDelay = (noteData.duration) / speedMultiplier;
+                musicTimer = setTimeout(playTetrisNote, Math.max(100, nextDelay));
+            } catch (e) {}
         }
 
         function playCrashSound() {
             if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.4);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.4);
 
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
 
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } catch(e) {}
         }
 
         function startGame() {
@@ -390,28 +394,28 @@
             updateStats();
             spawnFood();
             
-            clearInterval(gameLoop);
-            clearInterval(levelTimer);
-            clearTimeout(musicTimer);
+            if (gameLoop) clearInterval(gameLoop);
+            if (levelTimer) clearInterval(levelTimer);
+            if (musicTimer) clearTimeout(musicTimer);
 
-            // Nivel sube cada 30 segundos
             levelTimer = setInterval(() => {
                 level++;
-                speedMultiplier *= 1.5; // Incremento de velocidad por nivel
+                speedMultiplier *= 1.3;
                 if (level >= 3) generateObstacles();
                 updateStats();
                 restartLoop();
             }, 30000);
 
+            draw(); 
             restartLoop();
+            
             currentNoteIndex = 0;
             playTetrisNote();
         }
 
         function restartLoop() {
             if (gameLoop) clearInterval(gameLoop);
-            // El intervalo del loop se reduce a medida que sube el multiplicador
-            const interval = Math.max(50, 160 / speedMultiplier);
+            const interval = Math.max(60, 160 / speedMultiplier);
             gameLoop = setInterval(step, interval);
         }
 
@@ -439,10 +443,8 @@
         function step() {
             if (!isRunning) return;
 
-            // Mover cabeza
             const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
-            // Control de Bordes según nivel
             if (level <= 3) {
                 canvas.className = "walls-active";
                 if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
@@ -456,12 +458,10 @@
                 if (head.y >= canvas.height) head.y = 0;
             }
 
-            // Choque contra sí misma
             for (let segment of snake) {
                 if (head.x === segment.x && head.y === segment.y) return gameOver();
             }
 
-            // Choque contra obstáculos (nivel > 3)
             if (level >= 3) {
                 for (let obs of obstacles) {
                     if (head.x === obs.x && head.y === obs.y) return gameOver();
@@ -470,13 +470,12 @@
 
             snake.unshift(head);
 
-            // Comer copo de nieve
             if (head.x === food.x && head.y === food.y) {
                 score += 1;
                 applesEaten += 1;
 
                 if (applesEaten % 3 === 0) {
-                    speedMultiplier += 0.5; // +0.5x por cada 3 copos
+                    speedMultiplier += 0.3;
                     restartLoop();
                 }
 
@@ -493,7 +492,6 @@
             ctx.fillStyle = '#090d16';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Dibujar Obstáculos
             if (level >= 3) {
                 ctx.font = '14px sans-serif';
                 for (let obs of obstacles) {
@@ -501,11 +499,9 @@
                 }
             }
 
-            // Dibujar Copo Comida
             ctx.font = '14px sans-serif';
             ctx.fillText('❄️', food.x + 2, food.y + 14);
 
-            // Dibujar Serpiente de Nieve
             snake.forEach((segment, index) => {
                 ctx.font = index === 0 ? '15px sans-serif' : '12px sans-serif';
                 ctx.fillText('❄️', segment.x + 2, segment.y + 14);
@@ -532,13 +528,12 @@
         // Teclado
         window.addEventListener('keydown', e => {
             if (!isRunning) return;
-            if ((e.key === 'ArrowUp' || e.key === 'w') && dy === 0) { dx = 0; dy = -gridSize; }
-            if ((e.key === 'ArrowDown' || e.key === 's') && dy === 0) { dx = 0; dy = gridSize; }
-            if ((e.key === 'ArrowLeft' || e.key === 'a') && dx === 0) { dx = -gridSize; dy = 0; }
-            if ((e.key === 'ArrowRight' || e.key === 'd') && dx === 0) { dx = gridSize; dy = 0; }
+            if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') && dy === 0) { dx = 0; dy = -gridSize; }
+            if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && dy === 0) { dx = 0; dy = gridSize; }
+            if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && dx === 0) { dx = -gridSize; dy = 0; }
+            if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && dx === 0) { dx = gridSize; dy = 0; }
         });
 
-        // Modal Top 5
         function openTopModal() {
             const container = document.getElementById('top-list-container');
             container.innerHTML = '';
@@ -556,7 +551,6 @@
             document.getElementById('top-modal').classList.remove('active');
         }
 
-        // Teclado Virtual
         function buildKeyboard() {
             const keys = [
                 ['Q','W','E','R','T','Y','U','I','O','P'],
@@ -598,11 +592,12 @@
             localStorage.setItem('snake_snow_top', JSON.stringify(topScores));
 
             document.getElementById('crash-modal').classList.remove('active');
-            
-    document.getElementById('crash-modal').classList.remove('active');
-    
-    location.reload();
+            document.getElementById('start-btn').style.display = 'block';
+            draw();
         }
+
+        // Pintar fondo inicial
+        draw();
     </script>
 </body>
 </html>
