@@ -3,1816 +3,834 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TU SNOWBOARD ZONE by Ivymaravillas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Blackjack Snow - Alpine Casino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0f172a;
-            --glass-card: rgba(15, 23, 42, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --snow-white: #f8fafc;
             --accent-blue: #38bdf8;
-            --accent-green: #22c55e;
-            --accent-purple: #c084fc;
-            --accent-snow: #f8fafc;
-        }
-           /* --- PESTAÑA Y MONITOR FWT --- */
-  .fwt-floating-tab {
-    position: fixed;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 9999;
-    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 0 12px 12px 0;
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.5);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: fwtPulse 2s infinite;
-  }
-
-  .fwt-floating-tab:hover {
-    padding-left: 22px;
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    box-shadow: 0 6px 25px rgba(239, 68, 68, 0.8);
-  }
-
-  @keyframes fwtPulse {
-    0% { transform: translateY(-50%) scale(1); }
-    50% { transform: translateY(-50%) scale(1.05); }
-    100% { transform: translateY(-50%) scale(1); }
-  }
-
-  .fwt-calendar-preview {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%) translateX(15px) scale(0.9);
-    width: 320px;
-    background: rgba(15, 23, 42, 0.95);
-    border: 1px solid rgba(220, 38, 38, 0.6);
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    pointer-events: none;
-  }
-
-  .fwt-floating-tab:hover .fwt-calendar-preview {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(-50%) translateX(10px) scale(1);
-  }
-
-  .fwt-calendar-preview img {
-    width: 100%;
-    border-radius: 8px;
-    display: block;
-  }
-
-  .fwt-video-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(2, 6, 23, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 100000;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .fwt-video-modal.active {
-    display: flex;
-    opacity: 1;
-  }
-
-  .fwt-monitor-container {
-    position: relative;
-    width: 90vw;
-    max-width: 450px;
-    height: 80vh;
-    max-height: 800px;
-    background: #000;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 2px solid rgba(56, 189, 248, 0.3);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(56, 189, 248, 0.2);
-  }
-
-  .fwt-video-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .fwt-video-slide.active {
-    opacity: 1;
-  }
-
-  .fwt-video-slide iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    pointer-events: none;
-  }
-
-  .fwt-close-monitor {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 100002;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-  }
-
-  .fwt-close-monitor:hover {
-    background: #dc2626;
-    border-color: #dc2626;
-  }
-        body {
-            background: linear-gradient(135deg, #0b1329 0%, #1e293b 50%, #0f172a 100%);
-            background-attachment: fixed;
-            color: var(--accent-snow);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            --accent-teal: #2dd4bf;
+            --wood-dark: #1e293b;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --card-bg: #ffffff;
         }
 
-        .main-content {
-            flex: 1;
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Efecto de luces LED rítmicas estilo Afrohouse en el marco del juego */
+        @keyframes afroNeonPulse {
+            0% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
+            33% { box-shadow: 0 0 25px #ff007f, inset 0 0 25px #ff007f; border-color: #ff007f; }
+            66% { box-shadow: 0 0 25px #7928ca, inset 0 0 25px #7928ca; border-color: #7928ca; }
+            100% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
         }
 
-        .glass-panel {
-            background: var(--glass-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+        .music-active-lights {
+            animation: afroNeonPulse 2s infinite ease-in-out;
         }
 
-        /* Hero Banner Header Exacto */
-        .hero-banner {
-            position: relative;
-            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.95)),
-                        url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-            padding: 60px 20px 35px 20px;
-            border-bottom: 1px solid var(--glass-border);
-            text-align: center;
-        }
-
-        .btn-whatsapp {
-            background-color: var(--accent-green);
-            color: white;
-            font-weight: 600;
-            border-radius: 12px;
-            border: none;
-            transition: all 0.2s;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #16a34a;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Pulsador Ivysnow Muy Llamativo */
-.btn-ivy-pulsador {
-    background: linear-gradient(135deg, #9333ea, #c084fc, #38bdf8);
-    color: white;
-    font-weight: 700;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.3s ease;
-    box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
-    animation: pulseGlow 2s infinite;
-}
-
-.btn-ivy-pulsador:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 0 30px rgba(56, 189, 248, 0.8);
-    color: white;
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
-    50% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.7); }
-    100% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
-}
-        .nav-link.active-tab {
-            background-color: var(--accent-blue) !important;
-            color: #0f172a !important;
-            font-weight: bold;
-            border-radius: 12px;
-        }
-
-        .feature-tag {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
+        .audio-player-container {
+            background: rgba(0, 0, 0, 0.6);
             padding: 6px 12px;
-            font-size: 0.85rem;
-            display: inline-flex;
+            border-radius: 8px;
+            display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
 
-        /* Tarjetas de Estaciones */
-        .station-card {
-            border-radius: 20px;
+        body {
+            background: #020617;
+            font-family: 'Nunito', sans-serif;
+            color: var(--snow-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             overflow: hidden;
-            background: rgba(30, 41, 59, 0.65);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
+        }
+
+        .casino-window {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border: 3px solid var(--accent-blue);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(56, 189, 248, 0.3);
             display: flex;
             flex-direction: column;
-            cursor: pointer;
-        }
-
-        .station-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 36px rgba(56, 189, 248, 0.25);
-            border-color: rgba(56, 189, 248, 0.4);
-        }
-
-        .card-img-wrapper {
             position: relative;
-            height: 160px;
             overflow: hidden;
         }
 
-        .card-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
+        .header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+            z-index: 10;
         }
 
-        .station-card:hover .card-img-wrapper img {
-            transform: scale(1.08);
-        }
-
-        .fav-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #cbd5e1;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
+        .title-badge {
+            font-family: 'Fredoka One', cursive;
+            color: var(--accent-blue);
+            font-size: 13px;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 4px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .stat-item {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-item.forfaits {
+            color: var(--gold);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .top-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 900;
             cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        .fav-btn:hover, .fav-btn.active {
-            background: rgba(239, 68, 68, 0.9);
+        .close-game-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 4px;
+            transition: all 0.15s;
+        }
+
+        .close-game-btn:hover {
+            background: #ef4444;
             color: white;
-            border-color: #ef4444;
         }
 
-        .opening-badge {
-            position: absolute;
-            bottom: 10px;
-            left: 12px;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--accent-blue);
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .card-body-content {
-            padding: 16px;
+        .snowboard-table {
+            flex: 1;
+            margin: 8px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #075985 100%);
+            border-radius: 60px / 30px;
+            border: 3px solid #38bdf8;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            flex-grow: 1;
-        }
-
-        .metric-pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 6px 8px;
-            text-align: center;
-        }
-
-        .metric-label {
-            font-size: 0.68rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .metric-value {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #f8fafc;
-        }
-
-        .btn-custom {
-            background-color: var(--accent-blue);
-            color: #0f172a;
-            font-weight: 600;
-            border-radius: 10px;
-            border: none;
-            transition: all 0.2s;
-        }
-
-        .btn-custom:hover {
-            background-color: #0284c7;
-            color: white;
-        }
-
-        /* Píldoras de pistas en Modal */
-        .piste-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
-        .badge-verde { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
-        .badge-azul { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
-        .badge-roja { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
-        .badge-negra { background: rgba(15, 23, 42, 0.8); color: #e2e8f0; border: 1px solid #64748b; }
-
-        /* Contenedor del mapa con imagen oficial de pistas de alta calidad */
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            border-radius: 12px;
+            padding: 8px 16px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: #000;
-        }
-        .map-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #111;
         }
 
-        /* Tarjeta de pronóstico 7 días */
-        .forecast-day-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 8px;
-            text-align: center;
-            flex: 1;
-            min-width: 70px;
-        }
-
-        /* Footer con logo ivysnow y contador Shih Tzu Snowboarder */
-        .footer-branding {
-            border-top: 1px solid var(--glass-border);
-            background: rgba(11, 19, 41, 0.95);
-            padding: 30px 20px;
-            margin-top: 50px;
-        }
-
-        .ivysnow-logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #38bdf8, #c084fc, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .shihtzu-counter {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(56, 189, 248, 0.15));
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            border-radius: 40px;
-            padding: 8px 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.15);
-        }
-
-        .shihtzu-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #f8fafc 40%, #cbd5e1 100%);
+        .player-zone {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border: 2px solid var(--accent-blue);
-            font-size: 1.4rem;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            gap: 8px;
+            min-height: 70px;
             position: relative;
+            z-index: 2;
         }
 
-        .shihtzu-avatar::after {
-            content: "🏂";
-            position: absolute;
-            bottom: -4px;
-            right: -4px;
-            font-size: 0.85rem;
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            flex-shrink: 0;
         }
 
-        .counter-number {
-            font-family: monospace;
-            font-size: 1.25rem;
-            font-weight: bold;
+        .avatar-croupier { border-color: var(--accent-blue); }
+        .avatar-rider { border-color: var(--gold); }
+
+        .cards-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            height: 55px;
+        }
+
+        .card {
+            width: 36px;
+            height: 52px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: -2px 2px 5px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3px;
+            font-size: 11px;
+            font-weight: 900;
+            color: #0f172a;
+            margin-left: -12px;
+            animation: cardDeal 0.25s ease-out forwards;
+        }
+
+        .card:first-child { margin-left: 0; }
+        .card.red { color: #dc2626; }
+        .card.back {
+            background: linear-gradient(135deg, #1e3a8a, #0284c7);
+            border: 1px solid #93c5fd;
+        }
+        .card.back::after {
+            content: '❄';
+            color: white;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        @keyframes cardDeal {
+            from { transform: translateY(-30px) scale(0.5); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .score-badge {
+            background: rgba(0,0,0,0.7);
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            border: 1px solid rgba(255,255,255,0.2);
+            min-width: 22px;
+            text-align: center;
+        }
+
+        .controls-area {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-top: 2px solid rgba(56, 189, 248, 0.2);
+            z-index: 10;
+        }
+
+        .bet-buttons, .action-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn:hover:not(:disabled) { background: #475569; }
+        .btn:active:not(:disabled) { transform: scale(0.96); }
+
+        .btn-bet { background: linear-gradient(135deg, #0284c7, #0369a1); border: 1px solid #38bdf8; }
+        .btn-hit { background: linear-gradient(135deg, #16a34a, #15803d); }
+        .btn-stand { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+
+        .status-msg {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 800;
+            min-height: 16px;
             color: var(--accent-blue);
-            letter-spacing: 1px;
         }
-        /* Efecto de copos de nieve cayendo */
-.snowflake {
-    position: fixed;
-    top: -10px;
-    background: #ffffff;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.8;
-    animation: fall linear infinite;
-}
 
-@keyframes fall {
-    0% {
-        transform: translateY(-10px) translateX(0);
-        opacity: 0.8;
-    }
-    100% {
-        transform: translateY(105vh) translateX(20px);
-        opacity: 0.2;
-    }
-}
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
 
-/* Reproductor de música flotante */
-.music-player-float {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    border-radius: 30px;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 9998;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    color: #f8fafc;
-    font-size: 0.85rem;
-}
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-.music-player-float button {
-    background: var(--accent-blue);
-    border: none;
-    color: #0f172a;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
-}
+        .modal-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--gold);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
 
-.music-player-float button:hover {
-    transform: scale(1.1);
-}
-        /* Modal de Juegos */
-.games-modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(10, 15, 30, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-}
+        .top-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
 
-.games-modal-content {
-  background: #111827;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  border-radius: 16px;
-  width: 90%;
-  max-width: 650px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  color: #fff;
-}
+        .top-item {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 700;
+        }
 
-.games-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding-bottom: 10px;
-}
+        .top-item span:first-child { color: var(--accent-blue); }
+        .top-item span:last-child { color: var(--gold); }
 
-.btn-close-games {
-  background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;
-}
+        .keyboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            width: 100%;
+            margin-top: 4px;
+        }
 
-.games-tabs {
-  display: flex; gap: 8px; margin: 15px 0; overflow-x: auto;
-}
+        .kb-row {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+        }
 
-.game-tab {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #aaa; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.3s;
-}
+        .kb-key {
+            background: #334155;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            width: 24px;
+            height: 26px;
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
 
-.game-tab.active, .game-tab:hover {
-  background: #38bdf8; color: #0f172a; font-weight: bold;
-}
+        .kb-key:active { background: var(--accent-blue); color: black; }
+        .kb-key.wide { width: 45px; background: #475569; }
 
-.game-screen { 
-    display: none;
-    text-align: center; }
-.game-screen.active {
-    display: block !important;
-    width: 100%;
-    height: 100%;
-}
-
-canvas {
-  background: #000; border-radius: 8px; max-width: 100%; height: auto;
-}
-
-/* Tablero Sudoku */
-.sudoku-grid {
-  display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px;
-  background: #334155; width: 100%; max-width: 360px; margin: 0 auto; border: 2px solid #38bdf8;
-}
-
-.sudoku-cell {
-  aspect-ratio: 1; background: #1e293b; color: #fff; display: flex;
-  align-items: center; justify-content: center; font-weight: bold; cursor: pointer;
-}
-
-.sudoku-cell.selected { background: #0284c7; }
-.sudoku-cell.fixed { background: #0f172a; color: #94a3b8; }
-        .sudoku-cell.selected { background: #0284c7; }
-    .sudoku-cell.fixed { background: #0f172a; color: #94a3b8; }
-
-   /* Botón de SnowStudio integrado en la barra de pestañas */
-.studio-side-btn {
-    display: inline-flex;
-    align-items: center;
-    background: linear-gradient(135deg, #0284c7, #0369a1);
-    border: 2px solid #38bdf8;
-    color: #ffffff;
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-family: 'Permanent Marker', cursive;
-    font-size: 13px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-    margin-right: 10px;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.studio-side-btn:hover, .studio-side-btn.active {
-    background: #38bdf8;
-    color: #0f172a;
-    box-shadow: 0 0 25px #38bdf8;
-    transform: scale(1.05);
-}
-</style>
+        .name-display {
+            background: #020617;
+            border: 1px solid var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--snow-white);
+            min-width: 120px;
+            text-align: center;
+            margin-bottom: 6px;
+            height: 26px;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="main-content">
-        <!-- Hero Main Header Exacto -->
-        <div class="hero-banner mb-4">
-            <div class="container">
-                <h1 class="display-4 fw-extrabold text-light mb-1">
-                    <i class="fa-solid fa-mountain-sun text-info me-2"></i>TU SNOWBOARD ZONE
-                </h1>
-                <p class="fs-6 text-info fw-semibold mb-3">
-    by Ivymaravillas 
-    <a href="https://www.tiktok.com/@ivywonderwalls?_r=1&_t=ZN-9AzPtLym8P8" target="_blank" class="text-light ms-2 text-decoration-none" title="Sígueme en TikTok">
-        <i class="fa-brands fa-tiktok"></i>
-    </a>
-    <a href="https://www.instagram.com/ivywonderwalls?exln=dm9ubndtc3lnYXdh&utm_source=qr" target="_blank" class="text-light ms-2 text-decoration-none" title="Sígueme en Instagram">
-        <i class="fa-brands fa-instagram"></i>
-    </a>
-</p>
-                
-                <p class="lead opacity-90 text-light max-w-2xl mx-auto mb-4 fs-6">
-                    Portal de referencia para snowboarders. Consulta kilómetros esquiables, espesores de nieve, riesgo de aludes, tiempo, snowparks y webcams oficiales en tiempo real.
-                </p>
-
-                <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
-                    <span class="feature-tag"><i class="fa-solid fa-road text-info"></i> Kilómetros esquiables</span>
-                    <span class="feature-tag"><i class="fa-solid fa-ruler-vertical text-info"></i> Espesores de nieve</span>
-                    <span class="feature-tag"><i class="fa-solid fa-triangle-exclamation text-warning"></i> Riesgo de aludes</span>
-                    <span class="feature-tag"><i class="fa-solid fa-person-snowboarding text-purple"></i> Snowpark</span>
-                    <span class="feature-tag"><i class="fa-solid fa-video text-danger"></i> Webcams en directo</span>
+    <div class="casino-window">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="title-badge">
+                <span>❄</span> BLACKJACK SNOW
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item forfaits">
+                    🎫 <span id="forfaits-count">25</span>
                 </div>
-
-                <!-- Header Action Buttons -->
-                <div class="d-flex justify-content-center flex-wrap gap-3">
-                    <a href="https://chat.whatsapp.com/Hx7p8iGndpEG5tsxvZ49In" target="_blank" class="btn btn-whatsapp btn-lg px-4 py-3 shadow d-inline-flex align-items-center gap-2">
-                        <i class="fa-brands fa-whatsapp fs-3"></i> Comunidad WhatsApp
-                    </a>
-
-                    <button class="btn btn-ivy-pulsador btn-lg px-4 py-3 shadow d-inline-flex align-items-center gap-2" onclick="openIvysnowModal()">
-    <i class="fa-solid fa-mountain-sun fs-3 text-warning"></i> ❄️ Ivysnow te dice:
-</button>
-
-                    <button class="btn btn-warning btn-lg px-4 py-3 fw-bold shadow d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#donationModal">
-                        <i class="fa-solid fa-mug-hot fs-4"></i> Invitar a un café ☕
-                    </button>
-                </div>
+                <button class="top-btn" id="open-top-btn">TOP 5</button>
+                <button class="close-game-btn" onclick="closeGameWindow()" title="Cerrar juego">✕</button>
             </div>
         </div>
 
-        <!-- Main Content Container -->
-        <div class="container my-4">
-            <!-- Dynamic Region Tabs (SIN IvyAsesor en la barra) -->
-            <div class="glass-panel p-2 mb-4">
-                <ul class="nav nav-pills justify-content-center gap-1 flex-wrap" id="regionTabs">
-                    <li class="nav-item"><a class="nav-link text-light px-3 active-tab" id="tab-all" href="#" onclick="filterRegion('all')">Todas</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-3" id="tab-favs" href="#" onclick="filterRegion('favs')"><i class="fa-solid fa-heart text-danger me-1"></i> Favoritas (<span id="favCount">0</span>)</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-3" id="tab-aragon" href="#" onclick="filterRegion('aragon')">Pirineo Aragonés</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-3" id="tab-cataluna" href="#" onclick="filterRegion('cataluna')">Pirineo Catalán</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-3" id="tab-cantabrica" href="#" onclick="filterRegion('cantabrica')">Cordillera Cantábrica</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-3" id="tab-nevada" href="#" onclick="filterRegion('nevada')">Sierra Nevada</a></li>
-                    <li class="nav-item"><a class="nav-link text-light px-3" id="tab-central" href="#" onclick="filterRegion('central')">Sistema Central</a></li>
-                </ul>
+        <!-- Reproductor y Control de Luces Afrohouse -->
+        <div style="padding: 8px 15px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div class="audio-player-container">
+                <span style="color: #fff; font-size: 12px; font-weight: bold;">🎧 Aaron Sevilla - Afrohouse</span>
+                <button onclick="toggleMusicLights()" id="lights-btn" style="background: #ff007f; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">✨ Activar Luces Rítmicas</button>
+            </div>
+            <div style="font-size: 0; line-height: 0; margin-top: 6px;">
+                <iframe width="100%" height="40" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/aaron-sevilla/afrohouse-tengo&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            </div>
+        </div>
+        
+        <!-- MESA SNOWBOARD -->
+        <div class="snowboard-table">
+            <!-- CROUPIER (MUÑECO DE NIEVE) -->
+            <div class="player-zone">
+                <div class="avatar avatar-croupier">
+                    <svg width="32" height="32" viewBox="0 0 100 100">
+                        <circle cx="50" cy="70" r="25" fill="#ffffff"/>
+                        <circle cx="50" cy="35" r="18" fill="#ffffff"/>
+                        <circle cx="43" cy="30" r="2.5" fill="#000"/>
+                        <circle cx="57" cy="30" r="2.5" fill="#000"/>
+                        <polygon points="50,35 65,38 50,41" fill="#f97316"/>
+                        <path d="M 38,40 Q 50,48 62,40" fill="none" stroke="#000" stroke-width="2"/>
+                        <rect x="35" y="15" width="30" height="6" fill="#dc2626"/>
+                        <rect x="40" y="2" width="20" height="15" fill="#0f172a"/>
+                    </svg>
+                </div>
+                <div class="cards-container" id="dealer-cards"></div>
+                <div class="score-badge" id="dealer-score">0</div>
             </div>
 
-            <!-- Search & Filter Controls -->
+            <!-- RIDER (GAFAS Y CASCO) -->
+            <div class="player-zone">
+                <div class="avatar avatar-rider">
+                    <svg width="32" height="32" viewBox="0 0 100 100">
+                        <path d="M 20 50 A 30 30 0 0 1 80 50 L 80 55 L 20 55 Z" fill="#0284c7"/>
+                        <rect x="25" y="45" width="50" height="14" rx="7" fill="#fbbf24"/>
+                        <rect x="28" y="47" width="44" height="10" rx="5" fill="#0f172a"/>
+                        <line x1="20" y1="52" x2="10" y2="52" stroke="#475569" stroke-width="4"/>
+                        <line x1="80" y1="52" x2="90" y2="52" stroke="#475569" stroke-width="4"/>
+                    </svg>
+                </div>
+                <div class="cards-container" id="player-cards"></div>
+                <div class="score-badge" id="player-score">0</div>
+            </div>
+        </div>
+
+        <!-- CONTROLES -->
+        <div class="controls-area">
+            <div class="status-msg" id="status-msg">¡Haz tu apuesta en Forfaits!</div>
             
-<div class="row mb-4 align-items-center" id="searchFilterRow">
-  <div class="col-md-6 mb-2">
-    <input type="text" id="searchInput" class="form-control glass-panel text-light py-2 px-3 fs-5" placeholder="🔍 Buscar estación...">
-  </div>
-  <div class="col-md-4 mb-2">
-    <select id="regionSelect" class="form-select glass-panel text-light py-2 px-3 fs-5" onchange="filterRegion(this.value)">
-      <option value="all" class="bg-dark text-light">Todas las Regiones</option>
-      <option value="favs" class="bg-dark text-light">Mis Favoritas ❤️</option>
-      <option value="aragon" class="bg-dark text-light">Pirineo Aragonés</option>
-      <option value="cataluna" class="bg-dark text-light">Pirineo Catalán</option>
-      <option value="cantabrica" class="bg-dark text-light">Cordillera Cantábrica</option>
-      <option value="nevada" class="bg-dark text-light">Sierra Nevada</option>
-      <option value="central" class="bg-dark text-light">Sistema Central</option>
-    </select>
-  </div>
-  <div class="col-md-2 mb-2 text-end">
-    <button class="btn btn-info w-100 py-2 fs-5 text-dark fw-bold shadow-sm" onclick="openGamesModal()">
-      🎮 Juegos
-    </button>
-  </div>
-</div>
-
-            <!-- Stations Cards Grid -->
-            <div class="row g-4" id="stationsGrid">
-                <!-- Dynamic Cards -->
+            <div id="bet-controls" class="bet-buttons">
+                <button class="btn btn-bet" onclick="placeBet(1)">🪙 1 Forfait</button>
+                <button class="btn btn-bet" onclick="placeBet(5)">🪙 5 Forfaits</button>
+                <button class="btn btn-bet" onclick="placeBet(10)">🪙 10 Forfaits</button>
             </div>
+
+            <div class="action-buttons" id="action-controls" style="display: none;">
+                <button class="btn btn-hit" id="hit-btn" onclick="hit()">PEDIR</button>
+                <button class="btn btn-stand" id="stand-btn" onclick="stand()">PLANTARSE</button>
+            </div>
+        </div>
+
+        <!-- MODAL TOP 5 -->
+        <div class="modal-overlay" id="top-modal">
+            <div class="modal-title">🏆 TOP 5 RIDERS</div>
+            <div class="top-list" id="top-list-container"></div>
+            <button class="btn" onclick="closeTopModal()" style="width: 100%; margin-top: 6px;">CERRAR</button>
+        </div>
+
+        <!-- MODAL TECLADO / GAME OVER -->
+        <div class="modal-overlay" id="keyboard-modal">
+            <div class="modal-title">¡SIN FORFAITS!</div>
+            <div style="font-size: 11px; margin-bottom: 6px;" id="gameover-text">Has conseguido un récord.</div>
+            <div class="name-display" id="name-display">___</div>
+            
+            <div class="keyboard-container" id="keyboard"></div>
+            
+            <button class="btn btn-hit" onclick="submitScore()" style="width: 100%; margin-top: 8px;">GUARDAR RÉCORD</button>
         </div>
     </div>
 
-    <!-- Modal Ficha Técnica y Mapa de Pistas + Tiempo 7 Días -->
-    <div class="modal fade" id="stationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content glass-panel text-light border border-secondary">
-                <div class="modal-header border-bottom border-secondary">
-                    <h4 class="modal-title fw-bold" id="modalStationTitle"><i class="fa-solid fa-snowflake text-info me-2"></i>Ficha Técnica</h4>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4" id="modalStationBody">
-                    <!-- Contenido inyectado dinámicamente -->
-                </div>
-                <div class="modal-footer border-top border-secondary">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Ivysnow te dice (Frases y Paisajes de Montaña) -->
-<div class="modal fade" id="ivysnowModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content glass-panel text-light border border-secondary" style="overflow: hidden;">
-            <div class="modal-header border-bottom border-secondary bg-dark bg-opacity-50">
-                <h5 class="modal-title fw-bold"><i class="fa-solid fa-snowflake text-info me-2"></i>Ivysnow te dice:</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-0 position-relative">
-                <div id="quoteImageBg" style="position: absolute; top:0; left:0; width:100%; height:100%; background: url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; opacity: 0.25; z-index: 0;"></div>
-                
-                <div class="p-5 text-center position-relative" style="z-index: 1; min-height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                    <i class="fa-solid fa-quote-left text-info fs-3 mb-3 opacity-75"></i>
-                    <p id="quoteText" class="fs-5 fw-semibold fst-italic mb-4 text-light px-3" style="line-height: 1.6; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
-                        "La montaña no es más alta que tus sueños, ni la nieve más fría que la pasión de un rider."
-                    </p>
-                    <i class="fa-solid fa-quote-right text-info fs-3 mt-1 opacity-75"></i>
-                </div>
-            </div>
-            <div class="modal-footer border-top border-secondary bg-dark bg-opacity-50 d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-info px-4 fw-bold" onclick="generateNewQuote()"><i class="fa-solid fa-shuffle me-2"></i>Otra reflexión</button>
-                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Único de Apoyo PayPal -->
-    <div class="modal fade" id="donationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-panel text-light border border-secondary">
-                <div class="modal-header border-bottom border-secondary">
-                    <h5 class="modal-title"><i class="fa-solid fa-mug-hot text-warning me-2"></i>Apoyar "TU SNOWBOARD ZONE"</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center py-4 px-4">
-                    <i class="fa-brands fa-paypal text-primary display-3 mb-3"></i>
-                    <h5 class="fw-bold mb-2">¿Te resulta útil esta plataforma?</h5>
-                    <p class="small opacity-75 mb-4">
-                        Tu aportación voluntaria ayuda a mantener la web activa, actualizar los enlaces a webcams oficiales en directo, meteorología y los partes de nieve en tiempo real, garantizando un espacio libre de publicidad.
-                    </p>
-                    <a href="https://paypal.me/ivymaravillas" target="_blank" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow">
-                        <i class="fa-brands fa-paypal me-2 fs-5"></i> Donar vía paypal.me/ivymaravillas
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer Oficial ivysnow con Logo y Contador Shih Tzu Snowboarder -->
-    <footer class="footer-branding text-center">
-        <div class="container">
-            <div class="row align-items-center g-3">
-                <div class="col-md-4 text-md-start text-center">
-                    <div class="ivysnow-logo">❄️ ivysnow</div>
-                    <small class="text-secondary">Plataforma avanzada para riders y amantes de la montaña</small>
-                </div>
-                <div class="col-md-4 text-center">
-                    <div class="shihtzu-counter shadow">
-                        <div class="shihtzu-avatar" title="Bimba el Shih Tzu Snowboarder">🐶</div>
-                        <div class="text-start">
-                            <div class="small text-secondary" style="font-size: 0.7rem; line-height: 1;">Riders en pista</div>
-                            <div class="counter-number"><span id="visitorCountVal">560</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 text-md-end text-center">
-                    <p class="mb-0 text-secondary small">© 2026 TU SNOWBOARD ZONE by Ivymaravillas</p>
-                    <a href="#top" class="text-info small text-decoration-none"><i class="fa-solid fa-arrow-up me-1"></i>Volver arriba</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const stations = [
-            // PIRINEO ARAGONÉS
-            { 
-                id: "formigal",
-                name: "Formigal-Panticosa", 
-                region: "aragon", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/formigal-panticosa/8/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/formigal-panticosa/8/webcams/", 
-                opening: "28 Nov 2026", 
-                kmTotal: 182, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "2°C Soleado", snowpark: "Cerrado (Pretemporada)",
-                pistes: { verdes: 7, azules: 36, rojas: 51, negras: 43 },
-                mapaImg: "images/Formigal.pistas.jpg",
-                img: "images/Formigal.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "2°C", cond: "Soleado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "1°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-cloud-sun text-info", temp: "0°C", cond: "Claro" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nevada" }
-                ]
-            },
-            { 
-                id: "astun",
-                name: "Astún", 
-                region: "aragon", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/astun/1/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/astun/1/webcams/", 
-                opening: "28 Nov 2026", 
-                kmTotal: 50, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "1°C Despejado", snowpark: "Cerrado",
-                pistes: { verdes: 5, azules: 18, rojas: 21, negras: 6 },
-                mapaImg:"images/Astun.pistas.jpg",
-                img: "images/Astun.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "1°C", cond: "Despejado" },
-                    { day: "Sáb", icon: "fa-cloud text-secondary", temp: "0°C", cond: "Nublado" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-3°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-cloud-sun text-info", temp: "1°C", cond: "Parcial" },
-                    { day: "Mié", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Jue", icon: "fa-sun text-warning", temp: "4°C", cond: "Sol" }
-                ]
-            },
-            { 
-                id: "candanchu",
-                name: "Candanchú", 
-                region: "aragon", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/candanchu/3/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/candanchu/3/webcams/", 
-                opening: "28 Nov 2026", 
-                kmTotal: 50, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "3°C Nubes altas", snowpark: "Cerrado",
-                pistes: { verdes: 10, azules: 12, rojas: 16, negras: 13 },
-                mapaImg: "images/candanchu.pistas.jpg",
-                img: "images/Candanchu.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-cloud-sun text-info", temp: "3°C", cond: "Nubes" },
-                    { day: "Sáb", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-cloud text-secondary", temp: "0°C", cond: "Cubierto" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" },
-                    { day: "Jue", icon: "fa-sun text-warning", temp: "2°C", cond: "Despejado" }
-                ]
-            },
-            { 
-                id: "cerler",
-                name: "Cerler", 
-                region: "aragon", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/cerler/4/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/cerler/4/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 80, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "0°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 10, azules: 19, rojas: 27, negras: 14 },
-                mapaImg: "images/Cerler.pistas.jpg",
-                img: "images/Cerler.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "0°C", cond: "Sol" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "-1°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-4°C", cond: "Nevada" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "1°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "2°C", cond: "Despejado" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "0°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" }
-                ]
-            },
-            
-            // PIRINEO CATALÁN
-            { 
-                id: "boitaull",
-                name: "Boí Taüll", 
-                region: "cataluna", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/boi-taull/33/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/boi-taull/33/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 45, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "-1°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 8, azules: 9, rojas: 10, negras: 5 },
-                mapaImg: "images/Boi-taull.pistas.jpg",
-                img: "images/Boitall.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "-1°C", cond: "Sol" },
-                    { day: "Sáb", icon: "fa-snowflake text-light", temp: "-3°C", cond: "Nieve" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-5°C", cond: "Nevada" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "0°C", cond: "Claro" },
-                    { day: "Mar", icon: "fa-cloud-sun text-info", temp: "1°C", cond: "Parcial" },
-                    { day: "Mié", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "baqueira",
-                name: "Baqueira Beret", 
-                region: "cataluna", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/baqueira-beret/2/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/baqueira-beret/2/webcams/", 
-                opening: "25 Nov 2026", 
-                kmTotal: 170, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "-1°C Despejado", snowpark: "Cerrado",
-                pistes: { verdes: 6, azules: 42, rojas: 37, negras: 17 },
-                mapaImg: "images/Baqueira-Beret.pistas.jpg",
-                img: "images/BaqueiraBeret.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "-1°C", cond: "Despejado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "0°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-3°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nevada" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Jue", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" }
-                ]
-            },
-            { 
-                id: "lamolina",
-                name: "La Molina", 
-                region: "cataluna", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/la-molina/11/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/la-molina/11/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 71, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "4°C Parcial", snowpark: "Cerrado",
-                pistes: { verdes: 20, azules: 17, rojas: 17, negras: 7 },
-                mapaImg: "images/lamolina.pistas.jpg",
-                img: "images/LaMolina.fotos.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-cloud-sun text-info", temp: "4°C", cond: "Parcial" },
-                    { day: "Sáb", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-cloud text-secondary", temp: "2°C", cond: "Nublado" },
-                    { day: "Mié", icon: "fa-sun text-warning", temp: "4°C", cond: "Sol" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "0°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "masella",
-                name: "Masella", 
-                region: "cataluna", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/masella/14/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/masella/14/webcams/", 
-                opening: "02 Dic 2026", 
-                kmTotal: 74, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "2°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 24, azules: 30, rojas: 22, negras: 9 },
-                mapaImg: "images/Masella.pistas.jpg",
-                img: "images/Masella.fotos.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "2°C", cond: "Soleado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "1°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "4°C", cond: "Despejado" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "portaine",
-                name: "Port Ainé", 
-                region: "cataluna", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/port-aine/18/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/port-aine/18/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 26.7, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "1°C Despejado", snowpark: "Cerrado",
-                pistes: { verdes: 3, azules: 4, rojas: 11, negras: 7 },
-                mapaImg: "images/Portaine.pistas.jpg",
-                img: "images/PortAine.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "1°C", cond: "Despejado" },
-                    { day: "Sáb", icon: "fa-cloud text-secondary", temp: "0°C", cond: "Nublado" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-3°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-cloud-sun text-info", temp: "1°C", cond: "Parcial" },
-                    { day: "Mié", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "espot",
-                name: "Espot Esquí", 
-                region: "cataluna", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/espot-esqui/7/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/espot-esqui/7/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 25, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "0°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 2, azules: 6, rojas: 10, negras: 4 },
-                mapaImg: "images/spotski.pistas.jpg",
-                img: "images/SpotSki.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "0°C", cond: "Sol" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "-1°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-4°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "1°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "2°C", cond: "Despejado" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "0°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" }
-                ]
-            },
-
-            // CORDILLERA CANTÁBRICA
-            { 
-                id: "pajares",
-                name: "Valgrande-Pajares", 
-                region: "cantabrica", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/pajares/17/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/pajares/17/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 30.9, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "2°C Variable", snowpark: "Cerrado",
-                pistes: { verdes: 4, azules: 11, rojas: 9, negras: 5 },
-                mapaImg: "images/valgrandepajares.pistas.jpg",
-                img: "images/ValgrandePajares.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-cloud text-secondary", temp: "2°C", cond: "Variable" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "1°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Mié", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" },
-                    { day: "Jue", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" }
-                ]
-            },
-            { 
-                id: "sanisidro",
-                name: "San Isidro", 
-                region: "cantabrica", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/san-isidro/22/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/san-isidro/22/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 34, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "1°C Nublado", snowpark: "Cerrado",
-                pistes: { verdes: 5, azules: 15, rojas: 13, negras: 3 },
-                mapaImg: "images/sanisidro.pistas.jpg",
-                img: "images/SanIsidro.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "0°C", cond: "Claro" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-3°C", cond: "Nevada" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "1°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-cloud text-secondary", temp: "0°C", cond: "Nublado" },
-                    { day: "Mié", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Jue", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" }
-                ]
-            },
-            { 
-                id: "leitariegos",
-                name: "Valle Laciana - Leitariegos", 
-                region: "cantabrica", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/leitariegos/12/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/leitariegos/12/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 8, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "3°C Despejado", snowpark: "Cerrado",
-                pistes: { verdes: 4, azules: 4, rojas: 3, negras: 0 },
-                mapaImg: "images/Leitariegos.pistas.jpg",
-                img: "images/Leitariegos.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "3°C", cond: "Despejado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "2°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "4°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "0°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "altocampoo",
-                name: "Alto Campoo", 
-                region: "cantabrica", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/alto-campoo/0/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/alto-campoo/0/webcams/", 
-                opening: "05 Dic 2026", 
-                kmTotal: 28, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "2°C Parcial", snowpark: "Cerrado",
-                pistes: { verdes: 4, azules: 10, rojas: 13, negras: 0 },
-                mapaImg: "images/Altocampoo.pistas.jpg",
-                img: "images/AltoCampoo.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-cloud-sun text-info", temp: "2°C", cond: "Parcial" },
-                    { day: "Sáb", icon: "fa-sun text-warning", temp: "1°C", cond: "Sol" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Mié", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" },
-                    { day: "Jue", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" }
-                ]
-            },
-
-            // SIERRA NEVADA
-            { 
-                id: "sierranevada",
-                name: "Sierra Nevada", 
-                region: "nevada", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/sierra-nevada/25/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/sierra-nevada/25/webcams/", 
-                opening: "28 Nov 2026", 
-                kmTotal: 112.5, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "5°C Sol radiante", snowpark: "Cerrado (Sulayr)",
-                pistes: { verdes: 21, azules: 45, rojas: 53, negras: 7 },
-                mapaImg: "images/Sierranevada.pistas.jpg",
-                img: "images/SierraNevada.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "5°C", cond: "Sol radiante" },
-                    { day: "Sáb", icon: "fa-sun text-warning", temp: "6°C", cond: "Sol" },
-                    { day: "Dom", icon: "fa-cloud-sun text-info", temp: "3°C", cond: "Parcial" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "4°C", cond: "Despejado" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "5°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "3°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-sun text-warning", temp: "4°C", cond: "Sol" }
-                ]
-            },
-
-            // SISTEMA CENTRAL
-            { 
-                id: "valdesqui",
-                name: "Valdesquí", 
-                region: "central", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/valdesqui/29/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/valdesqui/29/webcams/", 
-                opening: "Según Nieve", 
-                kmTotal: 22, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "4°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 9, azules: 15, rojas: 3, negras: 1 },
-                mapaImg: "images/Valdeski.pistas.jpg",
-                img: "images/Valdeski.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "4°C", cond: "Soleado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "3°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "0°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "4°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "2°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "navacerrada",
-                name: "Puerto de Navacerrada", 
-                region: "central", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/navacerrada/15/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/navacerrada/15/webcams/", 
-                opening: "Según Nieve", 
-                kmTotal: 10, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "4°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 2, azules: 4, rojas: 2, negras: 1 },
-                mapaImg: "images/Navacerrada.pistas.jpg",
-                img: "images/Navacerrada.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "4°C", cond: "Soleado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "2°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "0°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "4°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" }
-                ]
-            },
-            { 
-                id: "lapinilla",
-                name: "La Pinilla", 
-                region: "central", 
-                infonieve: "https://www.infonieve.es/estacion-esqui/la-pinilla/10/", 
-                webcam: "https://www.infonieve.es/estacion-esqui/la-pinilla/10/webcams/", 
-                opening: "Según Nieve", 
-                kmTotal: 15, kmOpen: "0", snowCm: "0 - 0 cm", avalanche: "1/5", weather: "3°C Soleado", snowpark: "Cerrado",
-                pistes: { verdes: 4, azules: 6, rojas: 4, negras: 1 },
-                mapaImg: "images/LaPinilla.pistas.jpg",
-                img: "images/LaPinilla.foto.jpg",
-                forecast: [
-                    { day: "Hoy", icon: "fa-sun text-warning", temp: "3°C", cond: "Soleado" },
-                    { day: "Sáb", icon: "fa-cloud-sun text-info", temp: "2°C", cond: "Parcial" },
-                    { day: "Dom", icon: "fa-snowflake text-light", temp: "-1°C", cond: "Nieve" },
-                    { day: "Lun", icon: "fa-sun text-warning", temp: "2°C", cond: "Sol" },
-                    { day: "Mar", icon: "fa-sun text-warning", temp: "3°C", cond: "Sol" },
-                    { day: "Mié", icon: "fa-cloud text-secondary", temp: "1°C", cond: "Nublado" },
-                    { day: "Jue", icon: "fa-snowflake text-light", temp: "-2°C", cond: "Nieve" }
-                ]
+        let forfaits = 25;
+        try {
+            let savedBank = parseInt(localStorage.getItem('snowboard_bj_bank'));
+            if (!isNaN(savedBank) && savedBank > 0) {
+                forfaits = savedBank;
+            } else {
+                localStorage.setItem('snowboard_bj_bank', 25);
             }
+        } catch (e) {
+            forfaits = 25;
+        }
+
+        let currentBet = 0;
+        let deck = [];
+        let playerHand = [];
+        let dealerHand = [];
+        let gameOver = false;
+        let playerName = "";
+
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+        let topScores = JSON.parse(localStorage.getItem('blackjack_snow_top')) || [
+            { name: "RIDER_PRO", score: 25 },
+            { name: "SNOW_QUEEN", score: 20 },
+            { name: "POWDER_BOY", score: 15 },
+            { name: "CARVER", score: 12 },
+            { name: "ROOKIE", score: 8 }
         ];
 
-        // Gestión de Favoritos con localStorage
-        function getFavorites() {
-            const favs = localStorage.getItem('snow_favorites');
-            return favs ? JSON.parse(favs) : [];
+        function saveTopScores() {
+            localStorage.setItem('blackjack_snow_top', JSON.stringify(topScores));
         }
 
-        function toggleFavorite(id, event) {
-            event.stopPropagation();
-            let favs = getFavorites();
-            if (favs.includes(id)) {
-                favs = favs.filter(fId => fId !== id);
-            } else {
-                favs.push(id);
+        function closeGameWindow() {
+            const audio = document.getElementById('afro-audio');
+            const consoleBox = document.getElementById('sound-console');
+            const gameWindow = document.querySelector('.casino-window');
+            
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
             }
-            localStorage.setItem('snow_favorites', JSON.stringify(favs));
-            updateFavCount();
-            
-            const currentFilter = document.getElementById('regionSelect').value;
-            filterRegion(currentFilter);
+            if (consoleBox) consoleBox.classList.remove('playing-bass');
+            if (gameWindow) gameWindow.classList.remove('music-active-lights');
+
+            const modal = document.getElementById('blackjack-window') || document.getElementById('game-modal');
+            if (modal) modal.style.display = 'none';
         }
 
-        function updateFavCount() {
-            const count = getFavorites().length;
-            document.getElementById('favCount').textContent = count;
-        }
-
-        function openStationModal(id) {
-            const st = stations.find(s => s.id === id);
-            if (!st) return;
-
-            document.getElementById('modalStationTitle').innerHTML = `<i class="fa-solid fa-snowflake text-info me-2"></i>${st.name} - Ficha Técnica, Mapa Oficial y Tiempo 7 Días`;
-            
-            const totalPistes = st.pistes.verdes + st.pistes.azules + st.pistes.rojas + st.pistes.negras;
-
-            let forecastHtml = '';
-            st.forecast.forEach(f => {
-                forecastHtml += `
-                    <div class="forecast-day-card">
-                        <div class="small fw-bold text-info mb-1">${f.day}</div>
-                        <i class="fa-solid ${f.icon} fs-4 mb-1"></i>
-                        <div class="fw-bold text-light small">${f.temp}</div>
-                        <div class="text-secondary" style="font-size: 0.7rem;">${f.cond}</div>
-                    </div>
-                `;
-            });
-
-            const modalBody = document.getElementById('modalStationBody');
-            modalBody.innerHTML = `
-                <div class="row g-4">
-                    <div class="col-lg-5">
-                        <h5 class="fw-bold text-info mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Desglose de Pistas</h5>
-                        <div class="d-flex flex-column gap-2 mb-4">
-                            <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.04);">
-                                <span class="piste-badge badge-verde"><i class="fa-solid fa-circle"></i> Verdes (Principiante)</span>
-                                <strong class="fs-5">${st.pistes.verdes} pistas</strong>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.04);">
-                                <span class="piste-badge badge-azul"><i class="fa-solid fa-square"></i> Azules (Intermedio)</span>
-                                <strong class="fs-5">${st.pistes.azules} pistas</strong>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.04);">
-                                <span class="piste-badge badge-roja"><i class="fa-solid fa-diamond"></i> Rojas (Avanzado)</span>
-                                <strong class="fs-5">${st.pistes.rojas} pistas</strong>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.04);">
-                                <span class="piste-badge badge-negra"><i class="fa-solid fa-caret-up"></i> Negras (Expertos)</span>
-                                <strong class="fs-5">${st.pistes.negras} pistas</strong>
-                            </div>
-                        </div>
-
-                        <div class="p-3 glass-panel rounded mb-3">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-secondary">Total Pistas Oficiales:</span>
-                                <strong class="text-light">${totalPistes} pistas</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-secondary">Kilómetros Esquiables:</span>
-                                <strong class="text-info">${st.kmTotal} km</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-secondary">Estado Snowpark:</span>
-                                <strong class="text-purple">${st.snowpark}</strong>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="text-secondary">Riesgo de Aludes:</span>
-                                <strong class="text-warning">${st.avalanche} (Bajo)</strong>
-                            </div>
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <a href="${st.infonieve}" target="_blank" class="btn btn-custom flex-grow-1 text-center py-2">
-                                <i class="fa-solid fa-chart-line me-1"></i> InfoNieve Oficial
-                            </a>
-                            <a href="${st.webcam}" target="_blank" class="btn btn-outline-info flex-grow-1 text-center py-2 text-light fw-semibold">
-                                <i class="fa-solid fa-video me-1"></i> Ver Webcams
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-7">
-                        <h5 class="fw-bold text-info mb-3"><i class="fa-solid fa-map-location-dot me-2"></i>Plano Oficial de Pistas (Web Estación)</h5>
-                        <div class="map-container mb-4 shadow">
-                            <img src="${st.mapaImg}" alt="Mapa oficial de pistas de ${st.name}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80';">
-                        </div>
-
-                        <h5 class="fw-bold text-info mb-2"><i class="fa-solid fa-cloud-sun-rain me-2"></i>Pronóstico del Tiempo (7 Días)</h5>
-                        <div class="d-flex gap-2 flex-wrap justify-content-between">
-                            ${forecastHtml}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            const modal = new bootstrap.Modal(document.getElementById('stationModal'));
-            modal.show();
-        }
-
-        function openIvyModal() {
-            const modal = new bootstrap.Modal(document.getElementById('ivyModal'));
-            modal.show();
-        }
-
-        function sendToIvy() {
-            const input = document.getElementById('chatInput');
-            const query = input.value.trim();
-            if (!query) return;
-
-            const chatHistory = document.getElementById('chatHistory');
-            
-            chatHistory.innerHTML += `<div class="chat-bubble user" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: #38bdf8; color: #0f172a; margin-left: auto;">${escapeHtml(query)}</div>`;
-            input.value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            setTimeout(() => {
-                let response = "Como IvyAsesor experto en snowboard, analizando especificaciones técnicas, web e InfoNieve:";
-                const qLower = query.toLowerCase();
-
-                if (qLower.includes('tabla') || qLower.includes('freeride') || qLower.includes('powder') || qLower.includes('capita')) {
-                    response = "Para freeride y all-mountain versátil con buen comportamiento en polvo, te recomiendo perfiles híbridos camber (como la CAPiTA Outerspace Living o similares). En el Pirineo Aragonés, las palas de Formigal (Valle de Ízas) y las palas virgenes de Candanchú (Tuca) ofrecen descensos freeride legendarios respaldados por valoraciones excelentes de usuarios en comunidad.";
-                } else if (qLower.includes('estacion') || qLower.includes('mejor') || qLower.includes('pistas')) {
-                    response = "Basado en la calidad de dominio y valoraciones de usuarios: **Baqueira Beret** destaca en el Pirineo Catalán por sus kilométricos descensos y cota de nieve; **Formigal-Panticosa** en Aragón por su enorme extensión de 182 km; y **Sierra Nevada** por sus cotas soleadas y desnivel excepcional en el sur.";
-                } else if (qLower.includes('ropa') || qLower.includes('botas') || qLower.includes('equipamiento')) {
-                    response = "Para equipamiento óptimo en alta montaña, busca membranas técnicas de al menos 20k mm en impermeabilidad (tipo Gore-Tex), capas térmicas de lana merina y botas con ajuste preciso BOA o tradicional de cordones (flex medio-alto 6-8 para sujeción óptima en carving).";
-                } else {
-                    response = `He procesado tu consulta sobre "${query}" cruzando datos de Wikipedia, foros de usuarios y especificaciones técnicas. Para este propósito, te sugiero revisar el parte de nieve actualizado en InfoNieve desde las tarjetas de nuestra web y asegurar tu equipo con protecciones y buen mantenimiento de suelas con cera fluorada o ecológica.`;
+        function createDeck() {
+            deck = [];
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value });
                 }
-
-                chatHistory.innerHTML += `<div class="chat-bubble ivy" style="padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; background: rgba(30, 41, 59, 0.9); color: #f8fafc; border: 1px solid rgba(192, 132, 252, 0.3); margin-right: auto;">${response}</div>`;
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            }, 600);
-        }
-
-        function handleChatKey(e) {
-            if (e.key === 'Enter') {
-                sendToIvy();
             }
+            deck.sort(() => Math.random() - 0.5);
         }
 
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        function drawCard() {
+            if (deck.length === 0) createDeck();
+            return deck.pop();
         }
 
-        function renderStations(items) {
-            const grid = document.getElementById('stationsGrid');
-            grid.innerHTML = '';
+        function getCardValue(card) {
+            if (!card) return 0;
+            if (card.value === 'A') return 11;
+            if (['K', 'Q', 'J'].includes(card.value)) return 10;
+            let val = parseInt(card.value);
+            return isNaN(val) ? 0 : val;
+        }
 
-            if (items.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <i class="fa-solid fa-heart-crack display-4 text-muted mb-3"></i>
-                        <h4 class="text-light">No hay estaciones guardadas como favoritas</h4>
-                        <p class="text-secondary">Haz clic en el corazón de cualquier estación para añadirla a tus favoritas.</p>
-                    </div>
-                `;
+        function calculateScore(hand) {
+            let score = 0;
+            let aces = 0;
+
+            if (!hand || !Array.isArray(hand)) return 0;
+
+            for (let i = 0; i < hand.length; i++) {
+                let cardVal = hand[i].value !== undefined ? hand[i].value : hand[i];
+                
+                if (cardVal === 'A' || cardVal === 1 || cardVal === '1') {
+                    aces++;
+                    score += 11;
+                } else if (['K', 'Q', 'J', '10', 10].includes(cardVal)) {
+                    score += 10;
+                } else {
+                    score += parseInt(cardVal) || 0;
+                }
+            }
+
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+
+            return score;
+        }
+
+        function updateUI() {
+            let forfaitCountEl = document.getElementById('forfaits-count');
+            if (forfaitCountEl) forfaitCountEl.innerText = forfaits;
+
+            let playerScoreEl = document.getElementById('player-score');
+            if (playerScoreEl) playerScoreEl.innerText = calculateScore(playerHand);
+
+            let dealerScoreEl = document.getElementById('dealer-score');
+            if (dealerScoreEl) {
+                if (gameOver) {
+                    dealerScoreEl.innerText = calculateScore(dealerHand);
+                } else if (dealerHand.length > 0) {
+                    dealerScoreEl.innerText = getCardValue(dealerHand[0]);
+                } else {
+                    dealerScoreEl.innerText = 0;
+                }
+            }
+
+            renderHand('player-cards', playerHand);
+            renderHand('dealer-cards', dealerHand, !gameOver && dealerHand.length > 0);
+        }
+
+        function renderHand(elementId, hand, hideSecond = false) {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+            container.innerHTML = '';
+            hand.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                if (hideSecond && index === 1) {
+                    cardEl.className = 'card back';
+                } else {
+                    const isRed = card.suit === '♥' || card.suit === '♦';
+                    cardEl.className = `card ${isRed ? 'red' : ''}`;
+                    cardEl.innerHTML = `<div>${card.value}</div><div>${card.suit}</div>`;
+                }
+                container.appendChild(cardEl);
+            });
+        }
+
+        function placeBet(amount) {
+            if (forfaits < amount) {
+                document.getElementById('status-msg').innerText = "¡No tienes suficientes Forfaits!";
                 return;
             }
 
-            const favs = getFavorites();
+            forfaits -= amount;
+            currentBet = amount;
+            localStorage.setItem('snowboard_bj_bank', forfaits);
+            gameOver = false;
 
-            items.forEach(st => {
-                const isFav = favs.includes(st.id);
-                const col = document.createElement('div');
-                col.className = 'col-md-6 col-lg-4';
-                col.innerHTML = `
-                    <div class="station-card" onclick="openStationModal('${st.id}')">
-                        <div class="card-img-wrapper">
-                            <img src="${st.img}" alt="${st.name}">
-                            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${st.id}', event)" title="Marcar como favorita">
-                                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
-                            </button>
-                            <span class="opening-badge">
-                                <i class="fa-regular fa-calendar-check me-1"></i>Apertura: ${st.opening}
-                            </span>
-                        </div>
-                        <div class="card-body-content">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="mb-0 fw-bold text-light">${st.name}</h5>
-                                <span class="badge bg-secondary badge-status"><i class="fa-solid fa-snowflake me-1"></i> Pretemporada</span>
-                            </div>
+            createDeck();
+            playerHand = [drawCard(), drawCard()];
+            dealerHand = [drawCard(), drawCard()];
 
-                            <!-- Métricas Limpias con Snowpark -->
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <div class="metric-pill">
-                                        <div class="metric-label"><i class="fa-solid fa-road text-info me-1"></i>Km Esquiables</div>
-                                        <div class="metric-value">${st.kmOpen} / ${st.kmTotal} km</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="metric-pill">
-                                        <div class="metric-label"><i class="fa-solid fa-ruler-vertical text-info me-1"></i>Espesor Nieve</div>
-                                        <div class="metric-value">${st.snowCm}</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="metric-pill">
-                                        <div class="metric-label"><i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>Aludes</div>
-                                        <div class="metric-value text-warning">${st.avalanche} (Bajo)</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="metric-pill">
-                                        <div class="metric-label"><i class="fa-solid fa-person-snowboarding text-purple me-1"></i>Snowpark</div>
-                                        <div class="metric-value text-info">${st.snowpark}</div>
-                                    </div>
-                                </div>
-                            </div>
+            document.getElementById('bet-controls').style.display = 'none';
+            document.getElementById('action-controls').style.display = 'flex';
+            document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
 
-                            <!-- Botones de Acción Directa -->
-                            <div class="d-flex gap-2" onclick="event.stopPropagation()">
-                                <a href="${st.infonieve}" target="_blank" class="btn btn-custom flex-grow-1 text-center py-2 btn-sm">
-                                    <i class="fa-solid fa-chart-line me-1"></i> InfoNieve
-                                </a>
-                                <a href="${st.webcam}" target="_blank" class="btn btn-outline-info flex-grow-1 text-center py-2 text-light fw-semibold btn-sm">
-                                    <i class="fa-solid fa-video me-1"></i> Webcams
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(col);
+            let initialScore = calculateScore(playerHand);
+            if (initialScore === 21) {
+                document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
+                endRound(true, "¡Impresionante! ¡Has cantado el SNOWJACK!");
+                return;
+            }
+
+            updateUI();
+        }
+
+        function hit() {
+            if (gameOver) return;
+            
+            playerHand.push(drawCard());
+            
+            let playerScore = calculateScore(playerHand);
+            updateUI();
+            
+            if (playerScore === 21) {
+                document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
+                endRound(true, "¡21 Clavado! ¡SNOWJACK!");
+                return;
+            }
+            
+            if (playerScore > 21) {
+                gameOver = true;
+                const actionControls = document.getElementById('action-controls');
+                if (actionControls) actionControls.style.display = 'none';
+                
+                endRound(false, "¡Te has pasado de 21! Te has quedado fuera de pista.");
+                return;
+            }
+        }
+
+        function stand() {
+            if (gameOver) return;
+            gameOver = true;
+
+            while (calculateScore(dealerHand) < 17) {
+                dealerHand.push(drawCard());
+            }
+
+            const pScore = calculateScore(playerHand);
+            const dScore = calculateScore(dealerHand);
+
+            updateUI();
+
+            if (dScore > 21) {
+                endRound(true, "¡El Croupier se pasó! ¡Ganas!");
+            } else if (pScore > dScore) {
+                endRound(true, "¡Puntuación más alta! ¡Ganas!");
+            } else if (pScore < dScore) {
+                endRound(false, "Gana el Croupier.");
+            } else {
+                endRound(null, "Empate. Recuperas la apuesta.");
+            }
+        }
+
+        function endRound(playerWon, message) {
+            gameOver = true;
+            
+            if (playerWon === true) {
+                forfaits += currentBet * 2;
+            } else if (playerWon === null) {
+                forfaits += currentBet; // Empate
+            }
+            
+            if (forfaits <= 0) {
+                message += " 💥 ¡Te has quedado sin Forfaits! Se te recargan 25.";
+                forfaits = 25;
+                checkTop5Eligibility();
+            }
+
+            localStorage.setItem('snowboard_bj_bank', forfaits);
+            updateUI();
+
+            document.getElementById('status-msg').innerText = message;
+            
+            document.getElementById('action-controls').style.display = 'none';
+            document.getElementById('bet-controls').style.display = 'flex';
+
+            playerHand = [];
+            dealerHand = [];
+        }
+
+        function renderTopList() {
+            const container = document.getElementById('top-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+            topScores.sort((a,b) => b.score - a.score);
+            topScores.slice(0, 5).forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'top-item';
+                el.innerHTML = `<span>#${index+1} ${item.name}</span><span>${item.score} FF</span>`;
+                container.appendChild(el);
             });
         }
 
-        function filterRegion(region) {
-            document.getElementById('regionSelect').value = region;
-            
-            document.querySelectorAll('#regionTabs .nav-link').forEach(el => el.classList.remove('active-tab'));
-
-            const activeTab = document.getElementById('tab-' + region);
-            if (activeTab) activeTab.classList.add('active-tab');
-
-            if (region === 'all') {
-                renderStations(stations);
-            } else if (region === 'favs') {
-                const favs = getFavorites();
-                const filtered = stations.filter(s => favs.includes(s.id));
-                renderStations(filtered);
-            } else {
-                const filtered = stations.filter(s => s.region === region);
-                renderStations(filtered);
-            }
-        }
-
-        function searchStations() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = stations.filter(s => s.name.toLowerCase().includes(query));
-            renderStations(filtered);
-        }
-
-        function initShihTzuCounter() {
-            let count = localStorage.getItem('ivysnow_shihtzu_visits');
-            if (!count) {
-                count = 560;
-            } else {
-                count = parseInt(count) + 1;
-            }
-            localStorage.setItem('ivysnow_shihtzu_visits', count);
-            document.getElementById('visitorCountVal').textContent = count.toLocaleString();
-        }
-const quotesAndImages = [
-            {
-                quote: "La montaña no es más alta que tus sueños, ni la nieve más fría que la pasión de un rider.",
-                img: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80"
-            },
-            {
-                quote: "En la traza virgen y el silencio de las cumbres es donde el alma encuentra su verdadera línea.",
-                img: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1200&q=80"
-            },
-            {
-                quote: "El carving perfecto no busca velocidad, busca la armonía exacta entre el acero, la pendiente y el vacío.",
-                img: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1200&q=80"
-            },
-            {
-                quote: "Cada descenso empieza con un respeto profundo por la montaña y termina con una sonrisa en el pecho.",
-                img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
-            },
-            {
-                quote: "No hay atajos hacia la cima; cada metro de desnivel forja el carácter de los que aman la libertad blanca.",
-                img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80"
-            }
-        ];
-
-        function openIvysnowModal() {
-            generateNewQuote();
-            const modal = new bootstrap.Modal(document.getElementById('ivysnowModal'));
-            modal.show();
-        }
-
-        function generateNewQuote() {
-            const randomIndex = Math.floor(Math.random() * quotesAndImages.length);
-            const selected = quotesAndImages[randomIndex];
-            
-            document.getElementById('quoteText').textContent = `"${selected.quote}"`;
-            document.getElementById('quoteImageBg').style.backgroundImage = `url('${selected.img}')`;
-        }
-        // --- 1. GENERADOR DE COPOS DE NIEVE ---
-        function createSnowflake() {
-            const snow = document.createElement('div');
-            snow.classList.add('snowflake');
-            
-            const size = Math.random() * 5 + 3;
-            snow.style.width = `${size}px`;
-            snow.style.height = `${size}px`;
-            snow.style.left = `${Math.random() * window.innerWidth}px`;
-            
-            const duration = Math.random() * 5 + 4;
-            snow.style.animationDuration = `${duration}s`;
-            snow.style.opacity = Math.random() * 0.6 + 0.3;
-            
-            document.body.appendChild(snow);
-            
-            setTimeout(() => {
-                snow.remove();
-            }, duration * 1000);
-        }
-
-        setInterval(createSnowflake, 150);
-
-        // --- 2. REPRODUCTOR DE MÚSICA ALEATORIA ---
-        const playlist = [
-            { title: "Mountain Chill Beat", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-            { title: "Alpine Breeze", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-            { title: "Snowy Peaks Acoustic", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-            { title: "Freeride Energy", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
-        ];
-
-        let isPlaying = false;
-
-        function loadRandomSong() {
-            const randomIndex = Math.floor(Math.random() * playlist.length);
-            const song = playlist[randomIndex];
-            
-            const audio = document.getElementById('bgAudio');
-            audio.src = song.url;
-            document.getElementById('songTitle').textContent = song.title;
-        }
-
-        function toggleMusic() {
-            const audio = document.getElementById('bgAudio');
-            const icon = document.getElementById('playIcon');
-            
-            if (!audio.src) {
-                loadRandomSong();
-            }
-
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-                icon.className = "fa-solid fa-play";
-            } else {
-                audio.play().then(() => {
-                    isPlaying = true;
-                    icon.className = "fa-solid fa-pause";
-                }).catch(e => console.log("Audio play blocked by browser policy", e));
-            }
-        }
-
-        function nextRandomSong() {
-            loadRandomSong();
-            const audio = document.getElementById('bgAudio');
-            audio.play();
-            isPlaying = true;
-            document.getElementById('playIcon').className = "fa-solid fa-pause";
-        }
-        initShihTzuCounter();
-        updateFavCount();
-        renderStations(stations);
-    </script>
-    <!-- Reproductor de música ambiental / aleatoria -->
-<div class="music-player-float">
-    <i class="fa-solid fa-music text-info"></i>
-    <span id="songTitle" style="max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Música de Montaña</span>
-    <button onclick="toggleMusic()" id="playPauseBtn" title="Reproducir / Pausar"><i class="fa-solid fa-play" id="playIcon"></i></button>
-    <button onclick="nextRandomSong()" title="Siguiente canción aleatoria"><i class="fa-solid fa-forward"></i></button>
-</div>
-
-<audio id="bgAudio" onended="nextRandomSong()"></audio>
-    <!-- Modal de Juegos -->
-<div id="gamesModal" class="games-modal-overlay" onclick="closeGamesModal(event)">
-  <div class="games-modal-content" onclick="event.stopPropagation()">
-    <div class="games-header">
-      <h3 class="m-0"><i class="fas fa-gamepad me-2"></i>Zona de Juegos - TU SNOWBOARD ZONE</h3>
-      <button class="btn-close-games" onclick="closeGamesModal()">&times;</button>
-    </div>
-    
-    <!-- Pestañas de minijuegos -->
-   <div class="games-tabs" style="position: relative;">
-       
-       <!-- 🎧 BOTÓN LATERAL IZQUIERDO: SNOWZONESTUDIO -->
-    <button class="studio-side-btn" onclick="switchGame('groovebox')">
-        🔊 SNOWSTUDIO
-    </button>
-       
-      <button class="game-tab active" onclick="switchGame('blackjack')">🎰 Blackjack Forfaits</button>
-      <button class="game-tab" onclick="switchGame('snake')">🐍 Snake</button>
-      <button class="game-tab" onclick="switchGame('slot')">🎰 Slot Forfait</button>
-      <button class="game-tab" onclick="switchGame('sudoku')">🔢 Sudoku Intermedio</button>
-    </div>
-
-    <!-- Contenido de los Juegos -->
-    <div id="game-blackjack" class="game-screen active">
-      <!-- BLACKJACK DE FORFAITS (BLACK SNOW) -->
-      <iframe src="blackjack_snow.html" style="width: 400px; height: 400px; border: none; border-radius: 20px;"></iframe>
-        </div>
-      <div id="game-snake" class="game-screen">
-    <iframe src="snake/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
-</div>
-      
-<!-- PANTALLA NUEVA: SNOWZONESTUDIO (GROOVEBOX) -->
-<div id="game-groovebox" class="game-screen">
-    <iframe src="groovebox/index.html" style="width: 100%; height: 80vh; max-height: 620px; border: none; background: transparent;"></iframe>
-</div>
-<script>
-    
-    function closeBlackjackModal() {
-        // Oculta el contenedor del juego o cambia la vista según prefieras
-        const bjContainer = document.getElementById('game-blackjack');
-        if (bjContainer) {
-            bjContainer.style.display = 'none';
-        }
-    }
-</script>
-      <div id="game-snake" class="game-screen" style="display: none;">
-    <iframe src="snake/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
-</div>
-     
-<!-- SLOT FORFAIT -->
-      
-<div id="game-slot" class="game-screen">
-    <iframe src="slot/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
-</div>
-
-      <!-- SUDOKU -->
-      <div id="game-sudoku" class="game-screen">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Sudoku Intermedio (Aleatorio)</span>
-          <button class="btn btn-sm btn-outline-info" onclick="initSudoku()">Nuevo Tablero</button>
-        </div>
-        <div id="sudoku-grid" class="sudoku-grid"></div>
-        <div class="sudoku-controls mt-3">
-          <div class="btn-group me-2" role="group">
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(1)">1</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(2)">2</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(3)">3</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(4)">4</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(5)">5</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(6)">6</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(7)">7</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(8)">8</button>
-            <button class="btn btn-outline-light btn-sm" onclick="setSudokuNum(9)">9</button>
-          </div>
-          <button class="btn btn-outline-warning btn-sm" onclick="setSudokuNum(0)">Borrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-    <script>
-// --- LÓGICA DE MINIJUEGOS Y BLACK SNOW (BLACKJACK) ---
-
-function openGamesModal() {
-  document.getElementById('gamesModal').style.display = 'flex';
-  checkBjLockStatus();
-}
-
-function closeGamesModal(e) {
-  if (!e || e.target.id === 'gamesModal' || e.target.classList.contains('btn-close-games')) {
-    document.getElementById('gamesModal').style.display = 'none';
-  }
-}
-
-function switchGame(gameId) {
-    // Quita la clase 'active' de todas las pestañas y del botón lateral del estudio
-    document.querySelectorAll('.game-tab, .studio-side-btn').forEach(tab => tab.classList.remove('active'));
-    // Oculta todas las pantallas de juegos/estudio
-    document.querySelectorAll('.game-screen').forEach(screen => screen.classList.remove('active'));
-
-    // Activa el botón o pestaña que se acaba de pulsar
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('active');
-    }
-
-    // Muestra la pantalla correspondiente al juego o estudio seleccionado
-    const targetScreen = document.getElementById('game-' + gameId);
-    if (targetScreen) {
-        targetScreen.classList.add('active');
-    }
-
-    // Funciones específicas de cada sección
-    if (gameId === 'sudoku') initSudoku();
-    if (gameId === 'blackjack') checkBjLockStatus();
-}
-
-let selectedSudokuCell = null;
-function initSudoku() {
-  const grid = document.getElementById('sudoku-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  const sampleBoard = [
-    [5,3,0, 0,7,0, 0,0,0],
-    [6,0,0, 1,9,5, 0,0,0],
-    [0,9,8, 0,0,0, 0,6,0],
-    [8,0,0, 0,6,0, 0,0,3],
-    [4,0,0, 8,0,3, 0,0,1],
-    [7,0,0, 0,2,0, 0,0,6],
-    [0,6,0, 0,0,0, 2,8,0],
-    [0,0,0, 4,1,9, 0,0,5],
-    [0,0,0, 0,8,0, 0,7,9]
-  ];
-
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const cell = document.createElement('div');
-      cell.className = 'sudoku-cell';
-      let val = sampleBoard[r][c];
-      if (val !== 0) {
-        cell.innerText = val;
-        cell.classList.add('fixed');
-      } else {
-        cell.addEventListener('click', () => {
-          document.querySelectorAll('.sudoku-cell').forEach(el => el.classList.remove('selected'));
-          cell.classList.add('selected');
-          selectedSudokuCell = cell;
+        document.getElementById('open-top-btn').addEventListener('click', () => {
+            renderTopList();
+            document.getElementById('top-modal').classList.add('active');
         });
-      }
-      grid.appendChild(cell);
-    }
-  }
-}
-function setSudokuNum(num) {
-  if (selectedSudokuCell && !selectedSudokuCell.classList.contains('fixed')) {
-    selectedSudokuCell.innerText = num === 0 ? '' : num;
-  }
-}
 
-function checkBjLockStatus() {}
-           
-</script>        
-<footer style="text-align: center; padding: 25px 10px; font-size: 12px; color: #8b949e; border-top: 1px solid rgba(56, 189, 248, 0.2); margin-top: 30px;">
-    <p>© 2026 Tu Snowboard Zone. Todos los derechos reservados.</p>
-    <p style="margin-top: 6px;">
-        <a href="aviso-legal.html" style="color: #38bdf8; text-decoration: none; margin: 0 8px;">Aviso Legal</a> | 
-        <a href="privacidad.html" style="color: #38bdf8; text-decoration: none; margin: 0 8px;">Política de Privacidad</a> | 
-        <a href="cookies.html" style="color: #38bdf8; text-decoration: none; margin: 0 8px;">Política de Cookies</a>
-    </p>
-</footer>
-<!-- PASO 1: Modal global para ver mapas en pantalla completa -->
-<div id="modalMapaGlobal" onclick="cerrarMapaZoom()" style="display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(2, 6, 23, 0.92); backdrop-filter: blur(5px); justify-content: center; align-items: center; cursor: zoom-out;">
-    <span style="position: absolute; top: 20px; right: 25px; font-size: 32px; color: #38bdf8; font-weight: bold; cursor: pointer;">&times;</span>
-    <img id="imgZoomGlobal" style="max-width: 92%; max-height: 90%; border-radius: 12px; box-shadow: 0 0 30px rgba(56, 189, 248, 0.3); border: 1px solid rgba(56, 189, 248, 0.3); object-fit: contain;">
-</div>  
-    <script>
-// Funciones para el zoom global de mapas
-function abrirMapaZoom(src) {
-    const modal = document.getElementById('modalMapaGlobal');
-    const imgZoom = document.getElementById('imgZoomGlobal');
-    if (modal && imgZoom) {
-        imgZoom.src = src;
-        modal.style.display = 'flex';
-    }
-}
+        function closeTopModal() {
+            document.getElementById('top-modal').classList.remove('active');
+        }
 
-function cerrarMapaZoom() {
-    const modal = document.getElementById('modalMapaGlobal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
+        function checkTop5Eligibility() {
+            document.getElementById('keyboard-modal').classList.add('active');
+            buildKeyboard();
+        }
 
-// Activa el zoom automáticamente en las imágenes de mapas y planos de pistas
-document.addEventListener('DOMContentLoaded', () => {
-    const mapas = document.querySelectorAll('img[src*="mapa"], img[src*="plano"], .mapa-pistas');
-    mapas.forEach(img => {
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', () => abrirMapaZoom(img.src));
-    });
-});
-</script>
+        function buildKeyboard() {
+            const keys = [
+                ['Q','W','E','R','T','Y','U','I','O','P'],
+                ['A','S','D','F','G','H','J','K','L'],
+                ['Z','X','C','V','B','N','M','DEL']
+            ];
+            const kbContainer = document.getElementById('keyboard');
+            if (!kbContainer) return;
+            kbContainer.innerHTML = '';
+            playerName = "";
+            updateNameDisplay();
+
+            keys.forEach(row => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'kb-row';
+                row.forEach(key => {
+                    const keyEl = document.createElement('button');
+                    keyEl.className = `kb-key ${key === 'DEL' ? 'wide' : ''}`;
+                    keyEl.innerText = key;
+                    keyEl.onclick = () => handleKeyPress(key);
+                    rowEl.appendChild(keyEl);
+                });
+                kbContainer.appendChild(rowEl);
+            });
+        }
+
+        function handleKeyPress(key) {
+            if (key === 'DEL') {
+                playerName = playerName.slice(0, -1);
+            } else if (playerName.length < 8) {
+                playerName += key;
+            }
+            updateNameDisplay();
+        }
+
+        function updateNameDisplay() {
+            const display = document.getElementById('name-display');
+            if (display) display.innerText = playerName || "ESCRIBE...";
+        }
+
+        function submitScore() {
+            const finalName = playerName.trim() || "RIDER";
+            topScores.push({ name: finalName, score: currentBet || 1 });
+            topScores.sort((a,b) => b.score - a.score);
+            topScores = topScores.slice(0, 5);
+            saveTopScores();
+
+            document.getElementById('keyboard-modal').classList.remove('active');
+            updateUI();
+        }
+
+        function toggleMusicLights() {
+            const gameContainer = document.querySelector('.casino-window') || document.body;
+            const btn = document.getElementById('lights-btn');
+            
+            gameContainer.classList.toggle('music-active-lights');
+            
+            if (gameContainer.classList.contains('music-active-lights')) {
+                btn.style.background = '#00f2fe';
+                btn.style.color = '#000';
+                btn.innerText = '✨ Luces Activadas';
+            } else {
+                btn.style.background = '#ff007f';
+                btn.style.color = '#fff';
+                btn.innerText = '✨ Activar Luces Rítmicas';
+            }
+        }
+
+        // Inicialización
+        updateUI();
+        gameOver = false;
+        document.getElementById('action-controls').style.display = 'none';
+        document.getElementById('bet-controls').style.display = 'flex';
+    </script>
 </body>
 </html>
