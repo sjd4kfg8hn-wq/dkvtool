@@ -14,29 +14,33 @@
             user-select: none;
         }
 
-        body {
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-            font-family: 'Rajdhani', sans-serif;
-            color: #e2e8f0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+       body {
+    background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    font-family: 'Rajdhani', sans-serif;
+    color: #e2e8f0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-        /* Consola principal estilo chasis de nieve / aluminio helado */
-        .snow-console {
-            width: 740px;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 3px solid #38bdf8;
-            border-radius: 20px;
-            box-shadow: 0 0 35px rgba(56, 189, 248, 0.3), inset 0 0 20px rgba(56, 189, 248, 0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+/* Consola principal estilo chasis de nieve / aluminio helado */
+.snow-console {
+    width: 100%;
+    max-width: 740px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 3px solid #38bdf8;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.3), inset 0 0 20px rgba(56, 189, 248, 0.1);
+    padding: 10px 14px; /* Reducido para compactar en vertical */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
 
         /* Cabecera con Marca Grafiti */
         .console-header {
