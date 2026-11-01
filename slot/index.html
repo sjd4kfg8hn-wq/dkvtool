@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forfait Slot Machine</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: #0d1117;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        .slot-container {
+            background: linear-gradient(145deg, #161b22, #21262d);
+            border: 2px solid #38bdf8;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+            text-align: center;
+            width: 340px;
+        }
+        h2 {
+            color: #38bdf8;
+            font-size: 20px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+        .subtitle {
+            color: #8b949e;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+        .reels-container {
+            display: flex;
+            justify-content: space-between;
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            padding: 15px 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+        .reel {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            width: 80px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            user-select: none;
+            transition: transform 0.1s ease;
+        }
+        .spin-btn {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #0f172a;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+            transition: all 0.2s;
+        }
+        .spin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+        }
+        .spin-btn:disabled {
+            background: #30363d;
+            color: #8b949e;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            background: #0d1117;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            min-height: 20px;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slot-container">
+    <h2>🎫 FORFAIT SLOT</h2>
+    <div class="subtitle">¡Consigue 3 iguales para ganar tu pase VIP!</div>
+
+    <div class="reels-container">
+        <div class="reel" id="reel1">🏂</div>
+        <div class="reel" id="reel2">❄️</div>
+        <div class="reel" id="reel3">⛷️</div>
+    </div>
+
+    <button class="spin-btn" id="spinBtn" onclick="spin()">¡TIRAR DE LA PALANCA!</button>
+
+    <div class="message" id="message">¡Prueba tu suerte, Rider!</div>
+
+    <div class="stats">
+        <span>Copos: <strong id="credits" style="color: #38bdf8;">100</strong></span>
+        <span>Premios: <strong id="wins" style="color: #22c55e;">0</strong></span>
+    </div>
+</div>
+
+<script>
+    const symbols = ['🏂', '❄️', '⛷️', '🏔️', '🎫', '🍺'];
+    let credits = 100;
+    let wins = 0;
+
+    function spin() {
+        if (credits < 10) {
+            document.getElementById('message').innerText = "❌ ¡Sin copos! Recargando 50 copos...";
+            credits += 50;
+            document.getElementById('credits').innerText = credits;
+            return;
+        }
+
+        credits -= 10;
+        document.getElementById('credits').innerText = credits;
+        
+        const btn = document.getElementById('spinBtn');
+        btn.disabled = true;
+        document.getElementById('message').innerText = "🌀 Girando rodillos...";
+
+        let spinsCount = 0;
+        const interval = setInterval(() => {
+            document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            spinsCount++;
+
+            if (spinsCount > 15) {
+                clearInterval(interval);
+                finalizeSpin();
+            }
+        }, 80);
+    }
+
+    function finalizeSpin() {
+        const r1 = symbols[Math.floor(Math.random() * symbols.length)];
+        const r2 = symbols[Math.floor(Math.random() * symbols.length)];
+        const r3 = symbols[Math.floor(Math.random() * symbols.length)];
+
+        document.getElementById('reel1').innerText = r1;
+        document.getElementById('reel2').innerText = r2;
+        document.getElementById('reel3').innerText = r3;
+
+        const msg = document.getElementById('message');
+
+        if (r1 === r2 && r2 === r3) {
+            if (r1 === '🎫') {
+                msg.innerHTML = "🎉 ¡JACKPOT! ¡FORFAIT VIP TEMPORADA GANADO! (+200 copos)";
+                credits += 200;
+            } else {
+                msg.innerHTML = `🎉 ¡TRIPLE ${r1}! ¡PREMIO MAYOR! (+100 copos)`;
+                credits += 100;
+            }
+            wins++;
+            document.getElementById('wins').innerText = wins;
+        } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+            msg.innerHTML = "✨ ¡Pareja! Te devuelves 15 copos.";
+            credits += 15;
+        } else {
+            msg.innerText = "💥 ¡Sigue intentándolo!";
+        }
+
+        document.getElementById('credits').innerText = credits;
+        document.getElementById('spinBtn').disabled = false;
+    }
+</script>
+
+</body>
+</html>
