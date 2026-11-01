@@ -213,7 +213,24 @@
                 <div class="lcd-screen" id="lcd-msg">LISTO PARA MEZCLAR</div>
             </div>
         </div>
+        
+<!-- Selector de BPM y Estilos Musicales -->
+<div class="genre-bpm-bar" style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); padding: 12px 18px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #38bdf8;">
+    
+    <!-- Slider y Display de BPM -->
+    <div style="display: flex; align-items: center; gap: 12px; color: #38bdf8; font-weight: bold;">
+        <span>BPM: <span id="bpm-value">124</span></span>
+        <input type="range" id="bpm-range" min="80" max="180" value="124" step="1" oninput="changeBPM(this.value)" style="accent-color: #38bdf8; cursor: pointer;">
+    </div>
 
+    <!-- Botones de Género -->
+    <div style="display: flex; gap: 8px;">
+        <button class="btn-control genre-btn active" onclick="selectGenre('house')">🏠 House</button>
+        <button class="btn-control genre-btn" onclick="selectGenre('psy')">🌀 Psy</button>
+        <button class="btn-control genre-btn" onclick="selectGenre('hiphop')">🎤 Hip Hop</button>
+        <button class="btn-control genre-btn" onclick="selectGenre('dnb')">⚡ D&B</button>
+    </div>
+</div>
         <!-- Barra de Control y Grabación -->
         <div class="controls-bar">
             <div style="display: flex; gap: 10px;">
@@ -240,8 +257,8 @@
 
     <script>
         let audioCtx = null;
-        const BPM = 124;
-        const beatInterval = (60 / BPM) * 1000; // Duración de un pulso
+       let BPM = 124;
+let beatInterval = (60 / BPM) * 1000; // Duración de un pulso
         
         let isPlayingAll = false;
         let isRecording = false;
@@ -249,7 +266,35 @@
         let recStartTime = 0;
         let activeLoops = {};
         let loopIntervals = {};
+// Función para actualizar BPM manualmente con la barra
+function changeBPM(val) {
+    BPM = parseInt(val);
+    beatInterval = (60 / BPM) * 1000;
+    const bpmDisplay = document.getElementById('bpm-value');
+    if (bpmDisplay) bpmDisplay.innerText = BPM;
+}
 
+// Función para cambiar de género musical y ajustar su tempo
+function selectGenre(genre) {
+    // Cambiar la pestaña activa visualmente
+    document.querySelectorAll('.genre-btn').forEach(btn => btn.classList.remove('active'));
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
+
+    // BPMs predeterminados por estilo
+    if (genre === 'house') BPM = 124;
+    else if (genre === 'psy') BPM = 142;
+    else if (genre === 'hiphop') BPM = 90;
+    else if (genre === 'dnb') BPM = 174;
+
+    // Actualizar interval y controles visuales
+    beatInterval = (60 / BPM) * 1000;
+    const slider = document.getElementById('bpm-range');
+    if (slider) slider.value = BPM;
+    const bpmDisplay = document.getElementById('bpm-value');
+    if (bpmDisplay) bpmDisplay.innerText = BPM;
+}
         // Definición de los 16 Loops de House
         const padsData = [
             { id: 0, name: "4x4 Deep Kick", type: "kick", row: 0 },
