@@ -3,41 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slot Forfait - Alpine Casino</title>
+    <title>Forfait Slot Machine - Alpine Casino</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #0f172a;
-            --snow-white: #f8fafc;
-            --accent-blue: #38bdf8;
-            --accent-teal: #2dd4bf;
-            --gold: #fbbf24;
-            --danger: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
         body {
             background: #020617;
-            font-family: 'Nunito', sans-serif;
-            color: var(--snow-white);
+            color: #fff;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            padding: 10px;
             overflow: hidden;
         }
-
         .casino-window {
             width: 420px;
             height: 520px;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            border: 3px solid var(--accent-blue);
+            border: 3px solid #38bdf8;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(56, 189, 248, 0.3);
             display: flex;
@@ -45,7 +30,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .header {
             background: rgba(15, 23, 42, 0.9);
             padding: 8px 12px;
@@ -55,34 +39,20 @@
             border-bottom: 2px solid rgba(56, 189, 248, 0.2);
             z-index: 10;
         }
-
         .title-badge {
             font-family: 'Fredoka One', cursive;
-            color: var(--accent-blue);
+            color: #38bdf8;
             font-size: 13px;
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 4px;
         }
-
         .stats-bar {
             display: flex;
             gap: 8px;
             align-items: center;
         }
-
-        .stat-item {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .stat-item span { color: var(--gold); }
-
         .top-btn {
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
             color: #000;
@@ -93,87 +63,107 @@
             font-weight: 900;
             cursor: pointer;
         }
-
-        .game-canvas-container {
+        .slot-container {
             flex: 1;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 16px;
-            position: relative;
-            gap: 16px;
-        }
-
-        /* Ruletas Originales con borde Teal */
-        .slot-frame {
-            background: #090d16;
-            border: 3px solid var(--accent-teal);
-            border-radius: 18px;
-            padding: 16px 20px;
-            display: flex;
-            gap: 12px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 15px rgba(45, 212, 191, 0.2);
-        }
-
-        .slot-reel {
-            width: 70px;
-            height: 80px;
-            background: #0f172a;
-            border: 2px solid rgba(56, 189, 248, 0.4);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 38px;
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
-            transition: transform 0.05s ease;
-        }
-
-        .slot-reel.spinning {
-            filter: blur(1px);
-        }
-
-        .forfait-bag-badge {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid var(--gold);
-            padding: 6px 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--gold);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            max-width: 320px;
-        }
-
-        .btn-start {
-            flex: 1;
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-            color: white;
-            border: 1px solid var(--accent-blue);
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             text-align: center;
         }
-
-        .btn-start:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        h2 {
+            color: #38bdf8;
+            font-size: 18px;
+            margin-bottom: 3px;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
-
+        .subtitle {
+            color: #8b949e;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        .reels-container {
+            display: flex;
+            justify-content: space-between;
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            padding: 12px 10px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            width: 100%;
+        }
+        .reel {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            width: 75px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            user-select: none;
+            transition: transform 0.1s ease;
+        }
+        .button-group {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .spin-btn {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #0f172a;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+            transition: all 0.2s;
+        }
+        .spin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+        }
+        .spin-btn:disabled {
+            background: #30363d;
+            color: #8b949e;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
         .btn-saka {
-            background: linear-gradient(135deg, #10b981, #059669) !important;
-            border-color: #34d399 !important;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+        }
+        .btn-saka:hover {
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6) !important;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background: #0d1117;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            border: 1px solid #30363d;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            min-height: 20px;
+            color: #38bdf8;
         }
 
         /* MODALES */
@@ -192,19 +182,16 @@
             pointer-events: none;
             transition: opacity 0.2s;
         }
-
         .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
-
         .modal-title {
             font-family: 'Fredoka One', cursive;
-            color: var(--gold);
+            color: #fbbf24;
             font-size: 18px;
             margin-bottom: 8px;
         }
-
         .top-list {
             width: 100%;
             display: flex;
@@ -212,18 +199,16 @@
             gap: 4px;
             margin-bottom: 10px;
         }
-
         .top-item {
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 4px 8px;
+            padding: 6px 10px;
             border-radius: 6px;
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
         }
-
         .keyboard-container {
             display: flex;
             flex-direction: column;
@@ -231,7 +216,6 @@
             width: 100%;
             margin-top: 4px;
         }
-
         .kb-row { display: flex; justify-content: center; gap: 3px; }
         .kb-key {
             background: #334155;
@@ -244,259 +228,252 @@
             font-weight: 800;
             cursor: pointer;
         }
-        .kb-key:active { background: var(--accent-blue); color: black; }
+        .kb-key:active { background: #38bdf8; color: black; }
         .kb-key.wide { width: 48px; background: #475569; }
-
         .name-display {
             background: #020617;
-            border: 1px solid var(--accent-blue);
+            border: 1px solid #38bdf8;
             padding: 6px 10px;
             border-radius: 6px;
             font-size: 16px;
             font-weight: 800;
-            color: var(--snow-white);
+            color: #fff;
             min-width: 140px;
             letter-spacing: 3px;
             text-align: center;
             margin-bottom: 6px;
         }
-
         .crash-text {
-            color: var(--gold);
-            font-size: 20px;
+            color: #fbbf24;
+            font-size: 18px;
             font-family: 'Fredoka One', cursive;
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
             margin-bottom: 8px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="casino-window">
-        <!-- HEADER -->
-        <div class="header">
-            <div class="title-badge">
-                <span>🎫</span> SLOT FORFAIT
-            </div>
-            <div class="stats-bar">
-                <div class="stat-item">RÉCORD: <span id="record-val">25</span></div>
-                <button class="top-btn" onclick="openTopModal()">TOP 5</button>
-            </div>
+<div class="casino-window">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="title-badge">
+            <span>🎫</span> SLOT FORFAIT
         </div>
-
-        <!-- ÁREA DE JUEGO ORIGINAL -->
-        <div class="game-canvas-container">
-            <div class="slot-frame">
-                <div class="slot-reel" id="reel1">❄️</div>
-                <div class="slot-reel" id="reel2">❄️</div>
-                <div class="slot-reel" id="reel3">🏂</div>
-            </div>
-
-            <div class="forfait-bag-badge">
-                🎟️ Forfaits en saca: <span id="bag-val">10</span>
-            </div>
-
-            <div class="button-group">
-                <button class="btn-start" id="spin-btn" onclick="spinSlot()">GIRAR (1 🎟️)</button>
-                <button class="btn-start btn-saka" id="saka-btn" onclick="aLaSaka()">¡A LA SAKA!</button>
-            </div>
-        </div>
-
-        <!-- MODAL TOP 5 -->
-        <div class="modal-overlay" id="top-modal">
-            <div class="modal-title">🏆 TOP 5 SAKAS</div>
-            <div class="top-list" id="top-list-container"></div>
-            <button class="btn-start" onclick="closeTopModal()" style="width: 100%;">CERRAR</button>
-        </div>
-
-        <!-- MODAL RÉCORD (MÁXIMO 5 LETRAS) -->
-        <div class="modal-overlay" id="crash-modal">
-            <div class="crash-text">🏔️ ¡A LA SAKA RECORD!</div>
-            <div style="font-size: 12px; margin-bottom: 6px;" id="final-score-text">Has conseguido 0 forfaits</div>
-            <div class="name-display" id="name-display">_____</div>
-            
-            <div class="keyboard-container" id="keyboard"></div>
-            
-            <button class="btn-start" onclick="submitScore()" style="width: 100%; margin-top: 10px;">GUARDAR Y REINICIAR</button>
+        <div class="stats-bar">
+            <button class="top-btn" onclick="openTopModal()">TOP 5</button>
         </div>
     </div>
 
-    <script>
-        const symbols = ['🎿', '🏂', '❄️', '🪨', '🏆'];
-        let currentBag = 10;
-        let isSpinning = false;
-        let playerName = "";
+    <!-- CONTENEDOR PRINCIPAL ESTÉTICA ORIGINAL -->
+    <div class="slot-container">
+        <h2>🎫 FORFAIT SLOT</h2>
+        <div class="subtitle">¡Consigue 3 iguales para ganar tu pase VIP!</div>
 
-        let topScores = JSON.parse(localStorage.getItem('slot_forfait_top')) || [
-            { name: "IVY", score: 25 },
-            { name: "COLET", score: 20 },
-            { name: "RIDER", score: 15 },
-            { name: "POWDER", score: 10 },
-            { name: "CARV", score: 5 }
-        ];
+        <div class="reels-container">
+            <div class="reel" id="reel1">🏂</div>
+            <div class="reel" id="reel2">❄️</div>
+            <div class="reel" id="reel3">⛷️</div>
+        </div>
 
-        function updateStats() {
-            document.getElementById('bag-val').innerText = currentBag;
-            const highestScore = topScores.length > 0 ? Math.max(...topScores.map(s => s.score)) : 0;
-            document.getElementById('record-val').innerText = highestScore;
+        <div class="button-group">
+            <button class="spin-btn" id="spinBtn" onclick="spin()">¡TIRAR!</button>
+            <button class="spin-btn btn-saka" id="sakaBtn" onclick="aLaSaka()">¡A LA SAKA!</button>
+        </div>
+
+        <div class="message" id="message">¡Prueba tu suerte, Rider!</div>
+
+        <div class="stats">
+            <span>Copos: <strong id="credits" style="color: #38bdf8;">100</strong></span>
+            <span>Premios: <strong id="wins" style="color: #22c55e;">0</strong></span>
+        </div>
+    </div>
+
+    <!-- MODAL TOP 5 -->
+    <div class="modal-overlay" id="top-modal">
+        <div class="modal-title">🏆 TOP 5 SAKAS</div>
+        <div class="top-list" id="top-list-container"></div>
+        <button class="spin-btn" onclick="closeTopModal()" style="width: 100%;">CERRAR</button>
+    </div>
+
+    <!-- MODAL RÉCORD (MÁX 5 LETRAS) -->
+    <div class="modal-overlay" id="record-modal">
+        <div class="crash-text">🏔️ ¡NUEVA SAKA RÉCORD!</div>
+        <div style="font-size: 12px; margin-bottom: 6px;" id="final-score-text">Has conseguido 0 copos</div>
+        <div class="name-display" id="name-display">_____</div>
+        
+        <div class="keyboard-container" id="keyboard"></div>
+        
+        <button class="spin-btn" onclick="submitScore()" style="width: 100%; margin-top: 10px;">GUARDAR RÉCORD</button>
+    </div>
+</div>
+
+<script>
+    const symbols = ['🏂', '❄️', '⛷️', '🏔️', '🎫', '🍺'];
+    let credits = 100;
+    let wins = 0;
+    let playerName = "";
+
+    let topScores = JSON.parse(localStorage.getItem('slot_forfait_top')) || [
+        { name: "IVY", score: 250 },
+        { name: "COLET", score: 200 },
+        { name: "RIDER", score: 150 },
+        { name: "POWDER", score: 100 },
+        { name: "CARV", score: 50 }
+    ];
+
+    function spin() {
+        if (credits < 10) {
+            document.getElementById('message').innerText = "❌ ¡Sin copos! Recargando 50 copos...";
+            credits += 50;
+            document.getElementById('credits').innerText = credits;
+            return;
         }
 
-        function spinSlot() {
-            if (isSpinning) return;
-            if (currentBag < 1) {
-                alert("¡No te quedan forfaits para girar! Pulsa ¡A LA SAKA! si quieres registrar tus puntos.");
-                return;
+        credits -= 10;
+        document.getElementById('credits').innerText = credits;
+        
+        const btn = document.getElementById('spinBtn');
+        const sakaBtn = document.getElementById('sakaBtn');
+        btn.disabled = true;
+        sakaBtn.disabled = true;
+        document.getElementById('message').innerText = "🌀 Girando rodillos...";
+
+        let spinsCount = 0;
+        const interval = setInterval(() => {
+            document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            spinsCount++;
+
+            if (spinsCount > 15) {
+                clearInterval(interval);
+                finalizeSpin();
             }
+        }, 80);
+    }
 
-            // Descontar la apuesta de 1 forfait
-            currentBag--;
-            updateStats();
-            isSpinning = true;
+    function finalizeSpin() {
+        const r1 = symbols[Math.floor(Math.random() * symbols.length)];
+        const r2 = symbols[Math.floor(Math.random() * symbols.length)];
+        const r3 = symbols[Math.floor(Math.random() * symbols.length)];
 
-            const spinBtn = document.getElementById('spin-btn');
-            spinBtn.disabled = true;
+        document.getElementById('reel1').innerText = r1;
+        document.getElementById('reel2').innerText = r2;
+        document.getElementById('reel3').innerText = r3;
 
-            const reel1 = document.getElementById('reel1');
-            const reel2 = document.getElementById('reel2');
-            const reel3 = document.getElementById('reel3');
+        const msg = document.getElementById('message');
 
-            reel1.classList.add('spinning');
-            reel2.classList.add('spinning');
-            reel3.classList.add('spinning');
-
-            // Efecto visual de animación giratoria rápida
-            let counter = 0;
-            const interval = setInterval(() => {
-                reel1.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                reel2.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                reel3.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                counter++;
-
-                if (counter > 15) {
-                    clearInterval(interval);
-                    
-                    // Elegir resultados finales de verdad
-                    const final1 = symbols[Math.floor(Math.random() * symbols.length)];
-                    const final2 = symbols[Math.floor(Math.random() * symbols.length)];
-                    const final3 = symbols[Math.floor(Math.random() * symbols.length)];
-
-                    reel1.innerText = final1;
-                    reel1.classList.remove('spinning');
-
-                    setTimeout(() => {
-                        reel2.innerText = final2;
-                        reel2.classList.remove('spinning');
-                    }, 150);
-
-                    setTimeout(() => {
-                        reel3.innerText = final3;
-                        reel3.classList.remove('spinning');
-
-                        // LÓGICA DE PREMIOS REAL
-                        let prize = 0;
-                        if (final1 === final2 && final2 === final3) {
-                            prize = final1 === '🏆' ? 20 : 10; // Trío
-                        } else if (final1 === final2 || final2 === final3 || final1 === final3) {
-                            prize = 3; // Pareja
-                        } // Si no hay coincidencias, 0 premios (pierde el forfait)
-
-                        currentBag += prize;
-                        updateStats();
-                        isSpinning = false;
-                        spinBtn.disabled = false;
-                    }, 300);
-                }
-            }, 60);
-        }
-
-        function aLaSaka() {
-            if (isSpinning) return;
-            if (currentBag <= 0) {
-                alert("No tienes forfaits para meter en la saca.");
-                return;
-            }
-
-            const lowestScore = topScores.length < 5 ? 0 : topScores[topScores.length - 1].score;
-
-            if (currentBag > lowestScore || topScores.length < 5) {
-                document.getElementById('final-score-text').innerText = `¡Te retiras con ${currentBag} forfaits!`;
-                document.getElementById('crash-modal').classList.add('active');
-                buildKeyboard();
+        if (r1 === r2 && r2 === r3) {
+            if (r1 === '🎫') {
+                msg.innerHTML = "🎉 ¡JACKPOT! ¡FORFAIT VIP TEMPORADA! (+200 copos)";
+                credits += 200;
             } else {
-                alert(`¡Has guardado ${currentBag} forfaits en la saca, pero no entra en el Top 5!`);
-                currentBag = 10; // Reiniciar
-                updateStats();
+                msg.innerHTML = `🎉 ¡TRIPLE ${r1}! ¡PREMIO MAYOR! (+100 copos)`;
+                credits += 100;
             }
+            wins++;
+            document.getElementById('wins').innerText = wins;
+        } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+            msg.innerHTML = "✨ ¡Pareja! Recuperas 15 copos.";
+            credits += 15;
+        } else {
+            msg.innerText = "💥 ¡Sigue intentándolo!";
         }
 
-        function openTopModal() {
-            const container = document.getElementById('top-list-container');
-            container.innerHTML = '';
-            topScores.sort((a,b) => b.score - a.score);
-            topScores.slice(0, 5).forEach((item, i) => {
-                const el = document.createElement('div');
-                el.className = 'top-item';
-                el.innerHTML = `<span>#${i+1} ${item.name}</span><span>${item.score} FORFAITS</span>`;
-                container.appendChild(el);
+        document.getElementById('credits').innerText = credits;
+        document.getElementById('spinBtn').disabled = false;
+        document.getElementById('sakaBtn').disabled = false;
+    }
+
+    function aLaSaka() {
+        if (credits <= 0) {
+            alert("No tienes copos acumulados para llevarte a la saca.");
+            return;
+        }
+
+        const lowestScore = topScores.length < 5 ? 0 : topScores[topScores.length - 1].score;
+
+        if (credits > lowestScore || topScores.length < 5) {
+            document.getElementById('final-score-text').innerText = `¡Te retiras con ${credits} copos!`;
+            document.getElementById('record-modal').classList.add('active');
+            buildKeyboard();
+        } else {
+            alert(`¡Te has retirado con ${credits} copos, pero no alcanza para el Top 5!`);
+            credits = 100;
+            document.getElementById('credits').innerText = credits;
+        }
+    }
+
+    function openTopModal() {
+        const container = document.getElementById('top-list-container');
+        container.innerHTML = '';
+        topScores.sort((a,b) => b.score - a.score);
+        topScores.slice(0, 5).forEach((item, i) => {
+            const el = document.createElement('div');
+            el.className = 'top-item';
+            el.innerHTML = `<span>#${i+1} ${item.name}</span><span>${item.score} COPOS</span>`;
+            container.appendChild(el);
+        });
+        document.getElementById('top-modal').classList.add('active');
+    }
+
+    function closeTopModal() {
+        document.getElementById('top-modal').classList.remove('active');
+    }
+
+    function buildKeyboard() {
+        const keys = [
+            ['Q','W','E','R','T','Y','U','I','O','P'],
+            ['A','S','D','F','G','H','J','K','L'],
+            ['Z','X','C','V','B','N','M','DEL']
+        ];
+        const container = document.getElementById('keyboard');
+        container.innerHTML = '';
+        playerName = "";
+        updateNameDisplay();
+
+        keys.forEach(row => {
+            const rowEl = document.createElement('div');
+            rowEl.className = 'kb-row';
+            row.forEach(k => {
+                const btn = document.createElement('button');
+                btn.className = `kb-key ${k === 'DEL' ? 'wide' : ''}`;
+                btn.innerText = k;
+                btn.onclick = () => {
+                    if (k === 'DEL') {
+                        playerName = playerName.slice(0, -1);
+                    } else if (playerName.length < 5) { // Máximo 5 letras
+                        playerName += k;
+                    }
+                    updateNameDisplay();
+                };
+                rowEl.appendChild(btn);
             });
-            document.getElementById('top-modal').classList.add('active');
-        }
+            container.appendChild(rowEl);
+        });
+    }
 
-        function closeTopModal() {
-            document.getElementById('top-modal').classList.remove('active');
-        }
+    function updateNameDisplay() {
+        let padded = playerName.padEnd(5, '_');
+        document.getElementById('name-display').innerText = padded;
+    }
 
-        function buildKeyboard() {
-            const keys = [
-                ['Q','W','E','R','T','Y','U','I','O','P'],
-                ['A','S','D','F','G','H','J','K','L'],
-                ['Z','X','C','V','B','N','M','DEL']
-            ];
-            const container = document.getElementById('keyboard');
-            container.innerHTML = '';
-            playerName = "";
-            updateNameDisplay();
+    function submitScore() {
+        const finalName = playerName.trim() || "RIDER";
+        topScores.push({ name: finalName, score: credits });
+        topScores.sort((a,b) => b.score - a.score);
+        topScores = topScores.slice(0, 5);
+        localStorage.setItem('slot_forfait_top', JSON.stringify(topScores));
 
-            keys.forEach(row => {
-                const rowEl = document.createElement('div');
-                rowEl.className = 'kb-row';
-                row.forEach(k => {
-                    const btn = document.createElement('button');
-                    btn.className = `kb-key ${k === 'DEL' ? 'wide' : ''}`;
-                    btn.innerText = k;
-                    btn.onclick = () => {
-                        if (k === 'DEL') {
-                            playerName = playerName.slice(0, -1);
-                        } else if (playerName.length < 5) { // Máximo 5 caracteres
-                            playerName += k;
-                        }
-                        updateNameDisplay();
-                    };
-                    rowEl.appendChild(btn);
-                });
-                container.appendChild(rowEl);
-            });
-        }
+        document.getElementById('record-modal').classList.remove('active');
+        credits = 100;
+        wins = 0;
+        document.getElementById('credits').innerText = credits;
+        document.getElementById('wins').innerText = wins;
+        openTopModal();
+    }
+</script>
 
-        function updateNameDisplay() {
-            let padded = playerName.padEnd(5, '_');
-            document.getElementById('name-display').innerText = padded;
-        }
-
-        function submitScore() {
-            const finalName = playerName.trim() || "RIDER";
-            topScores.push({ name: finalName, score: currentBag });
-            topScores.sort((a,b) => b.score - a.score);
-            topScores = topScores.slice(0, 5);
-            localStorage.setItem('slot_forfait_top', JSON.stringify(topScores));
-
-            document.getElementById('crash-modal').classList.remove('active');
-            currentBag = 10;
-            updateStats();
-            openTopModal();
-        }
-
-        updateStats();
-    </script>
 </body>
 </html>
