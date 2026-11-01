@@ -486,29 +486,36 @@
     </div>
 
     <script>
-        // --- INICIALIZACIÓN DE FORFAITS ---
-let forfaits = parseInt(localStorage.getItem('snowboard_bj_bank'));
-if (isNaN(forfaits) || forfaits <= 0) {
-    forfaits = 25;
-    localStorage.setItem('snowboard_bj_bank', forfaits);
-}
-        let currentBet = 0;
-        let deck = [];
-        let playerHand = [];
-        let dealerHand = [];
-        let gameOver = false;
-        let playerName = "";
+    // --- INICIALIZACIÓN SEGURA DE VARIABLES Y SALDO ---
+    let forfaits = 25;
+    try {
+        let savedBank = parseInt(localStorage.getItem('snowboard_bj_bank'));
+        if (!isNaN(savedBank) && savedBank > 0) {
+            forfaits = savedBank;
+        } else {
+            localStorage.setItem('snowboard_bj_bank', 25);
+        }
+    } catch (e) {
+        forfaits = 25;
+    }
 
-        const suits = ['♠', '♥', '♦', '♣'];
-        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    let currentBet = 0;
+    let deck = [];
+    let playerHand = [];
+    let dealerHand = [];
+    let gameOver = false;
+    let playerName = "";
 
-        let topScores = JSON.parse(localStorage.getItem('blackjack_snow_top')) || [
-            { name: "RIDER_PRO", score: 25 },
-            { name: "SNOW_QUEEN", score: 20 },
-            { name: "POWDER_BOY", score: 15 },
-            { name: "CARVER", score: 12 },
-            { name: "ROOKIE", score: 8 }
-        ];
+    const suits = ['♠', '♥', '♦', '♣'];
+    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+    let topScores = JSON.parse(localStorage.getItem('blackjack_snow_top')) || [
+        { name: "RIDER_PRO", score: 25 },
+        { name: "SNOW_QUEEN", score: 20 },
+        { name: "POWDER_BOY", score: 15 },
+        { name: "CARVER", score: 12 },
+        { name: "ROOKIE", score: 8 }
+    ];
 
         function saveTopScores() {
             localStorage.setItem('blackjack_snow_top', JSON.stringify(topScores));
@@ -577,20 +584,26 @@ if (isNaN(forfaits) || forfaits <= 0) {
 }
 
         function updateUI() {
-            document.getElementById('forfaits-count').innerText = forfaits;
-            document.getElementById('player-score').innerText = calculateScore(playerHand);
-            
-            if (gameOver) {
-                document.getElementById('dealer-score').innerText = calculateScore(dealerHand);
-            } else if (dealerHand.length > 0) {
-                document.getElementById('dealer-score').innerText = getCardValue(dealerHand[0]);
-            } else {
-                document.getElementById('dealer-score').innerText = 0;
-            }
+    let forfaitCountEl = document.getElementById('forfaits-count');
+    if (forfaitCountEl) forfaitCountEl.innerText = forfaits;
 
-            renderHand('player-cards', playerHand);
-            renderHand('dealer-cards', dealerHand, !gameOver && dealerHand.length > 0);
+    let playerScoreEl = document.getElementById('player-score');
+    if (playerScoreEl) playerScoreEl.innerText = calculateScore(playerHand);
+
+    let dealerScoreEl = document.getElementById('dealer-score');
+    if (dealerScoreEl) {
+        if (gameOver) {
+            dealerScoreEl.innerText = calculateScore(dealerHand);
+        } else if (dealerHand.length > 0) {
+            dealerScoreEl.innerText = getCardValue(dealerHand[0]);
+        } else {
+            dealerScoreEl.innerText = 0;
         }
+    }
+
+    renderHand('player-cards', playerHand);
+    renderHand('dealer-cards', dealerHand, !gameOver && dealerHand.length > 0);
+}
 
         function renderHand(elementId, hand, hideSecond = false) {
             const container = document.getElementById(elementId);
