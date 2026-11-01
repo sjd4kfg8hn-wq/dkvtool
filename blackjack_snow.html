@@ -24,27 +24,28 @@
             padding: 0;
         }
         
-/* Efecto de luces LED rítmicas estilo Afrohouse en el marco del juego */
-@keyframes afroNeonPulse {
-    0% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
-    33% { box-shadow: 0 0 25px #ff007f, inset 0 0 25px #ff007f; border-color: #ff007f; }
-    66% { box-shadow: 0 0 25px #7928ca, inset 0 0 25px #7928ca; border-color: #7928ca; }
-    100% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
-}
+        /* Efecto de luces LED rítmicas estilo Afrohouse en el marco del juego */
+        @keyframes afroNeonPulse {
+            0% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
+            33% { box-shadow: 0 0 25px #ff007f, inset 0 0 25px #ff007f; border-color: #ff007f; }
+            66% { box-shadow: 0 0 25px #7928ca, inset 0 0 25px #7928ca; border-color: #7928ca; }
+            100% { box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe; border-color: #00f2fe; }
+        }
 
-.music-active-lights {
-    animation: afroNeonPulse 2s infinite ease-in-out;
-}
+        .music-active-lights {
+            animation: afroNeonPulse 2s infinite ease-in-out;
+        }
 
-.audio-player-container {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 6px 12px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
+        .audio-player-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
         body {
             background: #020617;
             font-family: 'Nunito', sans-serif;
@@ -403,16 +404,17 @@
                 <button class="close-game-btn" onclick="closeGameWindow()" title="Cerrar juego">✕</button>
             </div>
         </div>
+
         <!-- Reproductor y Control de Luces Afrohouse -->
-    <div style="padding: 8px 15px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
-        <div class="audio-player-container">
-            <span style="color: #fff; font-size: 12px; font-weight: bold;">🎧 Aaron Sevilla - Afrohouse</span>
-            <button onclick="toggleMusicLights()" id="lights-btn" style="background: #ff007f; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">✨ Activar Luces Rítmicas</button>
+        <div style="padding: 8px 15px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div class="audio-player-container">
+                <span style="color: #fff; font-size: 12px; font-weight: bold;">🎧 Aaron Sevilla - Afrohouse</span>
+                <button onclick="toggleMusicLights()" id="lights-btn" style="background: #ff007f; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">✨ Activar Luces Rítmicas</button>
+            </div>
+            <div style="font-size: 0; line-height: 0; margin-top: 6px;">
+                <iframe width="100%" height="40" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/aaron-sevilla/afrohouse-tengo&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            </div>
         </div>
-        <div style="font-size: 0; line-height: 0; margin-top: 6px;">
-            <iframe width="100%" height="40" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/aaron-sevilla/afrohouse-tengo&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
-        </div>
-    </div>
         
         <!-- MESA SNOWBOARD -->
         <div class="snowboard-table">
@@ -454,11 +456,11 @@
         <div class="controls-area">
             <div class="status-msg" id="status-msg">¡Haz tu apuesta en Forfaits!</div>
             
-            <div id="bet-controls" class="bet-controls">
-    <button onclick="placeBet(1)">🪙 1 Forfait</button>
-    <button onclick="placeBet(5)">🪙 5 Forfaits</button>
-    <button onclick="placeBet(10)">🪙 10 Forfaits</button>
-</div>
+            <div id="bet-controls" class="bet-buttons">
+                <button class="btn btn-bet" onclick="placeBet(1)">🪙 1 Forfait</button>
+                <button class="btn btn-bet" onclick="placeBet(5)">🪙 5 Forfaits</button>
+                <button class="btn btn-bet" onclick="placeBet(10)">🪙 10 Forfaits</button>
+            </div>
 
             <div class="action-buttons" id="action-controls" style="display: none;">
                 <button class="btn btn-hit" id="hit-btn" onclick="hit()">PEDIR</button>
@@ -486,58 +488,55 @@
     </div>
 
     <script>
-    // --- INICIALIZACIÓN SEGURA DE VARIABLES Y SALDO ---
-    let forfaits = 25;
-    try {
-        let savedBank = parseInt(localStorage.getItem('snowboard_bj_bank'));
-        if (!isNaN(savedBank) && savedBank > 0) {
-            forfaits = savedBank;
-        } else {
-            localStorage.setItem('snowboard_bj_bank', 25);
+        let forfaits = 25;
+        try {
+            let savedBank = parseInt(localStorage.getItem('snowboard_bj_bank'));
+            if (!isNaN(savedBank) && savedBank > 0) {
+                forfaits = savedBank;
+            } else {
+                localStorage.setItem('snowboard_bj_bank', 25);
+            }
+        } catch (e) {
+            forfaits = 25;
         }
-    } catch (e) {
-        forfaits = 25;
-    }
 
-    let currentBet = 0;
-    let deck = [];
-    let playerHand = [];
-    let dealerHand = [];
-    let gameOver = false;
-    let playerName = "";
+        let currentBet = 0;
+        let deck = [];
+        let playerHand = [];
+        let dealerHand = [];
+        let gameOver = false;
+        let playerName = "";
 
-    const suits = ['♠', '♥', '♦', '♣'];
-    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
-    let topScores = JSON.parse(localStorage.getItem('blackjack_snow_top')) || [
-        { name: "RIDER_PRO", score: 25 },
-        { name: "SNOW_QUEEN", score: 20 },
-        { name: "POWDER_BOY", score: 15 },
-        { name: "CARVER", score: 12 },
-        { name: "ROOKIE", score: 8 }
-    ];
+        let topScores = JSON.parse(localStorage.getItem('blackjack_snow_top')) || [
+            { name: "RIDER_PRO", score: 25 },
+            { name: "SNOW_QUEEN", score: 20 },
+            { name: "POWDER_BOY", score: 15 },
+            { name: "CARVER", score: 12 },
+            { name: "ROOKIE", score: 8 }
+        ];
 
         function saveTopScores() {
             localStorage.setItem('blackjack_snow_top', JSON.stringify(topScores));
         }
 
-        // FUNCIÓN PARA CERRAR LA VENTANA / IFRAME
         function closeGameWindow() {
-    const audio = document.getElementById('afro-audio');
-    const consoleBox = document.getElementById('sound-console');
-    const gameWindow = document.querySelector('.casino-window');
-    
-    if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-    }
-    if (consoleBox) consoleBox.classList.remove('playing-bass');
-    if (gameWindow) gameWindow.classList.remove('music-active-lights');
+            const audio = document.getElementById('afro-audio');
+            const consoleBox = document.getElementById('sound-console');
+            const gameWindow = document.querySelector('.casino-window');
+            
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+            if (consoleBox) consoleBox.classList.remove('playing-bass');
+            if (gameWindow) gameWindow.classList.remove('music-active-lights');
 
-    // Código para cerrar la ventana o modal del juego
-    const modal = document.getElementById('blackjack-window') || document.getElementById('game-modal');
-    if (modal) modal.style.display = 'none';
-}
+            const modal = document.getElementById('blackjack-window') || document.getElementById('game-modal');
+            if (modal) modal.style.display = 'none';
+        }
 
         function createDeck() {
             deck = [];
@@ -549,64 +548,71 @@
             deck.sort(() => Math.random() - 0.5);
         }
 
-        function getCardValue(card) {
-    if (card.value === 'A') return 11;
-    if (['K', 'Q', 'J'].includes(card.value)) return 10;
-    let val = parseInt(card.value);
-    return isNaN(val) ? 0 : val;
-}
-
-       function calculateScore(hand) {
-    let score = 0;
-    let aces = 0;
-
-    if (!hand || !Array.isArray(hand)) return 0;
-
-    for (let i = 0; i < hand.length; i++) {
-        let cardVal = hand[i].value !== undefined ? hand[i].value : hand[i];
-        
-        if (cardVal === 'A' || cardVal === 1 || cardVal === '1') {
-            aces++;
-            score += 11;
-        } else if (['K', 'Q', 'J', '10', 10].includes(cardVal)) {
-            score += 10;
-        } else {
-            score += parseInt(cardVal) || 0;
+        function drawCard() {
+            if (deck.length === 0) createDeck();
+            return deck.pop();
         }
-    }
 
-    while (score > 21 && aces > 0) {
-        score -= 10;
-        aces--;
-    }
+        function getCardValue(card) {
+            if (!card) return 0;
+            if (card.value === 'A') return 11;
+            if (['K', 'Q', 'J'].includes(card.value)) return 10;
+            let val = parseInt(card.value);
+            return isNaN(val) ? 0 : val;
+        }
 
-    return score;
-}
+        function calculateScore(hand) {
+            let score = 0;
+            let aces = 0;
+
+            if (!hand || !Array.isArray(hand)) return 0;
+
+            for (let i = 0; i < hand.length; i++) {
+                let cardVal = hand[i].value !== undefined ? hand[i].value : hand[i];
+                
+                if (cardVal === 'A' || cardVal === 1 || cardVal === '1') {
+                    aces++;
+                    score += 11;
+                } else if (['K', 'Q', 'J', '10', 10].includes(cardVal)) {
+                    score += 10;
+                } else {
+                    score += parseInt(cardVal) || 0;
+                }
+            }
+
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+
+            return score;
+        }
 
         function updateUI() {
-    let forfaitCountEl = document.getElementById('forfaits-count');
-    if (forfaitCountEl) forfaitCountEl.innerText = forfaits;
+            let forfaitCountEl = document.getElementById('forfaits-count');
+            if (forfaitCountEl) forfaitCountEl.innerText = forfaits;
 
-    let playerScoreEl = document.getElementById('player-score');
-    if (playerScoreEl) playerScoreEl.innerText = calculateScore(playerHand);
+            let playerScoreEl = document.getElementById('player-score');
+            if (playerScoreEl) playerScoreEl.innerText = calculateScore(playerHand);
 
-    let dealerScoreEl = document.getElementById('dealer-score');
-    if (dealerScoreEl) {
-        if (gameOver) {
-            dealerScoreEl.innerText = calculateScore(dealerHand);
-        } else if (dealerHand.length > 0) {
-            dealerScoreEl.innerText = getCardValue(dealerHand[0]);
-        } else {
-            dealerScoreEl.innerText = 0;
+            let dealerScoreEl = document.getElementById('dealer-score');
+            if (dealerScoreEl) {
+                if (gameOver) {
+                    dealerScoreEl.innerText = calculateScore(dealerHand);
+                } else if (dealerHand.length > 0) {
+                    dealerScoreEl.innerText = getCardValue(dealerHand[0]);
+                } else {
+                    dealerScoreEl.innerText = 0;
+                }
+            }
+
+            renderHand('player-cards', playerHand);
+            renderHand('dealer-cards', dealerHand, !gameOver && dealerHand.length > 0);
         }
-    }
-
-    renderHand('player-cards', playerHand);
-    renderHand('dealer-cards', dealerHand, !gameOver && dealerHand.length > 0);
-}
 
         function renderHand(elementId, hand, hideSecond = false) {
             const container = document.getElementById(elementId);
+            if (!container) return;
             container.innerHTML = '';
             hand.forEach((card, index) => {
                 const cardEl = document.createElement('div');
@@ -621,80 +627,65 @@
             });
         }
 
-       function endRound(playerWon, message) {
-    gameOver = true;
-    
-    if (playerWon === true) {
-        forfaits += currentBet * 2;
-    } else if (playerWon === null) {
-        forfaits += currentBet; // Empate
-    }
-    
-    // Si te quedas a 0 o menos, recarga automática de 25 forfaits
-    if (forfaits <= 0) {
-        message += " 💥 ¡Te has quedado sin Forfaits! Se te recargan 25.";
-        forfaits = 25;
-    }
+        function placeBet(amount) {
+            if (forfaits < amount) {
+                document.getElementById('status-msg').innerText = "¡No tienes suficientes Forfaits!";
+                return;
+            }
 
-    localStorage.setItem('snowboard_bj_bank', forfaits);
-    updateUI();
+            forfaits -= amount;
+            currentBet = amount;
+            localStorage.setItem('snowboard_bj_bank', forfaits);
+            gameOver = false;
 
-    document.getElementById('status-msg').innerText = message;
-    
-    // Oculta los controles de juego y muestra de nuevo las fichas de apuesta
-    document.getElementById('action-controls').style.display = 'none';
-    document.getElementById('bet-controls').style.display = 'flex';
+            createDeck();
+            playerHand = [drawCard(), drawCard()];
+            dealerHand = [drawCard(), drawCard()];
 
-    playerHand = [];
-    dealerHand = [];
-} // <--- ¡Esta llave cierra perfectamente la función y evita el error de sintaxis global!
+            document.getElementById('bet-controls').style.display = 'none';
+            document.getElementById('action-controls').style.display = 'flex';
+            document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
 
-    // Oculta botones de apuesta y muestra los de acción
-    document.getElementById('bet-controls').style.display = 'none';
-    document.getElementById('action-controls').style.display = 'flex';
-    document.getElementById('status-msg').innerText = `Apuesta: ${currentBet} Forfaits. ¿Qué haces?`;
+            let initialScore = calculateScore(playerHand);
+            if (initialScore === 21) {
+                document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
+                endRound(true, "¡Impresionante! ¡Has cantado el SNOWJACK!");
+                return;
+            }
 
-    // Comprobar si hay 21 inicial de mano (SNOWJACK)
-    let initialScore = calculateScore(playerHand);
-    if (initialScore === 21) {
-        document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
-        endRound(true, "¡Impresionante! ¡Has cantado el SNOWJACK!");
-        return;
-    }
+            updateUI();
+        }
 
-    updateUI();
-}
-
-       function hit() {
-    if (gameOver) return;
-    
-    playerHand.push(deck.pop());
-    
-    let playerScore = calculateScore(playerHand);
-    updateUI();
-    
-    if (playerScore === 21) {
-        document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
-        endRound(true, "¡21 Clavado! ¡SNOWJACK!");
-        return;
-    }
-    
-    if (playerScore > 21) {
-        gameOver = true;
-        const actionControls = document.getElementById('action-controls');
-        if (actionControls) actionControls.style.display = 'none';
-        
-        endRound(false, "¡Te has pasado de 21! Te has quedado fuera de pista.");
-        return;
-    }
-}
+        function hit() {
+            if (gameOver) return;
+            
+            playerHand.push(drawCard());
+            
+            let playerScore = calculateScore(playerHand);
+            updateUI();
+            
+            if (playerScore === 21) {
+                document.getElementById('status-msg').innerHTML = "<h1>¡¡¡❄️🏂🏽SNOWJACK!🏂🏽❄️!!!</h1>";
+                endRound(true, "¡21 Clavado! ¡SNOWJACK!");
+                return;
+            }
+            
+            if (playerScore > 21) {
+                gameOver = true;
+                const actionControls = document.getElementById('action-controls');
+                if (actionControls) actionControls.style.display = 'none';
+                
+                endRound(false, "¡Te has pasado de 21! Te has quedado fuera de pista.");
+                return;
+            }
+        }
 
         function stand() {
             if (gameOver) return;
             gameOver = true;
 
             while (calculateScore(dealerHand) < 17) {
-                dealerHand.push(deck.pop());
+                dealerHand.push(drawCard());
             }
 
             const pScore = calculateScore(playerHand);
@@ -714,30 +705,35 @@
         }
 
         function endRound(playerWon, message) {
-    gameOver = true;
-    
-    if (playerWon === true) {
-        forfaits += currentBet * 2;
-    } else if (playerWon === null) {
-        forfaits += currentBet; // Empate (Push)
-    }
-    
-    localStorage.setItem('snowboard_bj_bank', forfaits);
-    updateUI();
+            gameOver = true;
+            
+            if (playerWon === true) {
+                forfaits += currentBet * 2;
+            } else if (playerWon === null) {
+                forfaits += currentBet; // Empate
+            }
+            
+            if (forfaits <= 0) {
+                message += " 💥 ¡Te has quedado sin Forfaits! Se te recargan 25.";
+                forfaits = 25;
+                checkTop5Eligibility();
+            }
 
-    document.getElementById('status-msg').innerText = message;
-    
-    // Liberar controles de apuesta y ocultar botones de acción
-    document.getElementById('action-controls').style.display = 'none';
-    document.getElementById('bet-controls').style.display = 'flex';
+            localStorage.setItem('snowboard_bj_bank', forfaits);
+            updateUI();
 
-    // LIMPIEZA DE MESA PARA LA SIGUIENTE PARTIDA:
-    playerHand = [];
-    dealerHand = [];
-}
+            document.getElementById('status-msg').innerText = message;
+            
+            document.getElementById('action-controls').style.display = 'none';
+            document.getElementById('bet-controls').style.display = 'flex';
+
+            playerHand = [];
+            dealerHand = [];
+        }
 
         function renderTopList() {
             const container = document.getElementById('top-list-container');
+            if (!container) return;
             container.innerHTML = '';
             topScores.sort((a,b) => b.score - a.score);
             topScores.slice(0, 5).forEach((item, index) => {
@@ -769,6 +765,7 @@
                 ['Z','X','C','V','B','N','M','DEL']
             ];
             const kbContainer = document.getElementById('keyboard');
+            if (!kbContainer) return;
             kbContainer.innerHTML = '';
             playerName = "";
             updateNameDisplay();
@@ -797,53 +794,43 @@
         }
 
         function updateNameDisplay() {
-            document.getElementById('name-display').innerText = playerName || "ESCRIBE...";
+            const display = document.getElementById('name-display');
+            if (display) display.innerText = playerName || "ESCRIBE...";
         }
 
         function submitScore() {
             const finalName = playerName.trim() || "RIDER";
-            topScores.push({ name: finalName, score: currentBet });
+            topScores.push({ name: finalName, score: currentBet || 1 });
             topScores.sort((a,b) => b.score - a.score);
             topScores = topScores.slice(0, 5);
             saveTopScores();
 
             document.getElementById('keyboard-modal').classList.remove('active');
+            updateUI();
+        }
+
+        function toggleMusicLights() {
+            const gameContainer = document.querySelector('.casino-window') || document.body;
+            const btn = document.getElementById('lights-btn');
             
-            // Si al guardar récord no quedan forfaits, se cierra automáticamente
-            if (forfaits <= 0) {
-                closeGameWindow();
+            gameContainer.classList.toggle('music-active-lights');
+            
+            if (gameContainer.classList.contains('music-active-lights')) {
+                btn.style.background = '#00f2fe';
+                btn.style.color = '#000';
+                btn.innerText = '✨ Luces Activadas';
             } else {
-                updateUI();
+                btn.style.background = '#ff007f';
+                btn.style.color = '#fff';
+                btn.innerText = '✨ Activar Luces Rítmicas';
             }
         }
 
+        // Inicialización
         updateUI();
-        
         gameOver = false;
-    document.getElementById('action-controls').style.display = 'none';
-    document.getElementById('bet-controls').style.display = 'flex';
-       gameOver = false;
-    document.getElementById('action-controls').style.display = 'none';
-    document.getElementById('bet-controls').style.display = 'flex';
-
-    // --- FUNCIÓN DE LUCES RÍTMICAS NEÓN ---
-    function toggleMusicLights() {
-        const gameContainer = document.querySelector('.casino-window') || document.body;
-        const btn = document.getElementById('lights-btn');
-        
-        gameContainer.classList.toggle('music-active-lights');
-        
-        if (gameContainer.classList.contains('music-active-lights')) {
-            btn.style.background = '#00f2fe';
-            btn.style.color = '#000';
-            btn.innerText = '✨ Luces Activadas';
-        } else {
-            btn.style.background = '#ff007f';
-            btn.style.color = '#fff';
-            btn.innerText = '✨ Activar Luces Rítmicas';
-        }
-    }
-</script> 
+        document.getElementById('action-controls').style.display = 'none';
+        document.getElementById('bet-controls').style.display = 'flex';
     </script>
 </body>
 </html>
