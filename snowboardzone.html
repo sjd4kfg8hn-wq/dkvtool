@@ -600,23 +600,21 @@ canvas {
         .sudoku-cell.selected { background: #0284c7; }
     .sudoku-cell.fixed { background: #0f172a; color: #94a3b8; }
 
-   /* Pestaña lateral estilo solapa para SNOWZONESTUDIO */
+   /* Botón de SnowStudio integrado en la barra de pestañas */
 .studio-side-btn {
-    position: absolute;
-    left: -145px; /* Lo saca hacia la izquierda del cuadro principal */
-    top: 20px;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
     border: 2px solid #38bdf8;
-    border-right: none; /* Se conecta visualmente al cuadro */
-    color: #38bdf8;
-    padding: 10px 14px;
-    border-radius: 10px 0 0 10px;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 10px;
     font-family: 'Permanent Marker', cursive;
     font-size: 13px;
     letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: -5px 0 15px rgba(56, 189, 248, 0.2);
-    z-index: 100;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    margin-right: 10px;
     transition: all 0.3s ease;
     white-space: nowrap;
 }
@@ -624,8 +622,8 @@ canvas {
 .studio-side-btn:hover, .studio-side-btn.active {
     background: #38bdf8;
     color: #0f172a;
-    box-shadow: -5px 0 25px #38bdf8;
-    left: -150px; /* Pequeño efecto al pasar el ratón */
+    box-shadow: 0 0 25px #38bdf8;
+    transform: scale(1.05);
 }
 </style>
 </head>
