@@ -3,194 +3,446 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forfait Slot Machine</title>
+    <title>Slot Forfait - Alpine Casino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --bg-dark: #0f172a;
+            --snow-white: #f8fafc;
+            --accent-blue: #38bdf8;
+            --accent-teal: #2dd4bf;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: #0d1117;
-            color: #fff;
+            background: #020617;
+            font-family: 'Nunito', sans-serif;
+            color: var(--snow-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .casino-window {
+            width: 420px;
+            height: 520px;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border: 3px solid var(--accent-blue);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(56, 189, 248, 0.3);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+            z-index: 10;
+        }
+
+        .title-badge {
+            font-family: 'Fredoka One', cursive;
+            color: var(--accent-blue);
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .stat-item {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .stat-item span { color: var(--gold); }
+
+        .top-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .game-content {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 10px;
+            padding: 16px;
+            position: relative;
+            gap: 12px;
         }
-        .slot-container {
-            background: linear-gradient(145deg, #161b22, #21262d);
-            border: 2px solid #38bdf8;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
-            text-align: center;
-            width: 340px;
+
+        .slot-machine {
+            background: #090d16;
+            border: 3px solid var(--accent-teal);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
         }
-        h2 {
-            color: #38bdf8;
-            font-size: 20px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+
+        .reel {
+            width: 70px;
+            height: 80px;
+            background: #1e293b;
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
-        .subtitle {
-            color: #8b949e;
+
+        .forfait-bag {
+            font-size: 13px;
+            font-weight: 800;
+            background: rgba(30, 41, 59, 0.9);
+            padding: 6px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-controls {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: white;
+            border: 1px solid var(--accent-blue);
+            padding: 10px 16px;
+            border-radius: 10px;
             font-size: 12px;
-            margin-bottom: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            flex: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        .reels-container {
+
+        .btn-action:hover { background: #0284c7; }
+
+        .btn-saka {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            border-color: #34d399 !important;
+        }
+
+        /* MODALES */
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--gold);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .top-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .top-item {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
-            background: #0d1117;
-            border: 2px solid #30363d;
-            border-radius: 12px;
-            padding: 15px 10px;
-            margin-bottom: 20px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            font-size: 11px;
+            font-weight: 700;
         }
-        .reel {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            width: 80px;
-            height: 90px;
+
+        .keyboard-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            user-select: none;
-            transition: transform 0.1s ease;
+            flex-direction: column;
+            gap: 4px;
+            width: 100%;
+            margin-top: 4px;
         }
-        .spin-btn {
-            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-            color: #0f172a;
-            border: none;
-            padding: 12px 25px;
+
+        .kb-row { display: flex; justify-content: center; gap: 3px; }
+        .kb-key {
+            background: #334155;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            width: 26px;
+            height: 28px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .kb-key:active { background: var(--accent-blue); color: black; }
+        .kb-key.wide { width: 48px; background: #475569; }
+
+        .name-display {
+            background: #020617;
+            border: 1px solid var(--accent-blue);
+            padding: 6px 10px;
+            border-radius: 6px;
             font-size: 16px;
             font-weight: 800;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
-            transition: all 0.2s;
+            color: var(--snow-white);
+            min-width: 140px;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 6px;
         }
-        .spin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
-        }
-        .spin-btn:disabled {
-            background: #30363d;
-            color: #8b949e;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            background: #0d1117;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-        .message {
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            min-height: 20px;
-            color: #38bdf8;
+
+        .crash-text {
+            color: var(--gold);
+            font-size: 20px;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+            margin-bottom: 8px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-<div class="slot-container">
-    <h2>🎫 FORFAIT SLOT</h2>
-    <div class="subtitle">¡Consigue 3 iguales para ganar tu pase VIP!</div>
+    <div class="casino-window">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="title-badge">
+                <span>🎫</span> SLOT FORFAIT
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">RÉCORD: <span id="record-val">0</span></div>
+                <button class="top-btn" onclick="openTopModal()">TOP 5</button>
+            </div>
+        </div>
 
-    <div class="reels-container">
-        <div class="reel" id="reel1">🏂</div>
-        <div class="reel" id="reel2">❄️</div>
-        <div class="reel" id="reel3">⛷️</div>
+        <!-- ÁREA DE JUEGO -->
+        <div class="game-content">
+            <div class="slot-machine">
+                <div class="reel" id="reel1">🎿</div>
+                <div class="reel" id="reel2">🏂</div>
+                <div class="reel" id="reel3">❄️</div>
+            </div>
+
+            <div class="forfait-bag">🎟️ Forfaits en saca: <span id="current-bag">5</span></div>
+
+            <div class="btn-controls">
+                <button class="btn-action" id="spin-btn" onclick="spinSlot()">GIRAR (1 🎟️)</button>
+                <button class="btn-action btn-saka" onclick="aLaSaka()">¡A LA SAKA!</button>
+            </div>
+        </div>
+
+        <!-- MODAL TOP 5 -->
+        <div class="modal-overlay" id="top-modal">
+            <div class="modal-title">🏆 TOP 5 SAKAS</div>
+            <div class="top-list" id="top-list-container"></div>
+            <button class="btn-action" onclick="closeTopModal()" style="width: 100%;">CERRAR</button>
+        </div>
+
+        <!-- MODAL RÉCORD (MÁX 5 LETRAS) -->
+        <div class="modal-overlay" id="record-modal">
+            <div class="crash-text">🏔️ ¡NUEVA SAKA RECORD!</div>
+            <div style="font-size: 12px; margin-bottom: 6px;" id="final-forfaits-text">Has conseguido 0 forfaits</div>
+            <div class="name-display" id="name-display">_____</div>
+            
+            <div class="keyboard-container" id="keyboard"></div>
+            
+            <button class="btn-action" onclick="submitScore()" style="width: 100%; margin-top: 10px;">GUARDAR RÉCORD</button>
+        </div>
     </div>
 
-    <button class="spin-btn" id="spinBtn" onclick="spin()">¡TIRAR DE LA PALANCA!</button>
+    <script>
+        const symbols = ['🎿', '🏂', '❄️', '🪨', '🏆'];
+        let currentBag = 5; // Empiezas con 5 forfaits en saca
+        let playerName = "";
 
-    <div class="message" id="message">¡Prueba tu suerte, Rider!</div>
+        let topScores = JSON.parse(localStorage.getItem('slot_forfait_top')) || [
+            { name: "IVY", score: 25 },
+            { name: "COLET", score: 20 },
+            { name: "RIDER", score: 15 },
+            { name: "POWDER", score: 10 },
+            { name: "CARV", score: 5 }
+        ];
 
-    <div class="stats">
-        <span>Copos: <strong id="credits" style="color: #38bdf8;">100</strong></span>
-        <span>Premios: <strong id="wins" style="color: #22c55e;">0</strong></span>
-    </div>
-</div>
-
-<script>
-    const symbols = ['🏂', '❄️', '⛷️', '🏔️', '🎫', '🍺'];
-    let credits = 100;
-    let wins = 0;
-
-    function spin() {
-        if (credits < 10) {
-            document.getElementById('message').innerText = "❌ ¡Sin copos! Recargando 50 copos...";
-            credits += 50;
-            document.getElementById('credits').innerText = credits;
-            return;
+        function updateUI() {
+            document.getElementById('current-bag').innerText = currentBag;
+            document.getElementById('record-val').innerText = Math.max(...topScores.map(s => s.score), 0);
         }
 
-        credits -= 10;
-        document.getElementById('credits').innerText = credits;
-        
-        const btn = document.getElementById('spinBtn');
-        btn.disabled = true;
-        document.getElementById('message').innerText = "🌀 Girando rodillos...";
-
-        let spinsCount = 0;
-        const interval = setInterval(() => {
-            document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-            document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-            document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-            spinsCount++;
-
-            if (spinsCount > 15) {
-                clearInterval(interval);
-                finalizeSpin();
+        function spinSlot() {
+            if (currentBag <= 0) {
+                alert("¡Te has quedado sin forfaits en la saca! Pulsa ¡A la Saka! para retirar tus ganancias.");
+                return;
             }
-        }, 80);
-    }
 
-    function finalizeSpin() {
-        const r1 = symbols[Math.floor(Math.random() * symbols.length)];
-        const r2 = symbols[Math.floor(Math.random() * symbols.length)];
-        const r3 = symbols[Math.floor(Math.random() * symbols.length)];
+            currentBag--; // Cuesta 1 forfait girar
 
-        document.getElementById('reel1').innerText = r1;
-        document.getElementById('reel2').innerText = r2;
-        document.getElementById('reel3').innerText = r3;
+            const r1 = symbols[Math.floor(Math.random() * symbols.length)];
+            const r2 = symbols[Math.floor(Math.random() * symbols.length)];
+            const r3 = symbols[Math.floor(Math.random() * symbols.length)];
 
-        const msg = document.getElementById('message');
+            document.getElementById('reel1').innerText = r1;
+            document.getElementById('reel2').innerText = r2;
+            document.getElementById('reel3').innerText = r3;
 
-        if (r1 === r2 && r2 === r3) {
-            if (r1 === '🎫') {
-                msg.innerHTML = "🎉 ¡JACKPOT! ¡FORFAIT VIP TEMPORADA GANADO! (+200 copos)";
-                credits += 200;
+            let earned = 0;
+            if (r1 === r2 && r2 === r3) {
+                earned = r1 === '🏆' ? 15 : 8;
+            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                earned = 3;
             } else {
-                msg.innerHTML = `🎉 ¡TRIPLE ${r1}! ¡PREMIO MAYOR! (+100 copos)`;
-                credits += 100;
+                earned = 1;
             }
-            wins++;
-            document.getElementById('wins').innerText = wins;
-        } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-            msg.innerHTML = "✨ ¡Pareja! Te devuelves 15 copos.";
-            credits += 15;
-        } else {
-            msg.innerText = "💥 ¡Sigue intentándolo!";
+
+            currentBag += earned;
+            updateUI();
         }
 
-        document.getElementById('credits').innerText = credits;
-        document.getElementById('spinBtn').disabled = false;
-    }
-</script>
+        function aLaSaka() {
+            if (currentBag <= 0) {
+                alert("No tienes forfaits para guardar.");
+                return;
+            }
 
+            const lowestScore = topScores.length < 5 ? 0 : topScores[topScores.length - 1].score;
+
+            if (currentBag > lowestScore || topScores.length < 5) {
+                document.getElementById('final-forfaits-text').innerText = `¡Te retiras con ${currentBag} forfaits!`;
+                document.getElementById('record-modal').classList.add('active');
+                buildKeyboard();
+            } else {
+                alert(`¡Te has retirado con ${currentBag} forfaits, pero no alcanza para el Top 5!`);
+                currentBag = 5;
+                updateUI();
+            }
+        }
+
+        function openTopModal() {
+            const container = document.getElementById('top-list-container');
+            container.innerHTML = '';
+            topScores.sort((a,b) => b.score - a.score);
+            topScores.slice(0, 5).forEach((item, i) => {
+                const el = document.createElement('div');
+                el.className = 'top-item';
+                el.innerHTML = `<span>#${i+1} ${item.name}</span><span>${item.score} FORFAITS</span>`;
+                container.appendChild(el);
+            });
+            document.getElementById('top-modal').classList.add('active');
+        }
+
+        function closeTopModal() {
+            document.getElementById('top-modal').classList.remove('active');
+        }
+
+        function buildKeyboard() {
+            const keys = [
+                ['Q','W','E','R','T','Y','U','I','O','P'],
+                ['A','S','D','F','G','H','J','K','L'],
+                ['Z','X','C','V','B','N','M','DEL']
+            ];
+            const container = document.getElementById('keyboard');
+            container.innerHTML = '';
+            playerName = "";
+            updateNameDisplay();
+
+            keys.forEach(row => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'kb-row';
+                row.forEach(k => {
+                    const btn = document.createElement('button');
+                    btn.className = `kb-key ${k === 'DEL' ? 'wide' : ''}`;
+                    btn.innerText = k;
+                    btn.onclick = () => {
+                        if (k === 'DEL') {
+                            playerName = playerName.slice(0, -1);
+                        } else if (playerName.length < 5) { // MÁXIMO 5 LETRAS
+                            playerName += k;
+                        }
+                        updateNameDisplay();
+                    };
+                    rowEl.appendChild(btn);
+                });
+                container.appendChild(rowEl);
+            });
+        }
+
+        function updateNameDisplay() {
+            let padded = playerName.padEnd(5, '_');
+            document.getElementById('name-display').innerText = padded;
+        }
+
+        function submitScore() {
+            const finalName = playerName.trim() || "RIDER";
+            topScores.push({ name: finalName, score: currentBag });
+            topScores.sort((a,b) => b.score - a.score);
+            topScores = topScores.slice(0, 5);
+            localStorage.setItem('slot_forfait_top', JSON.stringify(topScores));
+
+            document.getElementById('record-modal').classList.remove('active');
+            currentBag = 5;
+            updateUI();
+            openTopModal();
+        }
+
+        updateUI();
+    </script>
 </body>
 </html>
