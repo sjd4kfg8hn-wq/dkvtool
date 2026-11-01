@@ -486,7 +486,12 @@
     </div>
 
     <script>
-        let forfaits = 10;
+        // --- INICIALIZACIÓN DE FORFAITS ---
+let forfaits = parseInt(localStorage.getItem('snowboard_bj_bank'));
+if (isNaN(forfaits) || forfaits <= 0) {
+    forfaits = 25;
+    localStorage.setItem('snowboard_bj_bank', forfaits);
+}
         let currentBet = 0;
         let deck = [];
         let playerHand = [];
@@ -603,22 +608,33 @@
             });
         }
 
-       function placeBet(amount) {
-    if (forfaits < amount) {
-        document.getElementById('status-msg').innerText = "¡No tienes suficientes Forfaits!";
-        return;
+       function endRound(playerWon, message) {
+    gameOver = true;
+    
+    if (playerWon === true) {
+        forfaits += currentBet * 2;
+    } else if (playerWon === null) {
+        forfaits += currentBet; // Empate
+    }
+    
+    // Si te quedas a 0 o menos, recarga automática de 25 forfaits
+    if (forfaits <= 0) {
+        message += " 💥 ¡Te has quedado sin Forfaits! Se te recargan 25.";
+        forfaits = 25;
     }
 
-    currentBet = amount;
-    forfaits -= amount;
-
     localStorage.setItem('snowboard_bj_bank', forfaits);
+    updateUI();
 
-    gameOver = false;
-    createDeck();
+    document.getElementById('status-msg').innerText = message;
+    
+    // Libera los botones de apuesta
+    document.getElementById('action-controls').style.display = 'none';
+    document.getElementById('bet-controls').style.display = 'flex';
 
-    playerHand = [deck.pop(), deck.pop()];
-    dealerHand = [deck.pop(), deck.pop()];
+    playerHand = [];
+    dealerHand = [];
+}
 
     // Oculta botones de apuesta y muestra los de acción
     document.getElementById('bet-controls').style.display = 'none';
