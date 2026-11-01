@@ -1616,9 +1616,10 @@ const quotesAndImages = [
       <div id="game-snake" class="game-screen" style="display: none;">
     <iframe src="snake/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
 </div>
-     <!-- SLOT FORFAIT -->
+     
 <!-- SLOT FORFAIT -->
-<div id="game-breakout" class="game-screen" style="display: none;">
+      
+<div id="game-slot" class="game-screen">
     <iframe src="slot/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
 </div>
 
@@ -1668,6 +1669,7 @@ function switchGame(gameId) {
   event.currentTarget.classList.add('active');
   const targetScreen = document.getElementById('game-' + gameId);
   if (targetScreen) targetScreen.classList.add('active');
+    
   if (gameId === 'sudoku') initSudoku();
   if (gameId === 'blackjack') checkBjLockStatus();
 }
