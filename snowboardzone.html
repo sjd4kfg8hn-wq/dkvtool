@@ -577,8 +577,14 @@
   background: #38bdf8; color: #0f172a; font-weight: bold;
 }
 
-.game-screen { display: none; text-align: center; }
-.game-screen.active { display: block; }
+.game-screen { 
+    display: none;
+    text-align: center; }
+.game-screen.active {
+    display: block !important;
+    width: 100%;
+    height: 100%;
+}
 
 canvas {
   background: #000; border-radius: 8px; max-width: 100%; height: auto;
@@ -1620,7 +1626,7 @@ const quotesAndImages = [
        
        <!-- 🎧 BOTÓN LATERAL IZQUIERDO: SNOWZONESTUDIO -->
     <button class="studio-side-btn" onclick="switchGame('groovebox')">
-         SNOWSTUDIO
+        🔊 SNOWSTUDIO
     </button>
        
       <button class="game-tab active" onclick="switchGame('blackjack')">🎰 Blackjack Forfaits</button>
@@ -1638,9 +1644,9 @@ const quotesAndImages = [
     <iframe src="snake/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
 </div>
       
-<!-- 🎧 PANTALLA NUEVA: SNOWZONESTUDIO (GROOVEBOX) -->
-    <div id="game-groovebox" class="game-screen" style="display: none;">
-        <iframe src="groovebox/index.html" width="100%" height="560" style="border: none; background: transparent;"></iframe>
+<!-- PANTALLA NUEVA: SNOWZONESTUDIO (GROOVEBOX) -->
+<div id="game-groovebox" class="game-screen">
+    <iframe src="groovebox/index.html" width="100%" height="560" style="border: none; background: transparent;"></iframe>
     </div>
 <script>
     
