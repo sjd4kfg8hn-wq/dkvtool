@@ -597,7 +597,37 @@ canvas {
 
 .sudoku-cell.selected { background: #0284c7; }
 .sudoku-cell.fixed { background: #0f172a; color: #94a3b8; }
-    </style>
+        .sudoku-cell.selected { background: #0284c7; }
+    .sudoku-cell.fixed { background: #0f172a; color: #94a3b8; }
+
+    /* 🎧 ESTILO PARA EL BOTÓN LATERAL SNOWZONESTUDIO */
+    .studio-side-btn {
+        position: absolute;
+        left: -78px;
+        top: 50%;
+        transform: translateY(-50%) rotate(-90deg);
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        border: 2px solid #38bdf8;
+        color: #38bdf8;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-family: 'Permanent Marker', cursive;
+        font-size: 14px;
+        letter-spacing: 2px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        z-index: 100;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .studio-side-btn:hover, .studio-side-btn.active {
+        background: #38bdf8;
+        color: #0f172a;
+        box-shadow: 0 0 30px #38bdf8;
+        transform: translateY(-50%) rotate(-90deg) scale(1.05);
+    }
+</style>
 </head>
 <body>
 
@@ -1588,7 +1618,13 @@ const quotesAndImages = [
     </div>
     
     <!-- Pestañas de minijuegos -->
-    <div class="games-tabs">
+   <div class="games-tabs" style="position: relative;">
+       
+       <!-- 🎧 BOTÓN LATERAL IZQUIERDO: SNOWZONESTUDIO -->
+    <button class="studio-side-btn" onclick="switchGame('groovebox')">
+        SNOWZONESTUDIO
+    </button>
+       
       <button class="game-tab active" onclick="switchGame('blackjack')">🎰 Blackjack Forfaits</button>
       <button class="game-tab" onclick="switchGame('snake')">🐍 Snake</button>
       <button class="game-tab" onclick="switchGame('slot')">🎰 Slot Forfait</button>
@@ -1603,6 +1639,11 @@ const quotesAndImages = [
       <div id="game-snake" class="game-screen">
     <iframe src="snake/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
 </div>
+      
+<!-- 🎧 PANTALLA NUEVA: SNOWZONESTUDIO (GROOVEBOX) -->
+    <div id="game-groovebox" class="game-screen" style="display: none;">
+        <iframe src="groovebox/index.html" width="100%" height="560" style="border: none; background: transparent;"></iframe>
+    </div>
 <script>
     
     function closeBlackjackModal() {
@@ -1663,15 +1704,25 @@ function closeGamesModal(e) {
 }
 
 function switchGame(gameId) {
-  document.querySelectorAll('.game-tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.game-screen').forEach(screen => screen.classList.remove('active'));
-  
-  event.currentTarget.classList.add('active');
-  const targetScreen = document.getElementById('game-' + gameId);
-  if (targetScreen) targetScreen.classList.add('active');
-    
-  if (gameId === 'sudoku') initSudoku();
-  if (gameId === 'blackjack') checkBjLockStatus();
+    // Quita la clase 'active' de todas las pestañas y del botón lateral del estudio
+    document.querySelectorAll('.game-tab, .studio-side-btn').forEach(tab => tab.classList.remove('active'));
+    // Oculta todas las pantallas de juegos/estudio
+    document.querySelectorAll('.game-screen').forEach(screen => screen.classList.remove('active'));
+
+    // Activa el botón o pestaña que se acaba de pulsar
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
+
+    // Muestra la pantalla correspondiente al juego o estudio seleccionado
+    const targetScreen = document.getElementById('game-' + gameId);
+    if (targetScreen) {
+        targetScreen.classList.add('active');
+    }
+
+    // Funciones específicas de cada sección
+    if (gameId === 'sudoku') initSudoku();
+    if (gameId === 'blackjack') checkBjLockStatus();
 }
 
 let selectedSudokuCell = null;
