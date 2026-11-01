@@ -100,48 +100,80 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 16px;
             position: relative;
+            gap: 16px;
         }
 
-        /* Estilo original de los rodillos de Slot Forfait */
-        .slot-container {
+        /* Ruletas Originales con borde Teal */
+        .slot-frame {
+            background: #090d16;
+            border: 3px solid var(--accent-teal);
+            border-radius: 18px;
+            padding: 16px 20px;
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 15px rgba(45, 212, 191, 0.2);
         }
 
         .slot-reel {
-            width: 75px;
-            height: 90px;
-            background: #090d16;
-            border: 2px solid var(--accent-teal);
+            width: 70px;
+            height: 80px;
+            background: #0f172a;
+            border: 2px solid rgba(56, 189, 248, 0.4);
             border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+            font-size: 38px;
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
+            transition: transform 0.05s ease;
+        }
+
+        .slot-reel.spinning {
+            filter: blur(1px);
+        }
+
+        .forfait-bag-badge {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid var(--gold);
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--gold);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 320px;
         }
 
         .btn-start {
+            flex: 1;
             background: linear-gradient(135deg, #0284c7, #0369a1);
             color: white;
             border: 1px solid var(--accent-blue);
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            margin-top: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
-        .btn-start:hover { background: #0284c7; }
+        .btn-start:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
         .btn-saka {
             background: linear-gradient(135deg, #10b981, #059669) !important;
             border-color: #34d399 !important;
-            margin-left: 6px;
         }
 
         /* MODALES */
@@ -218,13 +250,13 @@
         .name-display {
             background: #020617;
             border: 1px solid var(--accent-blue);
-            padding: 4px 10px;
+            padding: 6px 10px;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--snow-white);
             min-width: 140px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-align: center;
             margin-bottom: 6px;
         }
@@ -234,7 +266,7 @@
             font-size: 20px;
             font-family: 'Fredoka One', cursive;
             text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -247,19 +279,24 @@
                 <span>🎫</span> SLOT FORFAIT
             </div>
             <div class="stats-bar">
-                <div class="stat-item">BAG: <span id="bag-val">5</span></div>
+                <div class="stat-item">RÉCORD: <span id="record-val">25</span></div>
                 <button class="top-btn" onclick="openTopModal()">TOP 5</button>
             </div>
         </div>
 
         <!-- ÁREA DE JUEGO ORIGINAL -->
         <div class="game-canvas-container">
-            <div class="slot-container">
-                <div class="slot-reel" id="reel1">🎿</div>
-                <div class="slot-reel" id="reel2">🏂</div>
-                <div class="slot-reel" id="reel3">❄️</div>
+            <div class="slot-frame">
+                <div class="slot-reel" id="reel1">❄️</div>
+                <div class="slot-reel" id="reel2">❄️</div>
+                <div class="slot-reel" id="reel3">🏂</div>
             </div>
-            <div>
+
+            <div class="forfait-bag-badge">
+                🎟️ Forfaits en saca: <span id="bag-val">10</span>
+            </div>
+
+            <div class="button-group">
                 <button class="btn-start" id="spin-btn" onclick="spinSlot()">GIRAR (1 🎟️)</button>
                 <button class="btn-start btn-saka" id="saka-btn" onclick="aLaSaka()">¡A LA SAKA!</button>
             </div>
@@ -272,7 +309,7 @@
             <button class="btn-start" onclick="closeTopModal()" style="width: 100%;">CERRAR</button>
         </div>
 
-        <!-- MODAL RÉCORD (MÁX 5 LETRAS) -->
+        <!-- MODAL RÉCORD (MÁXIMO 5 LETRAS) -->
         <div class="modal-overlay" id="crash-modal">
             <div class="crash-text">🏔️ ¡A LA SAKA RECORD!</div>
             <div style="font-size: 12px; margin-bottom: 6px;" id="final-score-text">Has conseguido 0 forfaits</div>
@@ -286,7 +323,8 @@
 
     <script>
         const symbols = ['🎿', '🏂', '❄️', '🪨', '🏆'];
-        let currentBag = 5;
+        let currentBag = 10;
+        let isSpinning = false;
         let playerName = "";
 
         let topScores = JSON.parse(localStorage.getItem('slot_forfait_top')) || [
@@ -299,53 +337,94 @@
 
         function updateStats() {
             document.getElementById('bag-val').innerText = currentBag;
+            const highestScore = topScores.length > 0 ? Math.max(...topScores.map(s => s.score)) : 0;
+            document.getElementById('record-val').innerText = highestScore;
         }
 
         function spinSlot() {
-            if (currentBag <= 0) {
-                alert("¡No te quedan forfaits! Pulsa ¡A la Saka! para guardar tu puntuación.");
+            if (isSpinning) return;
+            if (currentBag < 1) {
+                alert("¡No te quedan forfaits para girar! Pulsa ¡A LA SAKA! si quieres registrar tus puntos.");
                 return;
             }
 
-            currentBag--; // Cuesta 1 forfait girar
+            // Descontar la apuesta de 1 forfait
+            currentBag--;
             updateStats();
+            isSpinning = true;
 
-            const r1 = symbols[Math.floor(Math.random() * symbols.length)];
-            const r2 = symbols[Math.floor(Math.random() * symbols.length)];
-            const r3 = symbols[Math.floor(Math.random() * symbols.length)];
+            const spinBtn = document.getElementById('spin-btn');
+            spinBtn.disabled = true;
 
-            document.getElementById('reel1').innerText = r1;
-            document.getElementById('reel2').innerText = r2;
-            document.getElementById('reel3').innerText = r3;
+            const reel1 = document.getElementById('reel1');
+            const reel2 = document.getElementById('reel2');
+            const reel3 = document.getElementById('reel3');
 
-            let earned = 0;
-            if (r1 === r2 && r2 === r3) {
-                earned = r1 === '🏆' ? 12 : 6;
-            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                earned = 3;
-            } else {
-                earned = 1;
-            }
+            reel1.classList.add('spinning');
+            reel2.classList.add('spinning');
+            reel3.classList.add('spinning');
 
-            currentBag += earned;
-            updateStats();
+            // Efecto visual de animación giratoria rápida
+            let counter = 0;
+            const interval = setInterval(() => {
+                reel1.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                reel2.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                reel3.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                counter++;
+
+                if (counter > 15) {
+                    clearInterval(interval);
+                    
+                    // Elegir resultados finales de verdad
+                    const final1 = symbols[Math.floor(Math.random() * symbols.length)];
+                    const final2 = symbols[Math.floor(Math.random() * symbols.length)];
+                    const final3 = symbols[Math.floor(Math.random() * symbols.length)];
+
+                    reel1.innerText = final1;
+                    reel1.classList.remove('spinning');
+
+                    setTimeout(() => {
+                        reel2.innerText = final2;
+                        reel2.classList.remove('spinning');
+                    }, 150);
+
+                    setTimeout(() => {
+                        reel3.innerText = final3;
+                        reel3.classList.remove('spinning');
+
+                        // LÓGICA DE PREMIOS REAL
+                        let prize = 0;
+                        if (final1 === final2 && final2 === final3) {
+                            prize = final1 === '🏆' ? 20 : 10; // Trío
+                        } else if (final1 === final2 || final2 === final3 || final1 === final3) {
+                            prize = 3; // Pareja
+                        } // Si no hay coincidencias, 0 premios (pierde el forfait)
+
+                        currentBag += prize;
+                        updateStats();
+                        isSpinning = false;
+                        spinBtn.disabled = false;
+                    }, 300);
+                }
+            }, 60);
         }
 
         function aLaSaka() {
+            if (isSpinning) return;
             if (currentBag <= 0) {
-                alert("No tienes forfaits para llevarte a la saca.");
+                alert("No tienes forfaits para meter en la saca.");
                 return;
             }
 
             const lowestScore = topScores.length < 5 ? 0 : topScores[topScores.length - 1].score;
 
             if (currentBag > lowestScore || topScores.length < 5) {
-                document.getElementById('final-score-text').innerText = `Te retiras con ${currentBag} forfaits en la saca`;
+                document.getElementById('final-score-text').innerText = `¡Te retiras con ${currentBag} forfaits!`;
                 document.getElementById('crash-modal').classList.add('active');
                 buildKeyboard();
             } else {
-                alert(`¡Te has llevado ${currentBag} forfaits a la saca, pero no entra en el Top 5!`);
-                currentBag = 5;
+                alert(`¡Has guardado ${currentBag} forfaits en la saca, pero no entra en el Top 5!`);
+                currentBag = 10; // Reiniciar
                 updateStats();
             }
         }
@@ -388,7 +467,7 @@
                     btn.onclick = () => {
                         if (k === 'DEL') {
                             playerName = playerName.slice(0, -1);
-                        } else if (playerName.length < 5) { // Máximo 5 letras
+                        } else if (playerName.length < 5) { // Máximo 5 caracteres
                             playerName += k;
                         }
                         updateNameDisplay();
@@ -412,7 +491,7 @@
             localStorage.setItem('slot_forfait_top', JSON.stringify(topScores));
 
             document.getElementById('crash-modal').classList.remove('active');
-            currentBag = 5;
+            currentBag = 10;
             updateStats();
             openTopModal();
         }
