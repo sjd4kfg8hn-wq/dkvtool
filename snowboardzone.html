@@ -1782,6 +1782,37 @@ function checkBjLockStatus() {}
         <a href="cookies.html" style="color: #38bdf8; text-decoration: none; margin: 0 8px;">Política de Cookies</a>
     </p>
 </footer>
-    
+<!-- PASO 1: Modal global para ver mapas en pantalla completa -->
+<div id="modalMapaGlobal" onclick="cerrarMapaZoom()" style="display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(2, 6, 23, 0.92); backdrop-filter: blur(5px); justify-content: center; align-items: center; cursor: zoom-out;">
+    <span style="position: absolute; top: 20px; right: 25px; font-size: 32px; color: #38bdf8; font-weight: bold; cursor: pointer;">&times;</span>
+    <img id="imgZoomGlobal" style="max-width: 92%; max-height: 90%; border-radius: 12px; box-shadow: 0 0 30px rgba(56, 189, 248, 0.3); border: 1px solid rgba(56, 189, 248, 0.3); object-fit: contain;">
+</div>  
+    <script>
+// Funciones para el zoom global de mapas
+function abrirMapaZoom(src) {
+    const modal = document.getElementById('modalMapaGlobal');
+    const imgZoom = document.getElementById('imgZoomGlobal');
+    if (modal && imgZoom) {
+        imgZoom.src = src;
+        modal.style.display = 'flex';
+    }
+}
+
+function cerrarMapaZoom() {
+    const modal = document.getElementById('modalMapaGlobal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Activa el zoom automáticamente en las imágenes de mapas y planos de pistas
+document.addEventListener('DOMContentLoaded', () => {
+    const mapas = document.querySelectorAll('img[src*="mapa"], img[src*="plano"], .mapa-pistas');
+    mapas.forEach(img => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', () => abrirMapaZoom(img.src));
+    });
+});
+</script>
 </body>
 </html>
