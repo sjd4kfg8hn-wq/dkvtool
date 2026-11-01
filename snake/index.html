@@ -332,56 +332,64 @@
     </div>
 
     <script>
-        const canvas = document.getElementById('snakeCanvas');
-        const ctx = canvas.getContext('2d');
-        const gridSize = 18; // 20x20 casillas (360px / 18px)
-        const tileCount = canvas.width / gridSize;
+        <script>
+    const canvas = document.getElementById('snakeCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 18; // 20x20 casillas (360px / 18px)
+    const tileCount = canvas.width / gridSize;
 
-        let snake = [];
-        let food = { x: 0, y: 0 };
-        let dx = gridSize;
-        let dy = 0;
-        let score = 0;
-        let level = 1;
-        let speedMultiplier = 1;
-        let applesEaten = 0;
-        let gameLoop = null;
-        let levelTimer = null;
-        let isRunning = false;
-        let obstacles = [];
-        let playerName = "";
+    let snake = [];
+    let food = { x: 0, y: 0 };
+    let dx = gridSize;
+    let dy = 0;
+    let score = 0;
+    let level = 1;
+    let speedMultiplier = 1;
+    let applesEaten = 0;
+    let gameLoop = null;
+    let levelTimer = null;
+    let isRunning = false;
+    let obstacles = [];
+    let playerName = "";
 
-        // Web Audio API Synth
-        let audioCtx = null;
-        let musicTimer = null;
-        let currentNoteIndex = 0;
+    // Web Audio API Synth
+    let audioCtx = null;
+    let musicTimer = null;
+    let currentNoteIndex = 0;
 
-        const tetrisMelody = [
-            { note: 76, duration: 400 }, { note: 71, duration: 200 }, { note: 72, duration: 200 }, { note: 74, duration: 400 },
-            { note: 72, duration: 200 }, { note: 71, duration: 200 }, { note: 69, duration: 400 }, { note: 69, duration: 200 },
-            { note: 72, duration: 200 }, { note: 76, duration: 400 }, { note: 74, duration: 200 }, { note: 72, duration: 200 },
-            { note: 71, duration: 600 }, { note: 72, duration: 200 }, { note: 74, duration: 400 }, { note: 76, duration: 400 },
-            { note: 72, duration: 400 }, { note: 69, duration: 400 }, { note: 69, duration: 400 }
-        ];
+    const tetrisMelody = [
+        { note: 76, duration: 400 }, { note: 71, duration: 200 }, { note: 72, duration: 200 }, { note: 74, duration: 400 },
+        { note: 72, duration: 200 }, { note: 71, duration: 200 }, { note: 69, duration: 400 }, { note: 69, duration: 200 },
+        { note: 72, duration: 200 }, { note: 76, duration: 400 }, { note: 74, duration: 200 }, { note: 72, duration: 200 },
+        { note: 71, duration: 600 }, { note: 72, duration: 200 }, { note: 74, duration: 400 }, { note: 76, duration: 400 },
+        { note: 72, duration: 400 }, { note: 69, duration: 400 }, { note: 69, duration: 400 }
+    ];
 
-        let topScores = JSON.parse(localStorage.getItem('snake_snow_top')) || [
-            { name: "POWDER_KING", score: 30 },
-            { name: "SNOW_QUEEN", score: 22 },
-            { name: "FREERIDER", score: 15 },
-            { name: "CARVER", score: 10 },
-            { name: "ROOKIE", score: 5 }
-        ];
+    let topScores = JSON.parse(localStorage.getItem('snake_snow_top')) || [
+        { name: "POWDER_KING", score: 30 },
+        { name: "SNOW_QUEEN", score: 22 },
+        { name: "FREERIDER", score: 15 },
+        { name: "CARVER", score: 10 },
+        { name: "ROOKIE", score: 5 }
+    ];
 
-        function initAudio() {
+    function initAudio() {
+        try {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        } catch (e) {
+            console.log("Audio no soportado o bloqueado");
         }
+    }
 
-        function playTetrisNote() {
-            if (!isRunning || !audioCtx) return;
+    function playTetrisNote() {
+        if (!isRunning || !audioCtx) return;
+        try {
             const noteData = tetrisMelody[currentNoteIndex];
-            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
@@ -402,10 +410,14 @@
 
             const nextDelay = (noteData.duration) / speedMultiplier;
             musicTimer = setTimeout(playTetrisNote, Math.max(100, nextDelay));
+        } catch (e) {
+            // Si el audio falla en móviles, el juego no se detiene
         }
+    }
 
-        function playCrashSound() {
-            if (!audioCtx) return;
+    function playCrashSound() {
+        if (!audioCtx) return;
+        try {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
@@ -421,249 +433,243 @@
 
             osc.start();
             osc.stop(audioCtx.currentTime + 0.4);
+        } catch(e) {}
+    }
+
+    function startGame() {
+        initAudio();
+        document.getElementById('start-btn').style.display = 'none';
+        document.getElementById('crash-modal').classList.remove('active');
+
+        snake = [
+            { x: 5 * gridSize, y: 10 * gridSize },
+            { x: 4 * gridSize, y: 10 * gridSize },
+            { x: 3 * gridSize, y: 10 * gridSize }
+        ];
+        dx = gridSize;
+        dy = 0;
+        score = 0;
+        level = 1;
+        speedMultiplier = 1;
+        applesEaten = 0;
+        obstacles = [];
+        isRunning = true;
+
+        updateStats();
+        spawnFood();
+        
+        clearInterval(gameLoop);
+        clearInterval(levelTimer);
+        clearTimeout(musicTimer);
+
+        levelTimer = setInterval(() => {
+            level++;
+            speedMultiplier *= 1.5;
+            if (level >= 3) generateObstacles();
+            updateStats();
+            restartLoop();
+        }, 30000);
+
+        restartLoop();
+        draw(); // Pintar la serpiente de inmediato
+        
+        currentNoteIndex = 0;
+        playTetrisNote();
+    }
+
+    function restartLoop() {
+        if (gameLoop) clearInterval(gameLoop);
+        const interval = Math.max(50, 160 / speedMultiplier);
+        gameLoop = setInterval(step, interval);
+    }
+
+    function generateObstacles() {
+        obstacles = [];
+        const count = Math.min(10, (level - 2) * 3);
+        for (let i = 0; i < count; i++) {
+            let obsX, obsY;
+            do {
+                obsX = Math.floor(Math.random() * tileCount) * gridSize;
+                obsY = Math.floor(Math.random() * tileCount) * gridSize;
+            } while (
+                (obsX === snake[0].x && obsY === snake[0].y) ||
+                (obsX === food.x && obsY === food.y)
+            );
+            obstacles.push({ x: obsX, y: obsY });
+        }
+    }
+
+    function spawnFood() {
+        food.x = Math.floor(Math.random() * tileCount) * gridSize;
+        food.y = Math.floor(Math.random() * tileCount) * gridSize;
+    }
+
+    function step() {
+        if (!isRunning) return;
+
+        const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+        if (level <= 3) {
+            canvas.className = "walls-active";
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                return gameOver();
+            }
+        } else {
+            canvas.className = "walls-off";
+            if (head.x < 0) head.x = canvas.width - gridSize;
+            if (head.x >= canvas.width) head.x = 0;
+            if (head.y < 0) head.y = canvas.height - gridSize;
+            if (head.y >= canvas.height) head.y = 0;
         }
 
-        function startGame() {
-            initAudio();
-            document.getElementById('start-btn').style.display = 'none';
-            document.getElementById('crash-modal').classList.remove('active');
+        for (let segment of snake) {
+            if (head.x === segment.x && head.y === segment.y) return gameOver();
+        }
 
-            snake = [
-                { x: 5 * gridSize, y: 10 * gridSize },
-                { x: 4 * gridSize, y: 10 * gridSize },
-                { x: 3 * gridSize, y: 10 * gridSize }
-            ];
-            dx = gridSize;
-            dy = 0;
-            score = 0;
-            level = 1;
-            speedMultiplier = 1;
-            applesEaten = 0;
-            obstacles = [];
-            isRunning = true;
+        if (level >= 3) {
+            for (let obs of obstacles) {
+                if (head.x === obs.x && head.y === obs.y) return gameOver();
+            }
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+            score += 1;
+            applesEaten += 1;
+
+            if (applesEaten % 3 === 0) {
+                speedMultiplier += 0.5;
+                restartLoop();
+            }
 
             updateStats();
             spawnFood();
-            
-            clearInterval(gameLoop);
-            clearInterval(levelTimer);
-            clearTimeout(musicTimer);
-
-            levelTimer = setInterval(() => {
-                level++;
-                speedMultiplier *= 1.5;
-                if (level >= 3) generateObstacles();
-                updateStats();
-                restartLoop();
-            }, 30000);
-
-            restartLoop();
-            currentNoteIndex = 0;
-            playTetrisNote();
+        } else {
+            snake.pop();
         }
 
-        function restartLoop() {
-            if (gameLoop) clearInterval(gameLoop);
-            const interval = Math.max(50, 160 / speedMultiplier);
-            gameLoop = setInterval(step, interval);
-        }
+        draw();
+    }
 
-        function generateObstacles() {
-            obstacles = [];
-            const count = Math.min(10, (level - 2) * 3);
-            for (let i = 0; i < count; i++) {
-                let obsX, obsY;
-                do {
-                    obsX = Math.floor(Math.random() * tileCount) * gridSize;
-                    obsY = Math.floor(Math.random() * tileCount) * gridSize;
-                } while (
-                    (obsX === snake[0].x && obsY === snake[0].y) ||
-                    (obsX === food.x && obsY === food.y)
-                );
-                obstacles.push({ x: obsX, y: obsY });
-            }
-        }
+    function draw() {
+        ctx.fillStyle = '#090d16';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        function spawnFood() {
-            food.x = Math.floor(Math.random() * tileCount) * gridSize;
-            food.y = Math.floor(Math.random() * tileCount) * gridSize;
-        }
-
-        function step() {
-            if (!isRunning) return;
-
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-
-            if (level <= 3) {
-                canvas.className = "walls-active";
-                if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-                    return gameOver();
-                }
-            } else {
-                canvas.className = "walls-off";
-                if (head.x < 0) head.x = canvas.width - gridSize;
-                if (head.x >= canvas.width) head.x = 0;
-                if (head.y < 0) head.y = canvas.height - gridSize;
-                if (head.y >= canvas.height) head.y = 0;
-            }
-
-            for (let segment of snake) {
-                if (head.x === segment.x && head.y === segment.y) return gameOver();
-            }
-
-            if (level >= 3) {
-                for (let obs of obstacles) {
-                    if (head.x === obs.x && head.y === obs.y) return gameOver();
-                }
-            }
-
-            snake.unshift(head);
-
-            if (head.x === food.x && head.y === food.y) {
-                score += 1;
-                applesEaten += 1;
-
-                if (applesEaten % 3 === 0) {
-                    speedMultiplier += 0.5;
-                    restartLoop();
-                }
-
-                updateStats();
-                spawnFood();
-            } else {
-                snake.pop();
-            }
-
-            draw();
-        }
-
-        function draw() {
-            ctx.fillStyle = '#090d16';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (level >= 3) {
-                ctx.font = '14px sans-serif';
-                for (let obs of obstacles) {
-                    ctx.fillText('🪨', obs.x + 2, obs.y + 14);
-                }
-            }
-
+        if (level >= 3) {
             ctx.font = '14px sans-serif';
-            ctx.fillText('❄️', food.x + 2, food.y + 14);
-
-            snake.forEach((segment, index) => {
-                ctx.font = index === 0 ? '15px sans-serif' : '12px sans-serif';
-                ctx.fillText('❄️', segment.x + 2, segment.y + 14);
-            });
-        }
-
-        function gameOver() {
-            isRunning = false;
-            clearInterval(gameLoop);
-            clearInterval(levelTimer);
-            clearTimeout(musicTimer);
-            playCrashSound();
-
-            document.getElementById('final-score-text').innerText = `Puntuación obtenida: ${score} copos`;
-            document.getElementById('crash-modal').classList.add('active');
-            buildKeyboard();
-        }
-
-        function updateStats() {
-            document.getElementById('score-val').innerText = score;
-            document.getElementById('level-val').innerText = level;
-        }
-
-        // Teclado físico
-        window.addEventListener('keydown', e => {
-            if (!isRunning) return;
-            if ((e.key === 'ArrowUp' || e.key === 'w') && dy === 0) { dx = 0; dy = -gridSize; }
-            if ((e.key === 'ArrowDown' || e.key === 's') && dy === 0) { dx = 0; dy = gridSize; }
-            if ((e.key === 'ArrowLeft' || e.key === 'a') && dx === 0) { dx = -gridSize; dy = 0; }
-            if ((e.key === 'ArrowRight' || e.key === 'd') && dx === 0) { dx = gridSize; dy = 0; }
-        });
-
-        // Controles Táctiles (Botonera Pad) corregidos
-        function setSnakeDirection(dir) {
-            if (!isRunning) return;
-            
-            if (dir === 'UP' && dy === 0) { 
-                dx = 0; 
-                dy = -gridSize; 
-            } else if (dir === 'DOWN' && dy === 0) { 
-                dx = 0; 
-                dy = gridSize; 
-            } else if (dir === 'LEFT' && dx === 0) { 
-                dx = -gridSize; 
-                dy = 0; 
-            } else if (dir === 'RIGHT' && dx === 0) { 
-                dx = gridSize; 
-                dy = 0; 
+            for (let obs of obstacles) {
+                ctx.fillText('🪨', obs.x + 2, obs.y + 14);
             }
         }
 
-        // Modal Top 5
-        function openTopModal() {
-            const container = document.getElementById('top-list-container');
-            container.innerHTML = '';
-            topScores.sort((a,b) => b.score - a.score);
-            topScores.slice(0, 5).forEach((item, i) => {
-                const el = document.createElement('div');
-                el.className = 'top-item';
-                el.innerHTML = `<span>#${i+1} ${item.name}</span><span>${item.score} PTS</span>`;
-                container.appendChild(el);
+        ctx.font = '14px sans-serif';
+        ctx.fillText('❄️', food.x + 2, food.y + 14);
+
+        snake.forEach((segment, index) => {
+            ctx.font = index === 0 ? '15px sans-serif' : '12px sans-serif';
+            ctx.fillText('❄️', segment.x + 2, segment.y + 14);
+        });
+    }
+
+    function gameOver() {
+        isRunning = false;
+        clearInterval(gameLoop);
+        clearInterval(levelTimer);
+        clearTimeout(musicTimer);
+        playCrashSound();
+
+        document.getElementById('final-score-text').innerText = `Puntuación obtenida: ${score} copos`;
+        document.getElementById('crash-modal').classList.add('active');
+        buildKeyboard();
+    }
+
+    function updateStats() {
+        document.getElementById('score-val').innerText = score;
+        document.getElementById('level-val').innerText = level;
+    }
+
+    // Teclado físico (PC)
+    window.addEventListener('keydown', e => {
+        if (!isRunning) return;
+        if ((e.key === 'ArrowUp' || e.key === 'w') && dy === 0) { dx = 0; dy = -gridSize; }
+        if ((e.key === 'ArrowDown' || e.key === 's') && dy === 0) { dx = 0; dy = gridSize; }
+        if ((e.key === 'ArrowLeft' || e.key === 'a') && dx === 0) { dx = -gridSize; dy = 0; }
+        if ((e.key === 'ArrowRight' || e.key === 'd') && dx === 0) { dx = gridSize; dy = 0; }
+    });
+
+    // Controles Táctiles (Botonera Pad Móvil)
+    function setSnakeDirection(dir) {
+        if (!isRunning) return;
+        if (dir === 'UP' && dy === 0) { dx = 0; dy = -gridSize; }
+        if (dir === 'DOWN' && dy === 0) { dx = 0; dy = gridSize; }
+        if (dir === 'LEFT' && dx === 0) { dx = -gridSize; dy = 0; }
+        if (dir === 'RIGHT' && dx === 0) { dx = gridSize; dy = 0; }
+    }
+
+    // Modal Top 5
+    function openTopModal() {
+        const container = document.getElementById('top-list-container');
+        container.innerHTML = '';
+        topScores.sort((a,b) => b.score - a.score);
+        topScores.slice(0, 5).forEach((item, i) => {
+            const el = document.createElement('div');
+            el.className = 'top-item';
+            el.innerHTML = `<span>#${i+1} ${item.name}</span><span>${item.score} PTS</span>`;
+            container.appendChild(el);
+        });
+        document.getElementById('top-modal').classList.add('active');
+    }
+
+    function closeTopModal() {
+        document.getElementById('top-modal').classList.remove('active');
+    }
+
+    // Teclado Virtual para Récords
+    function buildKeyboard() {
+        const keys = [
+            ['Q','W','E','R','T','Y','U','I','O','P'],
+            ['A','S','D','F','G','H','J','K','L'],
+            ['Z','X','C','V','B','N','M','DEL']
+        ];
+        const container = document.getElementById('keyboard');
+        container.innerHTML = '';
+        playerName = "";
+        updateNameDisplay();
+
+        keys.forEach(row => {
+            const rowEl = document.createElement('div');
+            rowEl.className = 'kb-row';
+            row.forEach(k => {
+                const btn = document.createElement('button');
+                btn.className = `kb-key ${k === 'DEL' ? 'wide' : ''}`;
+                btn.innerText = k;
+                btn.onclick = () => {
+                    if (k === 'DEL') playerName = playerName.slice(0, -1);
+                    else if (playerName.length < 8) playerName += k;
+                    updateNameDisplay();
+                };
+                rowEl.appendChild(btn);
             });
-            document.getElementById('top-modal').classList.add('active');
-        }
+            container.appendChild(rowEl);
+        });
+    }
 
-        function closeTopModal() {
-            document.getElementById('top-modal').classList.remove('active');
-        }
+    function updateNameDisplay() {
+        document.getElementById('name-display').innerText = playerName || "ESCRIBE...";
+    }
 
-        // Teclado Virtual para Récords
-        function buildKeyboard() {
-            const keys = [
-                ['Q','W','E','R','T','Y','U','I','O','P'],
-                ['A','S','D','F','G','H','J','K','L'],
-                ['Z','X','C','V','B','N','M','DEL']
-            ];
-            const container = document.getElementById('keyboard');
-            container.innerHTML = '';
-            playerName = "";
-            updateNameDisplay();
+    function submitScore() {
+        const finalName = playerName.trim() || "RIDER";
+        topScores.push({ name: finalName, score: score });
+        topScores.sort((a,b) => b.score - a.score);
+        topScores = topScores.slice(0, 5);
+        localStorage.setItem('snake_snow_top', JSON.stringify(topScores));
 
-            keys.forEach(row => {
-                const rowEl = document.createElement('div');
-                rowEl.className = 'kb-row';
-                row.forEach(k => {
-                    const btn = document.createElement('button');
-                    btn.className = `kb-key ${k === 'DEL' ? 'wide' : ''}`;
-                    btn.innerText = k;
-                    btn.onclick = () => {
-                        if (k === 'DEL') playerName = playerName.slice(0, -1);
-                        else if (playerName.length < 8) playerName += k;
-                        updateNameDisplay();
-                    };
-                    rowEl.appendChild(btn);
-                });
-                container.appendChild(rowEl);
-            });
-        }
-
-        function updateNameDisplay() {
-            document.getElementById('name-display').innerText = playerName || "ESCRIBE...";
-        }
-
-        function submitScore() {
-            const finalName = playerName.trim() || "RIDER";
-            topScores.push({ name: finalName, score: score });
-            topScores.sort((a,b) => b.score - a.score);
-            topScores = topScores.slice(0, 5);
-            localStorage.setItem('snake_snow_top', JSON.stringify(topScores));
-
-            document.getElementById('crash-modal').classList.remove('active');
-            location.reload();
-        }
+        document.getElementById('crash-modal').classList.remove('active');
+        location.reload();
+    }
+</script>
     </script>
 </body>
 </html>
