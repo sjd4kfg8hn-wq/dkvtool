@@ -598,7 +598,9 @@
             localStorage.setItem('snake_snow_top', JSON.stringify(topScores));
 
             document.getElementById('crash-modal').classList.remove('active');
-            startGame();
+            
+document.getElementById('start-screen').style.display = 'block'; // Muestra la pantalla inicial
+document.getElementById('game-canvas').style.display = 'none';   // Oculta el lienzo de juego
         }
     </script>
 </body>
