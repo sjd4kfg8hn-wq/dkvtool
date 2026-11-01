@@ -600,33 +600,33 @@ canvas {
         .sudoku-cell.selected { background: #0284c7; }
     .sudoku-cell.fixed { background: #0f172a; color: #94a3b8; }
 
-    /* 🎧 ESTILO PARA EL BOTÓN LATERAL SNOWZONESTUDIO */
-    .studio-side-btn {
-        position: absolute;
-        left: -78px;
-        top: 50%;
-        transform: translateY(-50%) rotate(-90deg);
-        background: linear-gradient(135deg, #1e293b, #0f172a);
-        border: 2px solid #38bdf8;
-        color: #38bdf8;
-        padding: 10px 20px;
-        border-radius: 12px;
-        font-family: 'Permanent Marker', cursive;
-        font-size: 14px;
-        letter-spacing: 2px;
-        cursor: pointer;
-        box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-        z-index: 100;
-        transition: all 0.3s ease;
-        white-space: nowrap;
-    }
+   /* Pestaña lateral estilo solapa para SNOWZONESTUDIO */
+.studio-side-btn {
+    position: absolute;
+    left: -145px; /* Lo saca hacia la izquierda del cuadro principal */
+    top: 20px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid #38bdf8;
+    border-right: none; /* Se conecta visualmente al cuadro */
+    color: #38bdf8;
+    padding: 10px 14px;
+    border-radius: 10px 0 0 10px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: -5px 0 15px rgba(56, 189, 248, 0.2);
+    z-index: 100;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
 
-    .studio-side-btn:hover, .studio-side-btn.active {
-        background: #38bdf8;
-        color: #0f172a;
-        box-shadow: 0 0 30px #38bdf8;
-        transform: translateY(-50%) rotate(-90deg) scale(1.05);
-    }
+.studio-side-btn:hover, .studio-side-btn.active {
+    background: #38bdf8;
+    color: #0f172a;
+    box-shadow: -5px 0 25px #38bdf8;
+    left: -150px; /* Pequeño efecto al pasar el ratón */
+}
 </style>
 </head>
 <body>
@@ -1622,7 +1622,7 @@ const quotesAndImages = [
        
        <!-- 🎧 BOTÓN LATERAL IZQUIERDO: SNOWZONESTUDIO -->
     <button class="studio-side-btn" onclick="switchGame('groovebox')">
-        SNOWZONESTUDIO
+         SNOWSTUDIO
     </button>
        
       <button class="game-tab active" onclick="switchGame('blackjack')">🎰 Blackjack Forfaits</button>
