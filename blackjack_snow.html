@@ -641,13 +641,13 @@
 
     document.getElementById('status-msg').innerText = message;
     
-    // Libera los botones de apuesta
+    // Oculta los controles de juego y muestra de nuevo las fichas de apuesta
     document.getElementById('action-controls').style.display = 'none';
     document.getElementById('bet-controls').style.display = 'flex';
 
     playerHand = [];
     dealerHand = [];
-}
+} // <--- ¡Esta llave cierra perfectamente la función y evita el error de sintaxis global!
 
     // Oculta botones de apuesta y muestra los de acción
     document.getElementById('bet-controls').style.display = 'none';
