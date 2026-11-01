@@ -1591,7 +1591,7 @@ const quotesAndImages = [
     <div class="games-tabs">
       <button class="game-tab active" onclick="switchGame('blackjack')">🎰 Blackjack Forfaits</button>
       <button class="game-tab" onclick="switchGame('snake')">🐍 Snake</button>
-      <button class="game-tab" onclick="switchGame('breakout')">🧱 Rebotes (Breakout)</button>
+      <button class="game-tab" onclick="switchGame('slot')">🎰 Slot Forfait</button>
       <button class="game-tab" onclick="switchGame('sudoku')">🔢 Sudoku Intermedio</button>
     </div>
 
@@ -1616,14 +1616,10 @@ const quotesAndImages = [
       <div id="game-snake" class="game-screen" style="display: none;">
     <iframe src="snake/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
 </div>
-      <!-- BREAKOUT -->
-      <div id="game-breakout" class="game-screen">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div>Puntos: <span id="breakout-score" class="fw-bold text-info">0</span> | Vidas: <span id="breakout-lives" class="fw-bold text-danger">3</span></div>
-          <button class="btn btn-sm btn-outline-info" onclick="startBreakout()">Reiniciar Juego</button>
-        </div>
-        <canvas id="breakoutCanvas" width="480" height="320"></canvas>
-      </div>
+     <!-- SLOT FORFAIT -->
+<div id="game-slot" class="game-screen" style="display: none;">
+    <iframe src="slot/index.html" width="420" height="520" style="border: none; background: transparent;"></iframe>
+</div>
 
       <!-- SUDOKU -->
       <div id="game-sudoku" class="game-screen">
@@ -1671,60 +1667,8 @@ function switchGame(gameId) {
   event.currentTarget.classList.add('active');
   const targetScreen = document.getElementById('game-' + gameId);
   if (targetScreen) targetScreen.classList.add('active');
-  if (gameId === 'breakout') startBreakout();
   if (gameId === 'sudoku') initSudoku();
   if (gameId === 'blackjack') checkBjLockStatus();
-}
-
-
-let breakoutAnim;
-function startBreakout() {
-  const canvas = document.getElementById('breakoutCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let x = canvas.width / 2, y = canvas.height - 30;
-  let dx = 2, dy = -2, ballRadius = 8;
-  let paddleHeight = 10, paddleWidth = 75;
-  let paddleX = (canvas.width - paddleWidth) / 2;
-  let rightPressed = false, leftPressed = false;
-  let lives = 3;
-
-  document.addEventListener("keydown", e => { if(e.key==="ArrowRight") rightPressed=true; else if(e.key==="ArrowLeft") leftPressed=true; });
-  document.addEventListener("keyup", e => { if(e.key==="ArrowRight") rightPressed=false; else if(e.key==="ArrowLeft") leftPressed=false; });
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#38bdf8";
-    ctx.fill();
-    ctx.closePath();
-
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#38bdf8";
-    ctx.fill();
-    ctx.closePath();
-
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
-    if (y + dy < ballRadius) dy = -dy;
-    else if (y + dy > canvas.height - ballRadius) {
-      if (x > paddleX && x < paddleX + paddleWidth) dy = -dy;
-      else {
-        lives--;
-        let lEl = document.getElementById('breakout-lives');
-        if(lEl) lEl.innerText = lives;
-        if (!lives) { alert("¡Juego terminado!"); document.location.reload(); return; }
-        else { x = canvas.width / 2; y = canvas.height - 30; dx = 2; dy = -2; paddleX = (canvas.width - paddleWidth) / 2; }
-      }
-    }
-    if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 5;
-    else if (leftPressed && paddleX > 0) paddleX -= 5;
-    x += dx; y += dy;
-    breakoutAnim = requestAnimationFrame(draw);
-  }
-  if (breakoutAnim) cancelAnimationFrame(breakoutAnim);
-  draw();
 }
 
 let selectedSudokuCell = null;
