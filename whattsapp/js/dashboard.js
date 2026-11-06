@@ -57,6 +57,20 @@ const Dashboard = {
             position.coords.longitude
 
         );
+            console.log(nearestStation);
+            GeoSnowModule.fetchSnowForecast(
+    nearestStation.stationKey
+)
+.then(data => {
+
+    console.log(data);
+
+})
+.catch(error => {
+
+    console.error(error);
+
+});
 
     result.innerHTML = `
 
