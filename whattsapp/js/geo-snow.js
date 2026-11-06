@@ -36,7 +36,8 @@ const GeoSnowModule = (() => {
     const station = CONFIG.STATIONS[stationKey];
     if (!station) throw new Error("Estación no válida");
 
-    const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${station.lat}&longitude=${station.lon}&hourly=snowfall,snowline,temperature_2m,windspeed_10m&forecast_days=2&timezone=auto`;
+    const endpoint =
+`https://api.open-meteo.com/v1/forecast?latitude=${station.lat}&longitude=${station.lon}&hourly=snowfall,snowline,temperature_2m,windspeed_10m&forecast_days=2&timezone=auto`;
     
     const response = await fetch(endpoint);
     if (!response.ok) throw new Error("Error al consultar el servidor meteorológico");
