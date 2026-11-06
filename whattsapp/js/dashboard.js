@@ -39,54 +39,41 @@ const Dashboard = {
 
     detectLocation() {
 
-        const result =
-            document.getElementById("snowResult");
+    const result =
+        document.getElementById("snowResult");
 
-        result.innerHTML =
-            "🛰 Buscando ubicación...";
+    result.innerHTML =
+        "🛰 Buscando ubicación...";
 
-        if (!navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+
+        (position) => {
+
+            result.innerHTML = `
+
+                <p>✅ GPS detectado</p>
+
+                <p>
+                    Latitud:
+                    ${position.coords.latitude}
+                </p>
+
+                <p>
+                    Longitud:
+                    ${position.coords.longitude}
+                </p>
+
+            `;
+
+        },
+
+        () => {
 
             result.innerHTML =
-                "❌ GPS no soportado";
-
-            return;
+                "❌ No se pudo obtener la ubicación";
 
         }
 
-        navigator.geolocation.getCurrentPosition(
+    );
 
-            (position) => {
-
-                result.innerHTML = `
-
-                    <p>
-                    ✅ GPS detectado
-                    </p>
-
-                    <p>
-                    Lat:
-                    ${position.coords.latitude.toFixed(4)}
-                    </p>
-
-                    <p>
-                    Lon:
-                    ${position.coords.longitude.toFixed(4)}
-                    </p>
-
-                `;
-
-            },
-
-            () => {
-
-                result.innerHTML =
-                    "❌ No se pudo obtener la ubicación";
-
-            }
-
-        );
-
-    }
-
-};
+}
