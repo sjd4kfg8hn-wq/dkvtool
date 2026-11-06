@@ -49,24 +49,38 @@ const Dashboard = {
 
         (position) => {
 
-            result.innerHTML = `
+    const nearestStation =
+        GeoSnowModule.getClosestStation(
 
-                <p>✅ GPS detectado</p>
+            position.coords.latitude,
 
-                <p>
-                    Latitud:
-                    ${position.coords.latitude}
-                </p>
+            position.coords.longitude
 
-                <p>
-                    Longitud:
-                    ${position.coords.longitude}
-                </p>
+        );
 
-            `;
+    result.innerHTML = `
 
-        },
+        <p>✅ GPS detectado</p>
 
+        <p>
+            🏔 Estación cercana:
+            <strong>
+                ${
+                    CONFIG.STATIONS[
+                        nearestStation.stationKey
+                    ].name
+                }
+            </strong>
+        </p>
+
+        <p>
+            📏 Distancia:
+            ${nearestStation.distanceKm} km
+        </p>
+
+    `;
+
+},
         () => {
 
             result.innerHTML =
