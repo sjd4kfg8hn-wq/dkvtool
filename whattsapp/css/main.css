@@ -93,43 +93,30 @@ body{
 }
 
 .dashboard-grid{
+    position:absolute;
+    left:40px;
+    top:320px;
 
-    max-width:1200px;
+    width:340px;
 
-    margin:auto;
+    display:flex;
+    flex-direction:column;
 
-    margin-top:100px;
-
-    padding:30px;
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(
-        auto-fit,
-        minmax(280px,1fr)
-    );
-
-    gap:25px;
-
+    gap:18px;
 }
-
 .glass-card{
 
+    width:100%;
+
+    min-height:110px;
+
     background:
-    rgba(10,20,40,.78);
+    rgba(7,20,40,.82);
 
     backdrop-filter:blur(14px);
 
     border:
-    1px solid rgba(79,195,255,.30);
-
-    border-radius:20px;
-
-    padding:25px;
-
-    box-shadow:
-    0 10px 35px rgba(0,0,0,.50);
+    1px solid rgba(79,195,255,.25);
 
 }
 
