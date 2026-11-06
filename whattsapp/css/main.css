@@ -67,25 +67,48 @@ body{
 
     position:absolute;
 
-    top:40px;
+    top:15px;
 
     left:50%;
 
     transform:translateX(-50%);
 
+    display:flex;
+
+    gap:35px;
 }
 
 .main-nav a{
 
+    background:
+    rgba(5,15,35,.08);
+    backdrop-filter:
+    blur(8px);
+
+    -webkit-backdrop-filter:
+    blur(8px);
+
+    border:
+    1px solid rgba(120,220,255,.08);
+
+    border-radius:14px;
+
+    padding:12px 18px;
+
     color:white;
 
-    text-decoration:none;
+    transition:.3s;
 
-    background:rgba(0,0,0,.4);
+}
+.main-nav a:hover{
 
-    padding:12px 20px;
+    background:
+    rgba(0,120,255,.18);
 
-    border-radius:12px;
+    box-shadow:
+    0 0 12px rgba(79,195,255,.35);
+
+    transform:translateY(-2px);
 
 }
 
