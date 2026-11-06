@@ -1,12 +1,3 @@
-/* Estilos generales Snowboard Zone */
-:root {
-  --bg-main: #0f172a;
-  --bg-card: #1e293b;
-  --accent-blue: #38bdf8;
-  --alert-red: #ef4444;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-}
 
 body {
   margin: 0;
