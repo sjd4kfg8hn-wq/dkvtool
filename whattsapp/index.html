@@ -10,34 +10,31 @@
 </head>
 <body>
 
-  <header>
-    <h1>❄️ SNOWBOARD ZONE</h1>
-    <p style="color: var(--text-muted);">Alertas de nieve, GPS & Freeride World Tour</p>
-  </header>
+  <div class="hero-console">
 
-  <main class="container">
-    <!-- Módulo 1: Tiempo y Alertas Geolocalizadas -->
-    <section id="snow-module" class="card">
-      <h2>⏳ Cargando estado del tiempo...</h2>
-    </section>
+    <header class="hero-header">
+      <h1>❄️ SNOWBOARD ZONE</h1>
+      <p>Alertas de nieve, GPS & Freeride World Tour</p>
+    </header>
 
-    <!-- Módulo 2: Freeride World Tour -->
-    <section id="fwt-module" class="card">
-      <h2>🏔️ Freeride World Tour</h2>
-      <p>Próximamente fechas y ventanas de espera.</p>
-    </section>
-  </main>
+    <main class="dashboard">
 
-  <!-- Rutas locales a js/ dentro de whattsapp/ -->
+      <section id="snow-module" class="card">
+        <h2>⏳ Cargando estado del tiempo...</h2>
+      </section>
+
+      <section id="fwt-module" class="card">
+        <h2>🏔️ Freeride World Tour</h2>
+        <p>Próximamente fechas y ventanas de espera.</p>
+      </section>
+
+    </main>
+
+  </div>
+
   <script src="js/config.js"></script>
   <script src="js/geo-snow.js"></script>
   <script src="js/app.js"></script>
-  
-  <!imagen en movimiento------>
-  <div class="hero-console"></div>
 
-<div class="dashboard">
-   ...
-</div>
 </body>
 </html>
