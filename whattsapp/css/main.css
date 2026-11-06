@@ -93,36 +93,57 @@ body{
 }
 
 .dashboard-grid{
+    position:absolute;
 
-    top:140px;
+    left:25px;
 
+    top:125px;
+
+    width:260px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:15px;
+
+    z-index:100;
 }
 .glass-card{
 
+    width:100%;
+
+    min-height:90px;
+
+    padding:15px;
+
     background:
-    rgba(5,15,35,.35);
+    rgba(5,15,35,.15);
 
-    backdrop-filter:
-    blur(16px);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
 
-    -webkit-backdrop-filter:
-    blur(16px);
-
-    border:
-    1px solid rgba(90,220,255,.18);
+    border:1px solid rgba(120,220,255,.12);
 
     border-radius:18px;
 
     box-shadow:
-    0 0 15px rgba(0,180,255,.10),
-    inset 0 0 15px rgba(255,255,255,.03);
+    0 0 10px rgba(0,180,255,.08);
 
 }
-
 .glass-card h2{
 
     color:#6cd8ff;
 
     margin-bottom:15px;
+
+}
+.glass-card: hover{
+
+    transform:translateX(5px);
+
+    border-color:
+    rgba(120,220,255,.45);
+
+    transition:.3s;
 
 }
