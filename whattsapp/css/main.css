@@ -93,30 +93,29 @@ body{
 }
 
 .dashboard-grid{
-    position:absolute;
-    left:40px;
-    top:320px;
 
-    width:340px;
+    top:140px;
 
-    display:flex;
-    flex-direction:column;
-
-    gap:18px;
 }
 .glass-card{
 
-    width:100%;
-
-    min-height:110px;
-
     background:
-    rgba(7,20,40,.82);
+    rgba(5,15,35,.35);
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:
+    blur(16px);
+
+    -webkit-backdrop-filter:
+    blur(16px);
 
     border:
-    1px solid rgba(79,195,255,.25);
+    1px solid rgba(90,220,255,.18);
+
+    border-radius:18px;
+
+    box-shadow:
+    0 0 15px rgba(0,180,255,.10),
+    inset 0 0 15px rgba(255,255,255,.03);
 
 }
 
