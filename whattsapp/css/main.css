@@ -43,7 +43,8 @@ body{
 
     text-align:center;
 
-    padding:40px 20px;
+    padding-top:70px;
+    padding-bottom:30px;
 
 }
 
@@ -62,7 +63,6 @@ body{
     font-size:1rem;
 
 }
-
 .main-nav{
 
     display:flex;
@@ -75,6 +75,7 @@ body{
 
     padding:20px;
 
+    margin-top:25px;
 }
 
 .main-nav a{
@@ -93,19 +94,20 @@ body{
 
 .dashboard-grid{
 
-    max-width:1400px;
+    max-width:1200px;
 
     margin:auto;
+
+    margin-top:100px;
 
     padding:30px;
 
     display:grid;
 
     grid-template-columns:
-
     repeat(
         auto-fit,
-        minmax(300px,1fr)
+        minmax(280px,1fr)
     );
 
     gap:25px;
@@ -115,21 +117,19 @@ body{
 .glass-card{
 
     background:
-    rgba(10,20,40,.70);
+    rgba(10,20,40,.78);
 
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(14px);
 
     border:
-
-    1px solid
-    rgba(79,195,255,.25);
+    1px solid rgba(79,195,255,.30);
 
     border-radius:20px;
 
     padding:25px;
 
     box-shadow:
-    0 8px 30px rgba(0,0,0,.4);
+    0 10px 35px rgba(0,0,0,.50);
 
 }
 
