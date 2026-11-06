@@ -77,3 +77,5 @@ const Dashboard = {
     );
 
 }
+    };
+
