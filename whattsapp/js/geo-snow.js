@@ -43,6 +43,36 @@ const GeoSnowModule = (() => {
     if (!response.ok) throw new Error("Error al consultar el servidor meteorológico");
     
     const data = await response.json();
+    async function getUserPosition() {
+  return new Promise((resolve, reject) => {
+
+    if (!navigator.geolocation) {
+      reject(new Error("Geolocalización no soportada"));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        });
+      },
+      error => reject(error),
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000
+      }
+    );
+
+  });
+}
+    return {
+  getClosestStation,
+  fetchSnowForecast,
+  getUserPosition
+};
     
     // Cálculos de datos agrupados para 48h
     const totalSnowfall = data.hourly.snowfall.reduce((acc, val) => acc + val, 0).toFixed(1);
